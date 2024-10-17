@@ -8,6 +8,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.home-container {
-  margin: 20px auto;
+.layout-admin{
+  display: flex;
 }

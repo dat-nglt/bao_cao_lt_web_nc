@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('head') %>
+    <title><%= data.title %></title>
+  </head>
+  <body>
+    <div class="layout-admin">
+      <%- include('header') %>
+      <% if (data.page) { %> <%- include(data.page) %> <%}%>
+    </div>
+  </body>
+</html>

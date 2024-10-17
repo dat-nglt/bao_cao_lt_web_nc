@@ -1,0 +1,7 @@
+.header-admin{
+    width: 180px;
+
+    > .nav > a{
+        color: #f8f9fa !important;
+    }
+}
