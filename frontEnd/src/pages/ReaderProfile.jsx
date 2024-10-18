@@ -1,9 +1,10 @@
 import React from 'react';
+import Search from '../components/SearchInput';
 
 function ReaderProfile(props) {
   return (
     <div>
-      Hồ sơ độc giả
+      <Search />
     </div>
   );
 }
