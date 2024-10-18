@@ -1,8 +1,11 @@
 import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import { Box, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ReorderIcon from '@mui/icons-material/Reorder';
+import LoginIcon from '@mui/icons-material/Login';
+import LabelIcon from '@mui/icons-material/Label';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.white.main,
@@ -13,7 +16,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
     color: theme.palette.yellow.main,
   },
 }));
-function Header(props) {
+function HeaderPage(props) {
   const theme = useTheme();
   return (
     <Box>
@@ -53,17 +56,42 @@ function Header(props) {
         >
           <Stack
             flexDirection={'row'}
+            sx={{
+              display: { xs: 'none', md: 'flex' }
+            }}
           >
             <StyledLink>Trang chủ</StyledLink>
             <StyledLink>Tin Tức</StyledLink>
             <StyledLink>Sách Mới</StyledLink>
             <StyledLink>Tài liệu điện tử</StyledLink>
+            <StyledLink>Tài liệu nghiên cứu</StyledLink>
+            <StyledLink>Liên hệ</StyledLink>
+          </Stack>
+          <Stack
+            flexDirection={'row'}
+            sx={{
+              display: { xs: 'flex', md: 'none' }
+            }}
+          >
+            <StyledLink>
+              <ReorderIcon />
+            </StyledLink>
           </Stack>
           <Stack
             flexDirection={'row'}
           >
-            {/* <StyledLink>Phiếu mượn</StyledLink> */}
-            <StyledLink>Đăng nhập</StyledLink>
+            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
+              Phiếu mượn
+            </StyledLink>
+            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'block', md: 'none' } }}>
+              <LabelIcon />
+            </StyledLink>
+            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
+              Đăng nhập
+            </StyledLink>
+            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'block', md: 'none' } }}>
+              <LoginIcon />
+            </StyledLink>
           </Stack>
         </Stack>
       </Stack>
@@ -71,4 +99,4 @@ function Header(props) {
   );
 }
 
-export default Header;
+export default HeaderPage;
