@@ -13,6 +13,7 @@ const initWebRoute = (app) => {
     router.post('/sach', bookController.addBook);
     router.post('/sach/:id', bookController.updateBook);
     router.delete('/sach/:id', bookController.deleteBook);
+    router.delete('/sach/:id', bookController.deleteBook);
     router.post('*', (req, res) => res.redirect('/not-found'));
     return app.use('/', router);
 }
