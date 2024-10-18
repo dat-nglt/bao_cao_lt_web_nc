@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
-import App from './App'
-import reportWebVitals from './reportWebVitals'
-import { router } from './containers/routes/Route'
+// import App from './App'
+import theme from './theme'
+import { ThemeProvider } from '@mui/material/styles'
+import { router } from './routes/Route'
 import { RouterProvider } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(
@@ -12,8 +12,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {/* <App /> */}
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 )
-
-reportWebVitals()
