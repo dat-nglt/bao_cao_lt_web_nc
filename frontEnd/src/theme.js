@@ -7,7 +7,7 @@ const theme = createTheme({
       palette: {
         primary: {
           // blue
-          main: '#1976d2',
+          main: '#005ac7',
           light: '#00c0ff',
           dark: '#015bb0'
         },
@@ -30,9 +30,9 @@ const theme = createTheme({
           dark: '#B8860B' // vàng đậm
         },
         orange: {
-          main: '#FF8C00', // cam
-          light: '#FFA07A', // cam nhạt
-          dark: '#FF4500' // cam đậm
+          main: '#ff5100', // cam
+          light: '#ff7300', // cam nhạt
+          dark: '#b23800' // cam đậm
         }
       },
       backgroundColor: {
