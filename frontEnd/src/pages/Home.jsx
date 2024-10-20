@@ -14,7 +14,7 @@ const menuItems = [
   { link: '/', text: 'Trang chủ', icon: <HomeIcon fontSize="medium" /> },
   { link: '/tin-tuc', text: 'Tin tức', icon: <FeedIcon fontSize="medium" /> },
   { link: '/sach-moi', text: 'Sách mới', icon: <AutoStoriesIcon fontSize="medium" /> },
-  { link: '/sach-yeu-thich', text: 'Sách yêu thích', icon: <FavoriteIcon fontSize="medium" /> },
+  { link: '/ho-so-doc-gia/yeu-thich', text: 'Sách yêu thích', icon: <FavoriteIcon fontSize="medium" /> },
 ];
 
 function Home(props) {
@@ -71,7 +71,7 @@ function Home(props) {
         }}
       >
         <Stack>
-          <SideBar menuItems={menuItems}/>
+          <SideBar menuItems={menuItems} />
         </Stack>
         <Stack sx={{ width: '100%', }}>
           <SearchInput />

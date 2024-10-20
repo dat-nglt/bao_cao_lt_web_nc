@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Category from '../components/Category';
+import Category from '../components/CategoryBook';
 
 const books = [
   {
@@ -131,7 +131,7 @@ function SearchPage(props) {
 
   return (
     <div>
-      <Category title={'Tìm kiếm dành cho: '} bookList={books} isSearchPage={true} searchData={{ danhMuc, tuKhoa }} />
+      <Category title={'Tìm kiếm dành cho: '} bookList={books} isHomePage={false} searchData={{ danhMuc, tuKhoa }} />
     </div>
   );
 }

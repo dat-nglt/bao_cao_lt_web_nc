@@ -9,10 +9,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Outlet } from 'react-router-dom';
 
 const menuItems = [
-  { link: '/', text: 'Hồ sơ độc giả', icon: <HomeIcon fontSize="medium" /> },
+  { link: '/ho-so-doc-gia', text: 'Hồ sơ độc giả', icon: <HomeIcon fontSize="medium" /> },
   { link: '/ho-so-doc-gia/lich-su-muon', text: 'Lịch sử mượn sách', icon: <FeedIcon fontSize="medium" /> },
-  { link: '/sach-moi', text: 'Cập nhật mật khẩu', icon: <AutoStoriesIcon fontSize="medium" /> },
-  { link: '/yeu-thich', text: 'Sách yêu thích', icon: <FavoriteIcon fontSize="medium" /> },
+  { link: '/ho-so-doc-gia/cap-nhat-mat-khau', text: 'Cập nhật mật khẩu', icon: <AutoStoriesIcon fontSize="medium" /> },
+  { link: '/ho-so-doc-gia/yeu-thich', text: 'Sách yêu thích', icon: <FavoriteIcon fontSize="medium" /> },
 ];
 
 
