@@ -10,6 +10,7 @@ import Profile from '../components/Profile'
 import RentHistory from '../components/RentHistory'
 import News from '../components/News'
 import FavoritBooks from '../components/FavoritBooks'
+import UpdatePassword from '../components/UpdatePassword'
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ export const router = createBrowserRouter([
       {
         path: '/ho-so-doc-gia/lich-su-muon',
         element: <RentHistory />
+      },
+      {
+        path: '/ho-so-doc-gia/cap-nhat-mat-khau',
+        element: <UpdatePassword />
+      },
+      {
+        path: '/ho-so-doc-gia/yeu-thich',
+        element: <FavoritBooks />
       }
     ],
     errorElement: <PageNotFound />

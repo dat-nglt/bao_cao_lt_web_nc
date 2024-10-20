@@ -17,6 +17,9 @@ const theme = createTheme({
           light: '#f74e4e',
           dark: '#920000'
         },
+        gray: {
+          main: '#e0e0de'
+        },
         white: {
           main: '#ffffff',
           light: '#fff5ce'
@@ -47,7 +50,8 @@ const theme = createTheme({
       },
       boxShadow: {
         main: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
-        hover: 'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+        hover:
+          'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px'
         // hover: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
         // hover: `rgba(3, 102, 214, 0.3) 0px 0px 0px 3px`,
       }

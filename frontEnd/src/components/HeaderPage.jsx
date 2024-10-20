@@ -11,7 +11,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.white.main,
   padding: '10px',
   fontWeight: 600,
-
+  textDecoration: 'none',
   '&:hover': {
     color: theme.palette.yellow.main,
   },
@@ -76,9 +76,6 @@ function HeaderPage(props) {
           <Stack
             flexDirection={'row'}
           >
-            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
-              Phiếu mượn
-            </StyledLink>
             <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'block', md: 'none' } }}>
               <LabelIcon />
             </StyledLink>

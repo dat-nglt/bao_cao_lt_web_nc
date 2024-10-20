@@ -7,10 +7,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
+import { Stack } from '@mui/material';
 
 const SideBar = ({ menuItems }) => {
   const theme = useTheme();
-  
+
   return (
     <Paper
       sx={{
@@ -22,11 +23,16 @@ const SideBar = ({ menuItems }) => {
         position: 'sticky',
         top: '10px',
         display: { xs: 'none', sm: 'none', md: 'block' },
+
       }}
     >
       <MenuList sx={{ p: 0 }}>
         {menuItems.map((item, index) => (
-          <React.Fragment key={index}>
+          <Stack key={index} sx={{
+            '&:hover': {
+              color: theme.palette.yellow.main,
+            },
+          }}>
             <Link to={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem sx={{ p: '12px 10px' }}>
                 <ListItemIcon sx={{ color: 'inherit' }}>
@@ -35,8 +41,8 @@ const SideBar = ({ menuItems }) => {
                 <ListItemText primary={item.text} sx={{ color: 'inherit' }} />
               </MenuItem>
             </Link>
-            {/* {item.divider && <Divider sx={{ bgcolor: theme.palette.common.white }} />} */}
-          </React.Fragment>
+            {item.divider && <Divider sx={{ bgcolor: theme.palette.common.white }} />}
+          </Stack>
         ))}
       </MenuList>
     </Paper>
