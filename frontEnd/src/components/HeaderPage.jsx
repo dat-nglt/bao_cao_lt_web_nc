@@ -60,12 +60,8 @@ function HeaderPage(props) {
               display: { xs: 'none', md: 'flex' }
             }}
           >
-            <StyledLink>Trang chủ</StyledLink>
-            <StyledLink>Tin Tức</StyledLink>
-            <StyledLink>Sách Mới</StyledLink>
-            <StyledLink>Tài liệu điện tử</StyledLink>
-            <StyledLink>Tài liệu nghiên cứu</StyledLink>
-            <StyledLink>Liên hệ</StyledLink>
+            <StyledLink to={'/'}>Trang chủ</ StyledLink>
+            <StyledLink to={'/lien-he'}>Liên hệ</StyledLink>
           </Stack>
           <Stack
             flexDirection={'row'}
@@ -86,9 +82,13 @@ function HeaderPage(props) {
             <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'block', md: 'none' } }}>
               <LabelIcon />
             </StyledLink>
-            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
+            {/* <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
               Đăng nhập
+            </StyledLink> */}
+            <StyledLink to={'/ho-so-doc-gia'} sx={{ display: { xs: 'none', md: 'block' } }}>
+              Hồ sơ độc giả
             </StyledLink>
+
             <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'block', md: 'none' } }}>
               <LoginIcon />
             </StyledLink>

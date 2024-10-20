@@ -13,11 +13,11 @@ const SearchInput = (props) => {
   const handleChangeValueSearch = (event) => setValueSearch(event.target.value);
 
   const menuItems = [
-    { value: 1, label: 'Sách' },
-    { value: 2, label: 'Tác giả' },
-    { value: 3, label: 'Thể loại' },
-    { value: 4, label: 'Năm xuất bản' },
-    { value: 5, label: 'Nhà xuất bản' },
+    { value: 'sach', label: 'Sách' },
+    { value: 'tacgia', label: 'Tác giả' },
+    { value: 'theloai', label: 'Thể loại' },
+    { value: 'namxuatban', label: 'Năm xuất bản' },
+    { value: 'nhaxuatban', label: 'Nhà xuất bản' },
   ];
 
   return (
@@ -29,7 +29,7 @@ const SearchInput = (props) => {
         flexDirection: 'row',
         alignItems: 'flex-end',
         gap: '10px',
-        }}
+      }}
     >
       <FormControl sx={{ width: '150px' }} size="small" variant="standard">
         <InputLabel id="category-select-label">Danh mục</InputLabel>

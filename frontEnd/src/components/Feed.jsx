@@ -1,7 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import Category from '../components/Category';
-
+import Category from './Category';
 const books = [
   {
     title: "The Great Gatsby",
@@ -109,31 +107,13 @@ const books = [
   }
 ];
 
-const options = [
-  { value: 'sach', label: 'Sách' },
-  { value: 'tacgia', label: 'Tác giả' },
-  { value: 'theloai', label: 'Thể loại' },
-  { value: 'namxuatban', label: 'Năm xuất bản' },
-  { value: 'nhaxuatban', label: 'Nhà xuất bản' },
-];
-
-const getLabelFromValue = (value) => {
-  const option = options.find(option => option.value === value);
-  return option?.label || 'Không xác định';
-};
-
-function SearchPage(props) {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
-  const danhMuc = getLabelFromValue(queryParams.get('danhmuc'));
-  const tuKhoa = danhMuc !== 'Không xác định' ? queryParams.get('tukhoa') : '';
-
+function Feed(props) {
   return (
-    <div>
-      <Category title={'Tìm kiếm dành cho: '} bookList={books} isSearchPage={true} searchData={{ danhMuc, tuKhoa }} />
-    </div>
+    <>
+      <Category title={'Sách mới'} bookList={books} />
+      <Category title={'Tin tức mới'} bookList={books} />
+    </>
   );
 }
 
-export default SearchPage;
+export default Feed;
