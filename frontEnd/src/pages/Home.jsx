@@ -73,7 +73,7 @@ function Home(props) {
         <Stack>
           <SideBar menuItems={menuItems} />
         </Stack>
-        <Stack sx={{ width: '100%', }}>
+        <Stack sx={{ width: '100%', alignItems: "center" }}>
           <SearchInput />
           <Outlet />
         </Stack>

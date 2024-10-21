@@ -1,13 +1,13 @@
 import React from "react";
 import { Box, Typography, IconButton, Stack } from "@mui/material";
-import { Favorite, Visibility, CalendarToday } from "@mui/icons-material";
+import { Favorite, Visibility, CalendarToday, ReplyIcon } from "@mui/icons-material";
 import styled from "@emotion/styled";
 
 const NewsBox = styled(Box)({
   border: "2px solid #ddd",
   borderRadius: "16px",
   padding: "20px",
-  maxWidth: "100%", // Đảm bảo component chiếm 100% chiều ngang
+  width: "80%", 
   margin: "20px 20px 0",
   backgroundColor: "#fff",
   boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
@@ -16,24 +16,50 @@ const NewsBox = styled(Box)({
     transform: "translateY(-10px)",
     boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
   },
-  display: "flex", // Sử dụng flexbox để ảnh và nội dung nằm ngang
-  flexDirection: "column", // Ảnh và nội dung nằm dọc, có thể đổi thành row nếu cần nằm ngang
+  display: "flex",
+  flexDirection: "column",
 });
-const BoxImg = styled(Box)({
+// const BoxImg = styled(Box)({
+//   maxWidth: "100%",
+//   textAlign: "center",
+// })
+// const NewsImage = styled("img")({
+//   width: "50%",
+//   height: "auto",
+//   borderRadius: "16px",
+//   marginBottom: "16px",
+//   objectFit: "cover",
+// });
+const BoxImgs = styled(Box)({
   maxWidth: "100%",
-  textAlign: "center",
-})
+  display: "flex", 
+  justifyContent: "center",
+  alignItems: "end", 
+  gap: "16px",
+  flexWrap: "wrap",
+  marginBottom: "16px",
+});
 const NewsImage = styled("img")({
-  width: "50%", // Chiều ngang 100% của phần tử chứa
-  height: "auto", // Tự động điều chỉnh chiều cao theo chiều ngang
+  width: "30%",
+  height: "auto",
   borderRadius: "16px",
-  marginBottom: "16px", // Khoảng cách phía dưới ảnh
-  objectFit: "cover", // Giữ tỉ lệ ảnh mà không bị biến dạng
-
+  objectFit: "cover",
+});
+const NewsImageSingle = styled("img")({
+  maxWidth: "80%", 
+  maxHeight:'700px',
+  borderRadius: "16px",
+  objectFit: "cover",
+});
+const NewsImageCouple = styled("img")({
+  width: "45%",
+  height: "auto",
+  borderRadius: "16px",
+  objectFit: "cover",
 });
 
 const Title = styled(Typography)({
-  fontSize: "28px", // Tăng kích thước font
+  fontSize: "28px",
   fontWeight: "700",
   color: "#333",
   marginBottom: "12px",
@@ -44,7 +70,7 @@ const Description = styled(Typography)({
   color: "#555",
   marginBottom: "16px",
   lineHeight: "1.75",
-  textAlign: "justify", // Canh đều văn bản
+  textAlign: "justify",
 });
 
 const IconInfo = styled(Typography)({
@@ -67,21 +93,26 @@ const IconButtonStyled = styled(IconButton)({
   },
 });
 
-const NewsContent = (props) => {
-  return (
-    <NewsBox>
-      {/* Hiển thị ảnh */}
-      <BoxImg>
-        <NewsImage src={props.data.image} alt={props.data.title} />
-      </BoxImg>
 
-      {/* Tiêu đề */}
+
+
+const NewsContent = (props) => {
+  const images = props.data.images.length > 2
+  ? props.data.images.slice(0, 6).map((image, index) => <NewsImage key={index} src={image.img} alt={image.title} />)
+  : props.data.images.length === 2
+  ? props.data.images.map((image, index) => <NewsImageCouple key={index} src={image.img} alt={image.title} />)
+  : props.data.images.map((image, index) => <NewsImageSingle key={index} src={image.img} alt={image.title} />);
+
+  return (
+    <NewsBox onClick={props.onClick}>
+      <BoxImgs>
+        {images}
+      </BoxImgs>
+
       <Title variant="h5">{props.data.title}</Title>
 
-      {/* Mô tả */}
       <Description variant="body1">{props.data.description}</Description>
 
-      {/* Thông tin lượt xem và lượt thích */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
         <Stack direction="row" spacing={2} alignItems="center">
           <Stack direction="row" alignItems="center">
@@ -97,8 +128,6 @@ const NewsContent = (props) => {
             <IconInfo>{props.data.likes} lượt thích</IconInfo>
           </Stack>
         </Stack>
-
-        {/* Ngày đăng */}
         <DateText>
           <CalendarToday fontSize="small" />
           {new Date(props.data.date).toLocaleDateString()}

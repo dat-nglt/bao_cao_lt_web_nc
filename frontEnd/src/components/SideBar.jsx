@@ -21,7 +21,7 @@ const SideBar = ({ menuItems }) => {
         color: theme.palette.common.white,
         bgcolor: theme.palette.primary.main,
         position: 'sticky',
-        top: '10px',
+        top: '140px',
         display: { xs: 'none', sm: 'none', md: 'block' },
 
       }}
