@@ -19,8 +19,9 @@ const StyledLink = styled(Link)(({ theme }) => ({
 function HeaderPage(props) {
   const theme = useTheme();
   return (
-    <Box>
+    <Box sx={{position: "sticky",top: 0, zIndex:10000}}>
       <Stack flexDirection={'row'}
+        backgroundColor={theme.palette.white.main}
         width={'90%'}
         alignItems={'center'}
         gap={'10px'}
@@ -47,7 +48,7 @@ function HeaderPage(props) {
           </Typography>
         </Stack>
       </Stack >
-      <Stack sx={{ backgroundColor: theme.palette.primary.main }}
+      <Stack sx={{ backgroundColor: theme.palette.primary.main}}
       >
         <Stack width={'90%'}
           m={'0 auto'}
