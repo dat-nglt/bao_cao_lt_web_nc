@@ -1,6 +1,6 @@
 import { Divider, Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
-import RentItem from './RentItem';
+import PunishItem from './PunishItem';
 
 const rentList = [
   {
@@ -29,7 +29,7 @@ const rentList = [
   },
 ];
 
-function RentHistory(props) {
+function Punish(props) {
   const theme = useTheme();
   return (
     <Stack
@@ -51,16 +51,16 @@ function RentHistory(props) {
         <Typography
           variant='h6'
           sx={{ color: theme.text.primary.main, fontWeight: 600 }}
-        >Lịch sử mượn sách</Typography>
+        >Thông tin phí phạt</Typography>
 
         <Divider />
 
         {
-          rentList.map((rentBook, index) => <RentItem key={index} book={rentBook} />)
+          rentList.map((rentBook, index) => <PunishItem key={index} book={rentBook} />)
         }
       </Stack >
     </Stack >
   );
 }
 
-export default RentHistory;
+export default Punish;

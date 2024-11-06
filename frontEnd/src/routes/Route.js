@@ -11,7 +11,8 @@ import RentHistory from '../components/RentHistory'
 import News from '../components/News'
 import FavoritBooks from '../components/FavoritBooks'
 import UpdatePassword from '../components/UpdatePassword'
-
+import Punish from '../components/Punish'
+import ReaderContact from '../components/ReaderContact'
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
       {
         path: '/ho-so-doc-gia/lich-su-muon',
         element: <RentHistory />
+      },
+      {
+        path: '/ho-so-doc-gia/phi-phat',
+        element: <Punish />
+      },
+      {
+        path: '/ho-so-doc-gia/phan-hoi-cua-toi',
+        element: <ReaderContact />
       },
       {
         path: '/ho-so-doc-gia/cap-nhat-mat-khau',

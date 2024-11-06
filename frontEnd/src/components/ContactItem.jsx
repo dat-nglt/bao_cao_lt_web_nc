@@ -1,7 +1,7 @@
 import { Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
 
-function RentItem(props) {
+function ContactItem(props) {
   const theme = useTheme()
   return (
     <Stack
@@ -31,7 +31,7 @@ function RentItem(props) {
           alt="hinhanh"
           style={{
             width: '100px',
-            aspectRatio: '6 / 9',
+            aspectRatio: '1',
             borderRadius: '5px'
           }}
         />
@@ -40,6 +40,7 @@ function RentItem(props) {
             marginLeft: '15px',
             gap: '5px',
             justifyContent: 'flex-start',
+            width: 'calc(100% -115px)',
           }}
         >
           <Stack
@@ -53,13 +54,17 @@ function RentItem(props) {
               sx={{
                 color: theme.text.primary.main
               }}
-            >Tên sách:</Typography>
+            >Tiêu đề phản hồi:</Typography>
             <Typography
               variant='subtitle2'
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
                 color: theme.text.primary.main,
+                maxWidth: '50%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >{props.book.title}</Typography>
           </Stack>
@@ -75,15 +80,19 @@ function RentItem(props) {
               sx={{
                 color: theme.text.primary.main
               }}
-            >Ngày mượn:</Typography>
+            >Nội dung phản hồi:</Typography>
             <Typography
               variant='subtitle2'
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
                 color: theme.text.primary.main,
+                maxWidth: '80%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
-            >{props.book.borrowDate}</Typography>
+            >{props.book.content}</Typography>
           </Stack>
           <Stack
             sx={{
@@ -96,7 +105,7 @@ function RentItem(props) {
               sx={{
                 color: theme.text.primary.main
               }}
-            >Ngày trả:</Typography>
+            >Thời gian gửi phản hồi:</Typography>
             <Typography
               variant='subtitle2'
               sx={{
@@ -104,28 +113,7 @@ function RentItem(props) {
                 fontWeight: 600,
                 color: theme.text.primary.main,
               }}
-            >{props.book.returnDate}</Typography>
-          </Stack>
-          <Stack
-            sx={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
-          >
-            <Typography
-              variant='subtitle2'
-              sx={{
-                color: theme.text.primary.main
-              }}
-            >Trạng thái yêu cầu mượn:</Typography>
-            <Typography
-              variant='subtitle2'
-              sx={{
-                marginLeft: '5px',
-                fontWeight: 600,
-                color: props.book.requestStatus === 'Quá hạn' ? theme.palette.secondary.main : theme.text.primary.main,
-              }}
-            >{props.book.requestStatus}</Typography>
+            >{props.book.timeSend}</Typography>
           </Stack>
         </Stack>
         {/* <Button variant='contained' color="error" size="small"
@@ -143,4 +131,4 @@ function RentItem(props) {
   );
 }
 
-export default RentItem;
+export default ContactItem;

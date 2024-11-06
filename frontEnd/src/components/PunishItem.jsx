@@ -1,7 +1,8 @@
 import { Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
+import { formatCurrencyVN } from '../utils/formatCurrencyVN';
 
-function RentItem(props) {
+function PunishItem(props) {
   const theme = useTheme()
   return (
     <Stack
@@ -9,6 +10,7 @@ function RentItem(props) {
         padding: '10px 0',
         gap: '10px',
         position: 'relative',
+
       }}
     >
 
@@ -75,28 +77,7 @@ function RentItem(props) {
               sx={{
                 color: theme.text.primary.main
               }}
-            >Ngày mượn:</Typography>
-            <Typography
-              variant='subtitle2'
-              sx={{
-                marginLeft: '5px',
-                fontWeight: 600,
-                color: theme.text.primary.main,
-              }}
-            >{props.book.borrowDate}</Typography>
-          </Stack>
-          <Stack
-            sx={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
-          >
-            <Typography
-              variant='subtitle2'
-              sx={{
-                color: theme.text.primary.main
-              }}
-            >Ngày trả:</Typography>
+            >Ngày trả dự kiến:</Typography>
             <Typography
               variant='subtitle2'
               sx={{
@@ -117,15 +98,36 @@ function RentItem(props) {
               sx={{
                 color: theme.text.primary.main
               }}
-            >Trạng thái yêu cầu mượn:</Typography>
+            >Số ngày quá hạn:</Typography>
             <Typography
               variant='subtitle2'
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
-                color: props.book.requestStatus === 'Quá hạn' ? theme.palette.secondary.main : theme.text.primary.main,
+                color: theme.text.primary.main,
               }}
-            >{props.book.requestStatus}</Typography>
+            >10 ngày</Typography>
+          </Stack>
+          <Stack
+            sx={{
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}
+          >
+            <Typography
+              variant='subtitle2'
+              sx={{
+                color: theme.text.primary.main
+              }}
+            >Tổng phí phạt :</Typography>
+            <Typography
+              variant='subtitle2'
+              sx={{
+                marginLeft: '5px',
+                fontWeight: 600,
+                color: theme.palette.secondary.main,
+              }}
+            >{formatCurrencyVN(10000 * 10)}</Typography>
           </Stack>
         </Stack>
         {/* <Button variant='contained' color="error" size="small"
@@ -136,11 +138,8 @@ function RentItem(props) {
           }}
         >Hủy mượn</Button> */}
       </Stack>
-
-
-
     </Stack>
   );
 }
 
-export default RentItem;
+export default PunishItem;

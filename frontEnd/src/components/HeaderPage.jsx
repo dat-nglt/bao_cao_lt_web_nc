@@ -79,9 +79,9 @@ function HeaderPage(props) {
             <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'block', md: 'none' } }}>
               <LabelIcon />
             </StyledLink>
-            {/* <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
+            <StyledLink to={'/dang-nhap'} sx={{ display: { xs: 'none', md: 'block' } }}>
               Đăng nhập
-            </StyledLink> */}
+            </StyledLink>
             <StyledLink to={'/ho-so-doc-gia'} sx={{ display: { xs: 'none', md: 'block' } }}>
               Hồ sơ độc giả
             </StyledLink>

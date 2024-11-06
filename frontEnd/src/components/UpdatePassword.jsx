@@ -20,6 +20,7 @@ function UpdatePassword(props) {
       <Stack
         sx={{
           margin: '0 auto',
+          minHeight: '334px',
           width: '95%',
           borderRadius: '10px',
           padding: '10px 20px',
