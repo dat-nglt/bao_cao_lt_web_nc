@@ -6,6 +6,20 @@
   font-family: Arial, sans-serif;
 }
 
-.layout-admin{
-  margin-left: 230px;
+:root{
+  /* color */
+  --black-cl: #2a303d;
+  --hover-cl: #323a49;
+  /* text */
+  
+  --text-gray-cl: rgb(255 255 255 / 87%);
+  --text-white-cl: #fff;
+  /* layout */
+  --max-height: 100vh;
 }
+
+.page_content__admin{
+  margin-left: 220px;
+  padding: 16px;
+}
+

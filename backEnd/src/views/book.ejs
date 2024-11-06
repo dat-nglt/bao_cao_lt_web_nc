@@ -1,6 +1,6 @@
 <div style="display: flex; padding: 10px; justify-content: flex-end; align-items: center; gap: 10px;">
 <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-    Thêm thể loại
+    Thêm sách
   </button>
  
     <form style="display: flex;" class="form-inline my-2 my-lg-0">
@@ -13,7 +13,7 @@
           <div class="dropdown-item">Cũ nhất</div>
         </div>
       </div>
-        <input class="form-control mr-sm-1" type="search" placeholder="Tìm tên thể loại" aria-label="Search">
+        <input class="form-control mr-sm-1" type="search" style="width: 300px;" placeholder="Tìm tên sách/ tác giả/ nhà xuất bản" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
       </form>
 </div>
@@ -22,9 +22,13 @@
   <thead>
     <tr>
       <th scope="col" style="width: 5%;">STT</th>
-      <th scope="col" style="width: 30%;">Tên thể loại</th>
-      <th scope="col" style="width: 48%;">Mô tả</th>
-      <th scope="col" style="width: 7%;">SL sách</th>
+      <th scope="col" style="width: 22%;">Tên sách</th>
+      <th scope="col" style="width: 10%;">Hình ảnh</th>
+      <th scope="col" style="width: 10%;">Tác giả</th>
+      <th scope="col" style="width: 10%;">Nhà xuất bản</th>
+      <th scope="col" style="width: 8%;">Năm XB</th>
+      <th scope="col" style="width: 22%;">Mô tả</th>
+      <th scope="col" style="width: 5%;">SL</th>
       <th scope="col" style="width: 10%;">Tùy chọn</th>
     </tr>
   </thead>
@@ -35,10 +39,24 @@
         <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].name %>
         </td>
-        <td class="text_truncate" style="max-width: 200px;">
+        <td class="text_truncate text-center" style="max-width: 110px;">
+          <img style="height: 80px; width: 55px;" src="" class="rounded" alt="...">
+        </td>
+        <td class="text_truncate" style="max-width: 110px;">
+          <%= data.row[i].author %>
+        </td>
+        <td class="text_truncate" style="max-width: 110px;">
+          <%= data.row[i].publisher %>
+        </td>
+        <td class="text_truncate yearOfRelease" style="max-width: 110px;">
+          <%= data.row[i].yearOfRelease %>
+        </td>
+        <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].description %>
         </td>
-        <td class="d-flex justify-content-center">3</td>
+        <td class="text_truncate" style="max-width: 10px;">
+          <%= data.row[i].count %>
+        </td>
         <td class="operation_group">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal"></i>
           <i class="fa-solid fa-eye"></i>
@@ -100,7 +118,11 @@
             };
           });
       });
+      document.getElementById('book_count').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
   });
+
 </script>
 
 <!-- thêm -->
@@ -108,20 +130,47 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Thêm thể loại</h5>
+        <h5 class="modal-title" id="addModalLabel">Thêm sách</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="/the-loai">
+        <form method="post" action="/sach">
           <div class="form-group">
-            <label for="category_name">Tên thể loại</label>
-            <input type="text" class="form-control" name="name" id="category_name" placeholder="Nhập tên..." required>
+            <label for="book_name">Tên sách</label>
+            <input type="text" class="form-control" name="name" id="book_name" placeholder="Nhập tên..." required>
+          </div>
+          <div class="form-group custom-file">  
+              <label for="book_image">Hình ảnh</label>
+              <input class="form-control" type="file" name="img" id="book_image">
+          </div>
+          <div class="form-group mt-4">
+            <label for="book_author">Tác giả</label>
+            <input type="text" class="form-control" name="author" id="book_author" placeholder="Nhập tác giả" required>
           </div>
           <div class="form-group">
-            <label for="category_description">Mô tả thể loại</label>
-            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="description" id="category_description" rows="5" required></textarea>
+            <label for="book_publisher">Nhà xuất bản</label>
+            <input type="text" class="form-control" name="publisher" id="book_publisher" placeholder="Nhập nhà xuất bản" required>
+          </div>
+          <div class="form-group">
+            <label for="book_yearOfRelease">Ngày xuất bản</label>
+            <input type="date" class="form-control" name="yearOfRelease" id="book_yearOfRelease" required>
+          </div>
+          <div class="form-group">
+            <label for="book_count">Số lượng</label>
+            <input type="text" class="form-control" name="count" id="book_count" required>
+          </div>
+          <div class="form-group">
+            <label for="book_category">Thể loại</label>
+              <select class="form-select" name="category" id="book_category">
+                <option selected>Chọn thể loại</option>
+                <option value="35">One</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="book_description">Mô tả </label>
+            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="description" id="book_description" rows="5" required></textarea>
           </div>
           <div class="modal-footer" style="border: none;">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

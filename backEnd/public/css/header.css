@@ -1,69 +1,56 @@
-header {
-    position: fixed;
-    top: 0;
+.header__admin {
+  background-color: var(--black-cl);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+
+  > a {
+    text-decoration: none;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    color: var(--text-white-cl);
+    border-bottom: 1px solid var(--text-gray-cl);
+  }
+
+  > ul > a {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    transition: all 0.4s;
+  }
+
+  .log_out__admin {
+    position: absolute;
+    bottom: 0;
     left: 0;
-    height: 100vh;
-    border-right: 2px solid var(--gray-cl);
-    background-color: rgba(27, 23, 81, 0.979);
-    width: 230px;
-    color: white;
-    
-    img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
+    width: 220px;
+  }
+
+  > ul {
+    flex: 1;
+    padding: 8px;
+
+    > a:hover {
+      border-radius: 6px;
+      background-color: var(--hover-cl);
+      > li {
+        color: var(--text-white-cl);
+      }
     }
+  }
 
-    > ul > a{
-        text-decoration: none;
+  > ul > a > li {
+    font-size: 18px;
+    color: var(--text-gray-cl);
+
+    > i {
+      width: 25px;
     }
-
-    div:first-of-type a {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 15px;
-        border-bottom: 2px solid var(--gray-cl);
-
-        span {
-            display: -webkit-box;
-            width: fit-content;
-            color: var(--white-cl);
-            font-weight: 600;
-            overflow: hidden;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-    }
-
-    ul:last-of-type a {
-        display: flex;
-        align-items: center;
-        padding: 20px;
-        font-size: 20px;
-        color: var(--white-cl);
-        font-weight: 500;
-
-        &:last-of-type {
-            background-color: var(--red-cl);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-
-            &:hover {
-                background-color: var(--red-black-cl);
-            }
-        }
-
-        .icon {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-
-        &:hover:not(:last-of-type) {
-            transition: color 0.1s linear;
-            color: var(--orange-cl);
-        }
-    }
+  }
 }

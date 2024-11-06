@@ -1,19 +1,17 @@
 <div style="display: flex; padding: 10px; justify-content: flex-end; align-items: center; gap: 10px;">
 <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-    Thêm thể loại
+    Thêm tin tức
   </button>
  
-    <form style="display: flex;" class="form-inline my-2 my-lg-0">
+    <form style="display: flex;" class="form-inline my-2 my-lg-0" method="put">
       <div class="dropdown mr-2">
-        <button style="padding: 5px 12px;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Bộ lọc
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item">Mới nhất</div>
-          <div class="dropdown-item">Cũ nhất</div>
-        </div>
+        <select name="sort" style="padding: 5px 12px;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <option class="dropdown-item" value="desc">Mới nhất</option>
+          <option class="dropdown-item" value="asc">Cũ nhất</option>
+        </select>
+    
       </div>
-        <input class="form-control mr-sm-1" type="search" placeholder="Tìm tên thể loại" aria-label="Search">
+        <input class="form-control mr-sm-1" type="search" name="search" placeholder="Tìm tên thể loại" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
       </form>
 </div>
@@ -33,10 +31,10 @@
       <tr>
         <th scope="row"><%= i+1%></th>
         <td class="text_truncate" style="max-width: 110px;">
-          <%= data.row[i].name %>
+          <%= data.row[i].title %>
         </td>
         <td class="text_truncate" style="max-width: 200px;">
-          <%= data.row[i].description %>
+          <%= data.row[i].content %>
         </td>
         <td class="d-flex justify-content-center">3</td>
         <td class="operation_group">
@@ -61,7 +59,7 @@
     <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angles-right"></i></a></li>
   </ul>
 </nav>
-<script>
+<!-- <script>
   document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.fa-pen-to-square').forEach(item => {
           item.addEventListener('click', function() {
@@ -101,10 +99,10 @@
           });
       });
   });
-</script>
+</script> -->
 
 <!-- thêm -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -131,10 +129,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- sửa -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
@@ -162,10 +160,10 @@
           </div>
       </div>
   </div>
-</div>
+</div> -->
 
 <!-- xóa -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
@@ -183,5 +181,5 @@
           </div>
       </div>
   </div>
-  </div>
+  </div> -->
 
