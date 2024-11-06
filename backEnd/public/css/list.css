@@ -1,0 +1,25 @@
+.text_truncate{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+.operation_group{
+    i{
+        color: purple;
+        margin: 0 3px;
+        cursor: pointer;
+        opacity: 0.6;
+    }
+
+    i:hover{
+        opacity: 1;
+    }
+    > i:first-child{
+        color: green;
+    }
+
+    > i:last-child{
+        color: red;
+    }
+}

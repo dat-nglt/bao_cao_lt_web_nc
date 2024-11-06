@@ -7,9 +7,11 @@
     <title><%= data.title %></title>
   </head>
   <body>
-    <div class="layout-admin">
+    <div class="layout__admin">
       <%- include('header') %>
-      <% if (data.page) { %> <%- include(data.page) %> <%}%>
+      <div class="page_content__admin">
+        <% if (data.page) { %> <%- include(data.page) %> <%}%>
+      </div>
     </div>
   </body>
 </html>
