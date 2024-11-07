@@ -36,7 +36,7 @@
 
 ### Trương Văn Đạt
 - Giao diện trang chủ (header, ds sách, ds tin tức)
-- Giao diện danh sách sách (có bộ lọc theo danh mục luôn)
+- Giao diện danh sách (có bộ lọc theo danh mục luôn)
 - Trang chi tiết sách (cho mượn 1 cuốn thôi pls)
 
 ### Lê Nguyễn Minh Hòa
