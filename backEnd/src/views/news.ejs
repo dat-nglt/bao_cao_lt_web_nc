@@ -1,65 +1,93 @@
-<div style="display: flex; padding: 10px; justify-content: flex-end; align-items: center; gap: 10px;">
-<button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-    Thêm tin tức
-  </button>
- 
-    <form style="display: flex;" class="form-inline my-2 my-lg-0" method="put">
-      <div class="dropdown mr-2">
-        <select name="sort" style="padding: 5px 12px;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <option class="dropdown-item" value="desc">Mới nhất</option>
-          <option class="dropdown-item" value="asc">Cũ nhất</option>
-        </select>
-    
-      </div>
-        <input class="form-control mr-sm-1" type="search" name="search" placeholder="Tìm tên thể loại" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-      </form>
+<div class="d-flex justify-content-between align-items-center">
+  <h3 class="p-2"><b>TRANG TIN TỨC</b></h3>
+  <div class="d-flex p-2 justify-content-end align-items-center gap-1">
+    <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
+        Thêm tin tức
+      </button>
+     
+        <form class="form-inline my-2 my-lg-0 d-flex" method="put">
+          <div class="dropdown mr-2">
+            <select class="form-select" aria-label="select Default" name="sort" >
+              <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
+              <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
+            </select>
+          
+        
+          </div>
+            <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo tiêu đề" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </form>
+    </div>
 </div>
+
 
 <table class="table" style="height: fit-content;">
   <thead>
     <tr>
       <th scope="col" style="width: 5%;">STT</th>
-      <th scope="col" style="width: 30%;">Tên thể loại</th>
-      <th scope="col" style="width: 48%;">Mô tả</th>
-      <th scope="col" style="width: 7%;">SL sách</th>
+      <th scope="col" style="width: 30%;">Tiêu đề</th>
+      <th scope="col" style="width: 20%;">Ảnh bìa</th>
+      <th scope="col" style="width: 35%;">Nội dung</th>
       <th scope="col" style="width: 10%;">Tùy chọn</th>
     </tr>
   </thead>
   <tbody>
-    <% for(let i=0; i<data.row.length; i++){ %>
+    <% 
+    let stt = ((data.currentPage-1) * data.limit) + 1;
+    for(let i=0; i<data.row.length; i++){ %>
       <tr>
-        <th scope="row"><%= i+1%></th>
+        <th scope="row"><%= stt%></th>
         <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].title %>
+        </td>
+        <td>
+          <%= data.row[i].content %>
         </td>
         <td class="text_truncate" style="max-width: 200px;">
           <%= data.row[i].content %>
         </td>
-        <td class="d-flex justify-content-center">3</td>
         <td class="operation_group">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal"></i>
           <i class="fa-solid fa-eye"></i>
           <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#deleteModal" data-id="<%= data.row[i].id %>"></i>
         </td>
       </tr>
-      <% }%>
+      <% stt++ }%>
   </tbody>
 </table>
-
+<% if (data.messages) { %>
+  <div id="emailHelp" class="form-text"><%= data.messages %></div>
+  <% } %>
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-end">
-    <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angles-left"></i></a></li>
-    <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angle-left"></i></a></li>
-    <li class="page-item"><a class="page-link" href="#">4</a></li>
-    <li class="page-item"><a class="page-link" href="#">5</a></li>
-    <li class="page-item"><a class="page-link" href="#">6</a></li>
-    <li class="page-item"><a class="page-link" href="#">7</a></li>
-    <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angle-right"></i></a></li>
-    <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angles-right"></i></a></li>
-  </ul>
+      <% if (data.totalPage > 3) {
+          if (data.currentPage > 3) { %>
+             <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+          <% }
+          if (data.currentPage > 1) { %>
+            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
+          <% }
+          for (let i = 1; i <= data.totalPage; i++) {
+            if (i == data.currentPage) { %>
+                <li class="page-item active"><a class="page-link" href="#" aria-disabled="true"><%= i %></a></li>
+                <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
+                <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
+                <%
+            }
+        }
+          if (data.currentPage < data.totalPage) { %>
+            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
+          <% }
+          if (data.currentPage < data.totalPage - 2) { %>
+            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
+          <% }
+      } %>
+      
+    </ul>
+
 </nav>
-<!-- <script>
+
+<script>
   document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.fa-pen-to-square').forEach(item => {
           item.addEventListener('click', function() {
@@ -99,29 +127,42 @@
           });
       });
   });
-</script> -->
+</script>
 
 <!-- thêm -->
-<!-- <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Thêm thể loại</h5>
+        <h5 class="modal-title" id="addModalLabel">Thêm tin tức</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="/the-loai">
+        <form method="post" class="needs-validation" novalidate action="/tin-tuc">
           <div class="form-group">
-            <label for="category_name">Tên thể loại</label>
-            <input type="text" class="form-control" name="name" id="category_name" placeholder="Nhập tên..." required>
+            <label for="news_title">Tiêu đề</label>
+            <input type="text" class="form-control" maxlength="255" name="title" id="news_title" placeholder="Nhập tiêu đề..." required>
+            <div class="invalid-feedback">
+              Vui lòng nhập tiêu đề!
+            </div>
           </div>
           <div class="form-group">
-            <label for="category_description">Mô tả thể loại</label>
+            <label for="category_description">Nội dung</label>
             <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="description" id="category_description" rows="5" required></textarea>
+            <div class="invalid-feedback">
+              Vui lòng nhập nội dung!
+            </div>
           </div>
-          <div class="modal-footer" style="border: none;">
+          <div class="form-group">  
+            <label for="news_image">Ảnh bìa</label>
+            <input class="form-control" type="file" name="image" id="news_image" required>
+            <div class="invalid-feedback">
+              Vui lòng chọn ảnh bìa!
+            </div>
+          </div>
+          <div class="modal-footer p-0" style="border: none;">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             <button type="submit" class="btn btn-success">Thêm</button>
           </div>
@@ -129,10 +170,10 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
 
 <!-- sửa -->
-<!-- <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
@@ -160,10 +201,10 @@
           </div>
       </div>
   </div>
-</div> -->
+</div>
 
 <!-- xóa -->
-<!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
@@ -181,5 +222,22 @@
           </div>
       </div>
   </div>
-  </div> -->
+  </div>
 
+<script>
+  (function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>

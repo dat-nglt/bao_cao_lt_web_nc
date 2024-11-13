@@ -26,7 +26,7 @@ const initWebRoute = (app) => {
 
   //tin tức
   router.get("/tin-tuc", newsControllers.getNewsPage);
-  router.post("/tin-tuc", bookController.addBook);
+  router.post("/tin-tuc", newsControllers.createNews);
   router.post("/tin-tuc/:id", bookController.updateBook);
   router.delete("/tin-tuc/:id", bookController.deleteBook);
 
