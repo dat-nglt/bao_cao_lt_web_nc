@@ -4,13 +4,26 @@ import viewEngine from './viewEngine'
 import initWebRoute from './src/routes/webRoute'
 import path from 'path'
 import bodyParser from 'body-parser'
+import flash from 'connect-flash'
+import session from 'express-session'
+
 const app = express()
+
 dotenv.config()
 app.use(
   express.static(
     path.join(__dirname, '/public')
   )
 )
+
+app.use(session({
+  secret: 'hehe',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+
+app.use(flash())
 
 app.use(
   bodyParser.urlencoded({

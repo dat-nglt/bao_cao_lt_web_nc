@@ -4,13 +4,13 @@
   top: 0;
   bottom: 0;
   left: 0;
-  width: 220px;
+  width: 200px;
   display: flex;
   flex-direction: column;
 
   > a {
     text-decoration: none;
-    padding: 16px;
+    padding: 16px 12px;
     display: flex;
     align-items: center;
     color: var(--text-white-cl);
@@ -50,7 +50,7 @@
     color: var(--text-gray-cl);
 
     > i {
-      width: 25px;
+      width: 29px;
     }
   }
 }

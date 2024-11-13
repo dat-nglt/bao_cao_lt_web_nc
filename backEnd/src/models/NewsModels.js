@@ -10,15 +10,13 @@ const getAllNews = async (search = '', sort = 'desc', start = 0, end = 10) => {
 
 const getTotalNews = async (search = '', sort = 'desc') => {
     const [rows, fields] = await pool.execute(
-        'SELECT * FROM news WHERE title LIKE ? ORDER BY id ' + sort ,
+        'SELECT count(id) FROM news WHERE title LIKE ? ORDER BY id ' + sort ,
         [`%${search}%`]
     );
     return rows;
 }
 
-
-
-const createCategory = async (data) => {
+const createNews = async (data) => {
     const { name, description } = data;
     const [result] = await pool.execute(
         'INSERT INTO category (name, description) VALUES (?, ?)',
@@ -46,4 +44,4 @@ const deleteCategory = async (id) => {
     return result;
 }
 
-export default { getAllNews, getTotalNews, updateCategory, deleteCategory} 
+export default { getAllNews, getTotalNews, createNews} 
