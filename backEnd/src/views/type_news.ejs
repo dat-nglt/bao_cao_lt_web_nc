@@ -2,17 +2,14 @@
   <h3 class="p-2"><b style="color: #e92de5;">TRANG TIN TỨC</b></h3>
   <div class="d-flex p-2 justify-content-end align-items-center gap-1">
     <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-        Thêm tin tức
+        Thêm thể loại tin tức
       </button>
-     
         <form class="form-inline my-2 my-lg-0 d-flex" method="put">
           <div class="dropdown mr-2">
             <select class="form-select" aria-label="select Default" name="sort" >
               <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
               <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
             </select>
-          
-        
           </div>
             <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo tiêu đề" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -25,9 +22,8 @@
   <thead>
     <tr>
       <th scope="col" style="width: 5%;" class="p-1">STT</th>
-      <th scope="col" style="width: 32%;" class="p-1">Tiêu đề</th>
-      <th scope="col" style="width: 10%;" class="p-1">Ảnh bìa</th>
-      <th scope="col" style="width: 45%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 32%;" class="p-1">Tên thể loại</th>
+      <th scope="col" style="width: 10%;" class="text-center p-1">Số tin tức</th>
       <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
     </tr>
   </thead>
@@ -38,22 +34,10 @@
       <tr>
         <th scope="row" class="p-1"><%= stt%></th>
         <td class="text_truncate p-1" style="max-width: 110px;">
-          <%= data.row[i].title %>
-        </td>
-
-        <td class="p-1">
-          <% if(data.row[i].image !== '') {%>
-            <a href="<%= data.row[i].image %>">
-              <img src="<%= data.row[i].image %>" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
-            </a>
-          <% }else{ %>
-            <a href="<%= data.row[i].image %>">
-              <img src="https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
-            </a>
-          <% } %>  
+          <%= data.row[i].name %>
         </td>
         <td class="text_truncate p-1" style="max-width: 200px;">
-          <%= data.row[i].content %>
+          <%= data.countNews[data.row[i].id] %>
         </td>
         <td class="operation_group f-flex">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
