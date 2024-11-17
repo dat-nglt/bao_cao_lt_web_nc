@@ -20,16 +20,19 @@ const initWebRoute = (app) => {
   router.delete("/sach/:id", bookController.deleteBook);
 
   //mượn trả
-
+  router.get("/muon-va-tra", typeNewsControllers.getTypeNewsPage);
+  router.post("/muon-va-tra", typeNewsControllers.createTypeNews);
+  router.post("/muon-va-tra/update/:id", typeNewsControllers.updateTypeNews);
+  router.post("/muon-va-tra/delete/:id", typeNewsControllers.deleteTypeNews);
   //phí phạt
 
   //phản hồi
 
-  //t
+  //loại tin tức
   router.get("/the-loai-tin-tuc", typeNewsControllers.getTypeNewsPage);
-  // router.post("/the-loai-tin-tuc", newsControllers.createNews);
-  // router.post("/the-loai-tin-tuc/update/:id", newsControllers.updateNews);
-  // router.post("/the-loai-tin-tuc/delete/:id", newsControllers.deleteNews);
+  router.post("/the-loai-tin-tuc", typeNewsControllers.createTypeNews);
+  router.post("/the-loai-tin-tuc/update/:id", typeNewsControllers.updateTypeNews);
+  router.post("/the-loai-tin-tuc/delete/:id", typeNewsControllers.deleteTypeNews);
 
   //tin tức
   router.get("/tin-tuc", newsControllers.getNewsPage);

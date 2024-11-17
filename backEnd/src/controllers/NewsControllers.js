@@ -1,36 +1,46 @@
-import { log } from "console";
-import newsModel from "../models/NewsModels.js";
+import { log } from 'console';
+import { typeNewsModel, newsModel, sequelize } from '../models/index.js';
 import cloudinary from "../utils/cloudinary.js";
 import { IncomingForm } from "formidable";
 import fs from "fs";
 import { Op } from "sequelize";
+import { type } from 'os';
 
 const getNewsPage = async (req, res) => {
   const limit = 5;
   const search = req.query.search ? req.query.search : "";
   const sort = req.query.sort ? req.query.sort : "desc";
   const currentPage = req.query.page ? req.query.page : 1;
+  const type = req.query.type ? req.query.type : '0';
+  const whereConditions = {
+    title: {
+        [Op.like]: `%${search}%`,
+    }
+  };
+  if (type !== '0') {
+    whereConditions.typeId = type;
+  }
   const totalNews = await newsModel.findAll({
     raw: true, 
-    where: {
-      title: {
-        [Op.like]: `%${search}%`,
-      },
-    }, 
+    where: whereConditions
   });
-  console.log(totalNews);
   const totalPage = Math.ceil(totalNews.length / limit);
   const start = (currentPage - 1) * limit;
-
   const listNews = await newsModel.findAll({
-    where: {
-      title: {
-        [Op.like]: `%${search}%`,
-      },
-    },
+    raw: true,
+    where: whereConditions,
     order: [["id", sort]],
     limit: limit,
     offset: start,
+    include: [{
+      model: typeNewsModel,
+      as: 'type_news',
+      attributes: ['id', 'name']
+  }],
+  });
+  const listTypeNews = await typeNewsModel.findAll({
+    raw: true,
+    attributes: ['id', 'name']
   });
   return res.render("layout", {
     data: {
@@ -39,11 +49,13 @@ const getNewsPage = async (req, res) => {
       messageSuccess: req.flash("success"),
       page: "news",
       row: listNews,
+      listTypeNews,
       currentPage: parseInt(currentPage),
       totalPage: parseInt(totalPage),
-      sort: sort,
-      search: search,
-      limit: limit,
+      sort,
+      search,
+      type: parseInt(type),
+      limit,
     },
   });
 };
@@ -73,6 +85,17 @@ const createNews = async (req, res) => {
       res.status(400).redirect("/tin-tuc");
       return;
     }
+    const type = fields.type[0];
+    const typeNews = await typeNewsModel.findOne({
+      where: {
+        id: type
+      },
+    });
+    if(!typeNews){
+      req.flash("error", "Loại tin tức không hợp lệ!");
+      res.status(400).redirect("/tin-tuc");
+      return;
+    }
     cloudinary.uploader.upload(file[0].filepath, async (err, result) => {
       fs.unlink(file[0].filepath, (unlinkErr) => {
         if (unlinkErr) {
@@ -86,11 +109,10 @@ const createNews = async (req, res) => {
         res.status(400).redirect("/tin-tuc");
         return;
       }
-      
       const content = fields.content[0];
       const image = result.secure_url;
      
-      const createdNews = await newsModel.create({ title, image, content });
+      const createdNews = await newsModel.create({ title, image, content, typeId: type });
       if (createdNews) {
         req.flash("success", "Thêm tin tức thành công");
         res.status(201).redirect("/tin-tuc");
@@ -115,6 +137,7 @@ const updateNews = async (req, res) => {
       const file = files.image;
       const title = fields.title[0];
       const content = fields.content[0];
+      const type = fields.type[0];
       if(file[0].originalFilename){ 
         const news = await newsModel.findOne({
           where: {
@@ -133,6 +156,16 @@ const updateNews = async (req, res) => {
             return;
           }
         }
+        const typeNews = await typeNewsModel.findOne({
+          where: {
+            id: type
+          },
+        });
+        if(!typeNews){
+          req.flash("error", "Loại tin tức không hợp lệ!");
+          res.status(400).redirect("/tin-tuc");
+          return;
+        }
         cloudinary.uploader.upload(file[0].filepath, async (err, result) => {
           fs.unlink(file[0].filepath, (unlinkErr) => {
             if (unlinkErr) {
@@ -148,7 +181,7 @@ const updateNews = async (req, res) => {
           }
           const newImage = result.secure_url;
           const updateNews = await newsModel.update(
-            { title, content, image: newImage },
+            { title, content, image: newImage, typeId: type },
             { where: { id: req.params.id } }
           );
           if (updateNews) {
@@ -179,8 +212,18 @@ const updateNews = async (req, res) => {
             return;
           }
         }
+        const typeNews = await typeNewsModel.findOne({
+          where: {
+            id: type
+          },
+        });
+        if(!typeNews){
+          req.flash("error", "Loại tin tức không hợp lệ!");
+          res.status(400).redirect("/tin-tuc");
+          return;
+        }
         const updateNews = await newsModel.update(
-          { title, content },
+          { title, content, typeId: type },
           { where: { id: req.params.id } }
         );
         if (updateNews) {

@@ -1,30 +1,31 @@
 <div class="d-flex justify-content-between align-items-center">
-  <h3 class="p-2"><b style="color: #e92de5;">TRANG TIN TỨC</b></h3>
+  <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">TRANG LOẠI TIN TỨC</b></h3>
   <div class="d-flex p-2 justify-content-end align-items-center gap-1">
     <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-        Thêm thể loại tin tức
+        Thêm loại tin tức
       </button>
         <form class="form-inline my-2 my-lg-0 d-flex" method="put">
           <div class="dropdown mr-2">
             <select class="form-select" aria-label="select Default" name="sort" >
               <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
               <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
+              <option class="dropdown-item" value="count_news_asc" <% if(data.sort === 'count_news_asc'){%> selected  <% } %>>Ít tin nhất</option>
+              <option class="dropdown-item" value="count_news_desc" <% if(data.sort === 'count_news_desc'){%> selected  <% } %>>Nhiều tin nhất</option>
             </select>
           </div>
-            <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo tiêu đề" aria-label="Search">
+            <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo tên" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
     </div>
 </div>
-
-
 <table class="table" style="height: fit-content;">
   <thead>
     <tr>
-      <th scope="col" style="width: 5%;" class="p-1">STT</th>
-      <th scope="col" style="width: 32%;" class="p-1">Tên thể loại</th>
+      <th scope="col" style="width: 5%;" class="p-1 text-center">STT</th>
+      <th scope="col" style="width: 67%;" class="p-1">Tên loại tin tức</th>
+      <th scope="col" style="width: 8%;" class="p-1 text-center">Ngày tạo</th>
       <th scope="col" style="width: 10%;" class="text-center p-1">Số tin tức</th>
-      <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
+      <th scope="col" style="width: 10%;" class="p-1">Tùy chọn</th>
     </tr>
   </thead>
   <tbody>
@@ -32,12 +33,19 @@
     let stt = ((data.currentPage-1) * data.limit) + 1;
     for(let i=0; i<data.row.length; i++){ %>
       <tr>
-        <th scope="row" class="p-1"><%= stt%></th>
-        <td class="text_truncate p-1" style="max-width: 110px;">
+        <th scope="row" class="text-center"><%= stt%></th>
+        <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].name %>
         </td>
-        <td class="text_truncate p-1" style="max-width: 200px;">
-          <%= data.countNews[data.row[i].id] %>
+        <td class="text_truncate" style="max-width: 110px;">
+          <%= data.row[i].dayCreated %>
+        </td>
+        <td scope="row" class="text-center">
+          <% if(data.row[i].count){ %>
+            <%= data.row[i].count %>
+          <% }else{ %>
+            0
+          <% } %>
         </td>
         <td class="operation_group f-flex">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
@@ -71,48 +79,45 @@
   <ul class="pagination justify-content-end">
       <% if (data.totalPage > 1) {
           if (data.currentPage > 3) { %>
-             <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+             <li class="page-item"><a class="page-link" href="/the-loai-tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
           <% }
           if (data.currentPage > 1) { %>
-            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
+            <li class="page-item"><a class="page-link" href="/the-loai-tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
           <% }
           for (let i = 1; i <= data.totalPage; i++) {
             if (i == data.currentPage) { %>
                 <li class="page-item active"><a class="page-link" href="#" aria-disabled="true"><%= i %></a></li>
                 <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
-                <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
+                <li class="page-item"><a class="page-link" href="/the-loai-tin-tuc?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
                 <%
             }
         }
           if (data.currentPage < data.totalPage) { %>
-            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
+            <li class="page-item"><a class="page-link" href="/the-loai-tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
           <% }
           if (data.currentPage < data.totalPage - 2) { %>
-            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
+            <li class="page-item"><a class="page-link" href="/the-loai-tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
           <% }
       } %>
     </ul>
 </nav>
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.fa-pen-to-square').forEach(item => {
         item.addEventListener('click', function() {
             const row = this.closest('tr');
             const id = this.getAttribute('data-id');
-            const title = row.cells[1].innerText;
-            const content = row.cells[3].innerText;
+            const name = row.cells[1].innerText;
             const formEdit = document.getElementById('edit_form');
-            formEdit.action = `/tin-tuc/update/${id}`;
-            document.getElementById('edit_news_title').value = title;
-            document.getElementById('edit_news_content').value = content;
+            formEdit.action = `/the-loai-tin-tuc/update/${id}`;
+            document.getElementById('edit_type_news_name').value = name;
         });
     });
     document.querySelectorAll('.fa-trash-can').forEach(item => {
         item.addEventListener('click', function() { 
             const id = this.getAttribute('data-id');
             const formDel = document.getElementById('del_form');
-            formDel.action = `/tin-tuc/delete/${id}`;
+            formDel.action = `/the-loai-tin-tuc/delete/${id}`;
         });
     });
     const errorToast = document.getElementById('errorToast');
@@ -152,32 +157,18 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Thêm tin tức</h5>
+        <h5 class="modal-title" id="addModalLabel">Thêm loại tin tức</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" class="needs-validation" novalidate action="/tin-tuc" enctype="multipart/form-data">
+        <form method="post" class="needs-validation" novalidate action="/the-loai-tin-tuc">
           <div class="form-group">
-            <label for="news_title">Tiêu đề</label>
-            <input type="text" class="form-control" maxlength="255" name="title" id="news_title" placeholder="Nhập tiêu đề..." required>
+            <label for="type_news_name">Tên loại tin tức</label>
+            <input type="text" class="form-control" maxlength="255" name="name" id="type_news_name" placeholder="Nhập tên loại..." required>
             <div class="invalid-feedback">
-              Vui lòng nhập tiêu đề!
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="news_content">Nội dung</label>
-            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="content" id="news_content" rows="5" required></textarea>
-            <div class="invalid-feedback">
-              Vui lòng nhập nội dung!
-            </div>
-          </div>
-          <div class="form-group">  
-            <label for="news_image">Ảnh bìa</label>
-            <input class="form-control" type="file" name="image" id="news_image" required>
-            <div class="invalid-feedback">
-              Vui lòng chọn ảnh bìa!
+              Vui lòng nhập tên loại tin tức!
             </div>
           </div>
           <div class="modal-footer p-0" style="border: none;">
@@ -193,30 +184,19 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">Cập nhật tin tức</h5>
+        <h5 class="modal-title" id="editModalLabel">Cập nhật loại tin tức</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" class="needs-validation" id="edit_form" novalidate enctype="multipart/form-data">
+        <form method="post" class="needs-validation" id="edit_form" novalidate>
           <div class="form-group">
-            <label for="edit_news_title">Tiêu đề</label>
-            <input type="text" class="form-control" maxlength="255" name="title" id="edit_news_title" placeholder="Nhập tiêu đề..." required>
+            <label for="edit_type_news_name">Tên loại tin tức</label>
+            <input type="text" class="form-control" maxlength="255" name="name" id="edit_type_news_name" placeholder="Nhập tên loại..." required>
             <div class="invalid-feedback">
-              Vui lòng nhập tiêu đề!
+              Vui lòng nhập tên loại tin tức!
             </div>
-          </div>
-          <div class="form-group">
-            <label for="edit_news_content">Nội dung</label>
-            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="content" id="edit_news_content" rows="5" required></textarea>
-            <div class="invalid-feedback">
-              Vui lòng nhập nội dung!
-            </div>
-          </div>
-          <div class="form-group">  
-            <label for="edit_news_image">Ảnh bìa</label>
-            <input class="form-control" type="file" name="image" id="edit_news_image">
           </div>
           <div class="modal-footer p-0" style="border: none;">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

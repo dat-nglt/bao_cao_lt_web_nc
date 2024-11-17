@@ -4,30 +4,35 @@
     <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
         Thêm tin tức
       </button>
-     
         <form class="form-inline my-2 my-lg-0 d-flex" method="put">
           <div class="dropdown mr-2">
             <select class="form-select" aria-label="select Default" name="sort" >
               <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
               <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
             </select>
-          
-        
           </div>
+          <div class="dropdown mr-2">
+            <select class="form-select" aria-label="select Default" name="type" >
+              <option class="dropdown-item" value="0" >Tất cả</option>
+              <% for(let i=0; i<data.listTypeNews.length; i++){ %>
+                <option class="dropdown-item" value="<%= data.listTypeNews[i].id %>" <% if(data.type === data.listTypeNews[i].id){%> selected <% } %>><%= data.listTypeNews[i].name %></option>
+                <% } %>
+            </select>
+          </div>         
             <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo tiêu đề" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
     </div>
 </div>
 
-
 <table class="table" style="height: fit-content;">
   <thead>
     <tr>
       <th scope="col" style="width: 5%;" class="p-1">STT</th>
-      <th scope="col" style="width: 32%;" class="p-1">Tiêu đề</th>
+      <th scope="col" style="width: 30%;" class="p-1">Tiêu đề</th>
       <th scope="col" style="width: 10%;" class="p-1">Ảnh bìa</th>
-      <th scope="col" style="width: 45%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 32%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 15%;" class="p-1">Loại tin</th>
       <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
     </tr>
   </thead>
@@ -36,11 +41,10 @@
     let stt = ((data.currentPage-1) * data.limit) + 1;
     for(let i=0; i<data.row.length; i++){ %>
       <tr>
-        <th scope="row" class="p-1"><%= stt%></th>
+        <td scope="row" class="p-1"><%= stt%></td>
         <td class="text_truncate p-1" style="max-width: 110px;">
           <%= data.row[i].title %>
         </td>
-
         <td class="p-1">
           <% if(data.row[i].image !== '') {%>
             <a href="<%= data.row[i].image %>">
@@ -54,6 +58,9 @@
         </td>
         <td class="text_truncate p-1" style="max-width: 200px;">
           <%= data.row[i].content %>
+        </td>
+        <td class="text_truncate p-1" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
+          <%= data.row[i]['type_news.name'] %>
         </td>
         <td class="operation_group f-flex">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
@@ -113,17 +120,19 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.fa-pen-to-square').forEach(item => {
-        item.addEventListener('click', function() {
-            const row = this.closest('tr');
-            const id = this.getAttribute('data-id');
-            const title = row.cells[1].innerText;
-            const content = row.cells[3].innerText;
-            const formEdit = document.getElementById('edit_form');
-            formEdit.action = `/tin-tuc/update/${id}`;
-            document.getElementById('edit_news_title').value = title;
-            document.getElementById('edit_news_content').value = content;
-        });
+    item.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const id = this.getAttribute('data-id');
+        const title = row.cells[1].innerText;
+        const content = row.cells[3].innerText;
+        const type = row.cells[4].getAttribute('data-type-id');
+        const formEdit = document.getElementById('edit_form');
+        formEdit.action = `/tin-tuc/update/${id}`;
+        document.getElementById('edit_news_title').value = title;
+        document.getElementById('edit_news_content').value = content;
+        document.getElementById('edit_news_type').value = type;
     });
+});
     document.querySelectorAll('.fa-trash-can').forEach(item => {
         item.addEventListener('click', function() { 
             const id = this.getAttribute('data-id');
@@ -190,6 +199,14 @@
             </div>
           </div>
           <div class="form-group">  
+            <label for="news_type">Loại tin</label>
+            <select class="form-select" id="news_type" aria-label="select Default" name="type">
+              <% for(let i=0; i<data.listTypeNews.length; i++){ %>
+                <option class="dropdown-item" value="<%= data.listTypeNews[i].id %>"><%= data.listTypeNews[i].name %></option>
+                <% } %>
+            </select>
+          </div>
+          <div class="form-group">  
             <label for="news_image">Ảnh bìa</label>
             <input class="form-control" type="file" name="image" id="news_image" required>
             <div class="invalid-feedback">
@@ -229,6 +246,14 @@
             <div class="invalid-feedback">
               Vui lòng nhập nội dung!
             </div>
+          </div>
+          <div class="form-group">  
+            <label for="edit_news_type">Loại tin</label>
+            <select class="form-select" id="edit_news_type" aria-label="select Default" name="type">
+              <% for(let i=0; i<data.listTypeNews.length; i++){ %>
+                <option class="dropdown-item" value="<%= data.listTypeNews[i].id %>"><%= data.listTypeNews[i].name %></option>
+                <% } %>
+            </select>
           </div>
           <div class="form-group">  
             <label for="edit_news_image">Ảnh bìa</label>
