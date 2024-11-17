@@ -6,10 +6,13 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import flash from 'connect-flash'
 import session from 'express-session'
+import sequelize from "./src/configs/connectDB.js";
+
+sequelize.sync();
 
 const app = express()
 
-dotenv.config()
+dotenv.config({force: true})
 app.use(
   express.static(
     path.join(__dirname, '/public')
