@@ -38,7 +38,8 @@ const initWebRoute = (app) => {
   router.post("/tin-tuc/update/:id", newsControllers.updateNews);
   router.post("/tin-tuc/delete/:id", newsControllers.deleteNews);
 
-  router.get("*", (req, res) => res.send("Không có trang này"));
+
+  router.post("*", (req, res) => res.redirect("/not-found"));
   return app.use("/", router);
 };
 

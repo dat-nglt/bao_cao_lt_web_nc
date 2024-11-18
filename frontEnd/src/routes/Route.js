@@ -6,6 +6,8 @@ import ReaderProfile from '../pages/ReaderProfile'
 import PageNotFound from '../pages/PageNotFound'
 import SearchPage from '../pages/SearchPage'
 import Feed from '../components/Feed'
+import CategoryAll from '../components/CategoryAll'
+import BookDetails from '../components/BookDetails'
 import Contact from '../pages/Contact'
 import Profile from '../components/Profile'
 import RentHistory from '../components/RentHistory'
@@ -40,6 +42,14 @@ export const router = createBrowserRouter([
       {
         path: '/sach-yeu-thich',
         element: <FavoritBooks />
+      },
+      {
+        path: '/danh-muc',
+        element: <CategoryAll />
+      },
+      {
+        path: '/chi-tiet-sach', 
+        element: <BookDetails /> 
       }
     ]
   },
