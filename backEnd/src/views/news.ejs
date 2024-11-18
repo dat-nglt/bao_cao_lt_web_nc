@@ -31,7 +31,8 @@
       <th scope="col" style="width: 5%;" class="p-1">STT</th>
       <th scope="col" style="width: 30%;" class="p-1">Tiêu đề</th>
       <th scope="col" style="width: 10%;" class="p-1">Ảnh bìa</th>
-      <th scope="col" style="width: 32%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 24%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 8%;" class="p-1">Ngày tạo</th>
       <th scope="col" style="width: 15%;" class="p-1">Loại tin</th>
       <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
     </tr>
@@ -41,11 +42,11 @@
     let stt = ((data.currentPage-1) * data.limit) + 1;
     for(let i=0; i<data.row.length; i++){ %>
       <tr>
-        <td scope="row" class="p-1"><%= stt%></td>
-        <td class="text_truncate p-1" style="max-width: 110px;">
+        <td scope="row"><%= stt%></td>
+        <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].title %>
         </td>
-        <td class="p-1">
+        <td>
           <% if(data.row[i].image !== '') {%>
             <a href="<%= data.row[i].image %>">
               <img src="<%= data.row[i].image %>" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
@@ -56,11 +57,14 @@
             </a>
           <% } %>  
         </td>
-        <td class="text_truncate p-1" style="max-width: 200px;">
+        <td class="text_truncate" style="max-width: 200px;">
           <%= data.row[i].content %>
         </td>
-        <td class="text_truncate p-1" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
-          <%= data.row[i]['type_news.name'] %>
+        <td class="text_truncate" style="max-width: 200px;">
+          <%= data.row[i].dayCreated %>
+        </td>
+        <td class="text_truncate" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
+          <a href="http://localhost:3001/the-loai-tin-tuc?sort=desc&search=<%= data.row[i]['type_news.name'] %>"><%= data.row[i]['type_news.name'] %></a>
         </td>
         <td class="operation_group f-flex">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
@@ -146,7 +150,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
     const successToast = document.getElementById('successToast');
     if (successToast) {
@@ -154,7 +158,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
 
     (function () {

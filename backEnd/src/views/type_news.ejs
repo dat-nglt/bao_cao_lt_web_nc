@@ -42,7 +42,7 @@
         </td>
         <td scope="row" class="text-center">
           <% if(data.row[i].count){ %>
-            <%= data.row[i].count %>
+            <a href="http://localhost:3001/tin-tuc?type=<%= data.row[i].id %>"><%= data.row[i].count %></a>
           <% }else{ %>
             0
           <% } %>
@@ -54,6 +54,7 @@
       </tr>
       <% stt++ }%>
   </tbody>
+  
 </table>
 <% if (data.messageError.length > 0) { %>
   <div class="toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0" style="z-index: 1050;" id="errorToast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -126,7 +127,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
     const successToast = document.getElementById('successToast');
     if (successToast) {
@@ -134,7 +135,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
 
     (function () {
