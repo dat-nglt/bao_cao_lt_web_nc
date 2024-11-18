@@ -1,15 +1,15 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../configs/connectDB.js';
 
-const bookModel = sequelize.define('book', {
-    name: {
+const userModel = sequelize.define('user', {
+    studentCode: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    count: {
-        type: DataTypes.INTEGER,
+    fullName: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
 });
 
-export default bookModel;
+export default userModel;

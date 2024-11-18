@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center">
-  <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">TRANG TIN TỨC</b></h3>
+  <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">TRANG MƯỢN TRẢ SÁCH</b></h3>
   <div class="d-flex p-2 justify-content-end align-items-center gap-1">
     <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
         Thêm tin tức
@@ -14,12 +14,10 @@
           <div class="dropdown mr-2">
             <select class="form-select" aria-label="select Default" name="type" >
               <option class="dropdown-item" value="0" >Tất cả</option>
-              <% for(let i=0; i<data.listTypeNews.length; i++){ %>
-                <option class="dropdown-item" value="<%= data.listTypeNews[i].id %>" <% if(data.type === data.listTypeNews[i].id){%> selected <% } %>><%= data.listTypeNews[i].name %></option>
-                <% } %>
+              
             </select>
           </div>         
-            <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo tiêu đề" aria-label="Search">
+            <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo MSSV, tên sách" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
     </div>
@@ -29,10 +27,13 @@
   <thead>
     <tr>
       <th scope="col" style="width: 5%;" class="p-1">STT</th>
-      <th scope="col" style="width: 30%;" class="p-1">Tiêu đề</th>
-      <th scope="col" style="width: 10%;" class="p-1">Ảnh bìa</th>
-      <th scope="col" style="width: 32%;" class="p-1">Nội dung</th>
-      <th scope="col" style="width: 15%;" class="p-1">Loại tin</th>
+      <th scope="col" style="width: 8%;" class="p-1">MSSV</th>
+      <th scope="col" style="width: 15%;" class="p-1">Họ tên</th>
+      <th scope="col" style="width: 30%;" class="p-1">Tên sách</th>
+      <th scope="col" style="width: 8%;" class="p-1">Ngày mượn</th>
+      <th scope="col" style="width: 10%;" class="p-1">Ngày đến hạn</th>
+      <th scope="col" style="width: 8%;" class="p-1">Ngày trả</th>
+      <th scope="col" style="width: 8%;" class="p-1">Trạng thái</th>
       <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
     </tr>
   </thead>
@@ -94,24 +95,24 @@
   <ul class="pagination justify-content-end">
       <% if (data.totalPage > 1) {
           if (data.currentPage > 3) { %>
-             <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+             <li class="page-item"><a class="page-link" href="/muon-tra?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
           <% }
           if (data.currentPage > 1) { %>
-            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
+            <li class="page-item"><a class="page-link" href="/muon-tra?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
           <% }
           for (let i = 1; i <= data.totalPage; i++) {
             if (i == data.currentPage) { %>
                 <li class="page-item active"><a class="page-link" href="#" aria-disabled="true"><%= i %></a></li>
                 <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
-                <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
+                <li class="page-item"><a class="page-link" href="/muon-tra?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
                 <%
             }
         }
           if (data.currentPage < data.totalPage) { %>
-            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
+            <li class="page-item"><a class="page-link" href="/muon-tra?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
           <% }
           if (data.currentPage < data.totalPage - 2) { %>
-            <li class="page-item"><a class="page-link" href="/tin-tuc?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
+            <li class="page-item"><a class="page-link" href="/muon-tra?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
           <% }
       } %>
     </ul>
@@ -127,7 +128,7 @@
         const content = row.cells[3].innerText;
         const type = row.cells[4].getAttribute('data-type-id');
         const formEdit = document.getElementById('edit_form');
-        formEdit.action = `/tin-tuc/update/${id}`;
+        formEdit.action = `/muon-tra/update/${id}`;
         document.getElementById('edit_news_title').value = title;
         document.getElementById('edit_news_content').value = content;
         document.getElementById('edit_news_type').value = type;
@@ -137,7 +138,7 @@
         item.addEventListener('click', function() { 
             const id = this.getAttribute('data-id');
             const formDel = document.getElementById('del_form');
-            formDel.action = `/tin-tuc/delete/${id}`;
+            formDel.action = `/muon-tra/delete/${id}`;
         });
     });
     const errorToast = document.getElementById('errorToast');
@@ -183,7 +184,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" class="needs-validation" novalidate action="/tin-tuc" enctype="multipart/form-data">
+        <form method="post" class="needs-validation" novalidate action="/muon-tra" enctype="multipart/form-data">
           <div class="form-group">
             <label for="news_title">Tiêu đề</label>
             <input type="text" class="form-control" maxlength="255" name="title" id="news_title" placeholder="Nhập tiêu đề..." required>
@@ -201,9 +202,7 @@
           <div class="form-group">  
             <label for="news_type">Loại tin</label>
             <select class="form-select" id="news_type" aria-label="select Default" name="type">
-              <% for(let i=0; i<data.listTypeNews.length; i++){ %>
-                <option class="dropdown-item" value="<%= data.listTypeNews[i].id %>"><%= data.listTypeNews[i].name %></option>
-                <% } %>
+            
             </select>
           </div>
           <div class="form-group">  
@@ -250,9 +249,7 @@
           <div class="form-group">  
             <label for="edit_news_type">Loại tin</label>
             <select class="form-select" id="edit_news_type" aria-label="select Default" name="type">
-              <% for(let i=0; i<data.listTypeNews.length; i++){ %>
-                <option class="dropdown-item" value="<%= data.listTypeNews[i].id %>"><%= data.listTypeNews[i].name %></option>
-                <% } %>
+             
             </select>
           </div>
           <div class="form-group">  
