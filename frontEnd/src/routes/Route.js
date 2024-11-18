@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { createBrowserRouter } from 'react-router-dom'
 import Login from '../pages/Login'
 import Home from '../pages/Home'
@@ -13,6 +14,11 @@ import FavoritBooks from '../components/FavoritBooks'
 import UpdatePassword from '../components/UpdatePassword'
 import Punish from '../components/Punish'
 import ReaderContact from '../components/ReaderContact'
+
+import FormContact from "../components/FormContact"
+import ContactList from "../components/ContactList"
+
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -70,6 +76,16 @@ export const router = createBrowserRouter([
   {
     path: '/lien-he',
     element: <Contact />,
+    children: [
+      {
+        path: '/lien-he',
+        element:<FormContact/>
+      },
+      {
+        path: '/lien-he/lien-he-gan-day',
+        element:<ContactList/>
+      }
+    ],
     errorElement: <PageNotFound />
   },
   {

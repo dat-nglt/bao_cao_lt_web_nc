@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import flash from 'connect-flash'
 import session from 'express-session'
 import sequelize from "./src/configs/connectDB.js";
-
+import methodOverride from 'method-override'; 
 sequelize.sync();
 
 const app = express()
@@ -35,6 +35,7 @@ app.use(
 )
 app.use(bodyParser.json())
 viewEngine(app)
+app.use(methodOverride('_method'));
 initWebRoute(app)
 const PORT = process.env.PORT || 8081
 

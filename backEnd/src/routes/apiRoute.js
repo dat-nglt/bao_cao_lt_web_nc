@@ -3,6 +3,8 @@ import categoryController from "../controllers/CategoryControllers.js";
 import bookController from "../controllers/BookControllers.js";
 const router = express.Router();
 const initApiRoute = (app) => {
+
+
   // Trang danh mục sách
     router.get('/the-loai', categoryController.getCategoryPage);
     router.post('/the-loai', categoryController.addCategory);

@@ -5,6 +5,7 @@ const userModel = sequelize.define('user', {
     studentCode: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     },
     fullName: {
         type: DataTypes.STRING,
