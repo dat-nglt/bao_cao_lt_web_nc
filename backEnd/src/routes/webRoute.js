@@ -1,29 +1,21 @@
 import express from "express";
-import categoryController from "../controllers/CategoryControllers.js";
-import bookController from "../controllers/BookControllers.js";
 import typeNewsControllers from "../controllers/TypeNewsControllers.js";
 import newsControllers from "../controllers/NewsControllers.js";
+import borrowControllers from "../controllers/BorrowControllers.js";
 const router = express.Router();
 const initWebRoute = (app) => {
   //tài khoản
 
   //thể loại
-  router.get("/the-loai", categoryController.getCategoryPage);
-  router.post("/the-loai", categoryController.addCategory);
-  router.post("/the-loai/:id", categoryController.updateCategory);
-  router.delete("/the-loai/:id", categoryController.deleteCategory);
 
   //sách
-  router.get("/sach", bookController.getBookPage);
-  router.post("/sach", bookController.addBook);
-  router.post("/sach/:id", bookController.updateBook);
-  router.delete("/sach/:id", bookController.deleteBook);
 
   //mượn trả
-  router.get("/muon-va-tra", typeNewsControllers.getTypeNewsPage);
-  router.post("/muon-va-tra", typeNewsControllers.createTypeNews);
-  router.post("/muon-va-tra/update/:id", typeNewsControllers.updateTypeNews);
-  router.post("/muon-va-tra/delete/:id", typeNewsControllers.deleteTypeNews);
+  router.get("/muon-tra", borrowControllers.getBorrowPage);
+  router.post("/muon-tra", borrowControllers.createBorrow);
+  router.post("/muon-tra/update/:id", borrowControllers.updateBorrow);
+  router.post("/muon-tra/delete/:id", borrowControllers.deleteBorrow);
+  
   //phí phạt
 
   //phản hồi

@@ -1,10 +1,8 @@
-import { log } from 'console';
-import { typeNewsModel, newsModel, sequelize } from '../models/index.js';
+import { typeNewsModel, newsModel } from '../models/index.js';
 import cloudinary from "../utils/cloudinary.js";
 import { IncomingForm } from "formidable";
 import fs from "fs";
 import { Op } from "sequelize";
-import { type } from 'os';
 
 const getNewsPage = async (req, res) => {
   const limit = 5;
@@ -111,7 +109,6 @@ const createNews = async (req, res) => {
       }
       const content = fields.content[0];
       const image = result.secure_url;
-     
       const createdNews = await newsModel.create({ title, image, content, typeId: type });
       if (createdNews) {
         req.flash("success", "Thêm tin tức thành công");

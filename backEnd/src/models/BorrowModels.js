@@ -1,23 +1,23 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../configs/connectDB.js';
 
-const newsModel = sequelize.define('news', {
-    title: {
+const borrowModel = sequelize.define('borrow', {
+    dayReturn: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    status: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    image: {
-        type: DataTypes.STRING,
+    bookId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
-    content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    typeId: {
+    userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
 });
 
-export default newsModel;
+export default borrowModel;
