@@ -2,12 +2,16 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../configs/connectDB.js';
 
 const borrowModel = sequelize.define('borrow', {
-    dayReturn: {
+    dueDate: {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    dayReturn: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
     status: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     bookId: {
