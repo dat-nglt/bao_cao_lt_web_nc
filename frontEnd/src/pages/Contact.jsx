@@ -8,17 +8,13 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Outlet } from 'react-router-dom';
 
-
-import FormContact from "../components/FormContact";
-
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 
 const menuItems = [
-  { link: '/lien-he', text: '', icon: <HomeIcon fontSize="medium" /> },
-  { link: '/tin-tuc', text: 'Tin tức', icon: <FeedIcon fontSize="medium" /> },
-  { link: '/sach-moi', text: 'Sách mới', icon: <AutoStoriesIcon fontSize="medium" /> },
-  { link: '/ho-so-doc-gia/yeu-thich', text: 'Sách yêu thích', icon: <FavoriteIcon fontSize="medium" /> },
+  { link: '/lien-he', text: 'Liên hệ', icon: <HomeIcon fontSize="medium" /> },
+  { link: '/lien-he/lien-he-gan-day', text: 'Phản hồi mới nhất', icon: <FeedIcon fontSize="medium" /> },
+  { link: '/lien-he/thong-tin-lien-he', text: 'Thông tin liên hệ', icon: <FeedIcon fontSize="medium" /> },
 ];
 function Contact(props) {
   const [visible, setVisible] = useState(false);
@@ -76,7 +72,7 @@ function Contact(props) {
         <Stack>
           <SideBar menuItems={menuItems} />
         </Stack>
-        <Stack sx={{ width: '100%', }}>
+        <Stack sx={{ flexGrow: 1, width: '100%' }}>
           <Outlet/>
         </Stack>
       </Box>

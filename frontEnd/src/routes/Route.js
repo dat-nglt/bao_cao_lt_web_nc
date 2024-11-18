@@ -15,8 +15,9 @@ import UpdatePassword from '../components/UpdatePassword'
 import Punish from '../components/Punish'
 import ReaderContact from '../components/ReaderContact'
 
-import FormContact from "../components/FormContact"
-import ContactList from "../components/ContactList"
+import FormContact from "../components/ContactComponent/FormContact"
+import ContactList from "../components/ContactComponent/ContactList"
+import AboutUs from "../components/ContactComponent/AboutUs"
 
 
 export const router = createBrowserRouter([
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
       {
         path: '/lien-he/lien-he-gan-day',
         element:<ContactList/>
+      },
+      {
+        path: '/lien-he/thong-tin-lien-he',
+        element:<AboutUs/>
       }
     ],
     errorElement: <PageNotFound />

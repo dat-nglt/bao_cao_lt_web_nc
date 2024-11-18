@@ -17,14 +17,14 @@ const initWebRoute = (app) => {
   router.get("/muon-tra", borrowControllers.getBorrowPage);
   router.post("/muon-tra", borrowControllers.createBorrow);
   router.post("/muon-tra/update/:id", borrowControllers.updateBorrow);
-  router.post("/muon-tra/delete/:id", borrowControllers.deleteBorrow);
+  router.post("/muon-tra/cancel/:id", borrowControllers.cancelBorrow);
   
   //phí phạt
 
   //phản hồi
   router.get('/api/get-all-contact', contactControllers.getAllContacts);
   router.get('/api/get-contact/:id', contactControllers.getContactById);
-  router.get("/phan-hoi", contactControllers.getContactPage)
+  router.get("/phan-hoi", contactControllers.getContactPage);
   router.delete('/phan-hoi/:id/delete',contactControllers.deleteContact);
   //loại tin tức
   router.get("/the-loai-tin-tuc", typeNewsControllers.getTypeNewsPage);
@@ -38,9 +38,9 @@ const initWebRoute = (app) => {
   router.post("/tin-tuc/update/:id", newsControllers.updateNews);
   router.post("/tin-tuc/delete/:id", newsControllers.deleteNews);
 
-
-  // router.post("*", (req, res) => res.redirect("/not-found"));
+  router.get("*", (req, res) => res.send("Không có trang này"));
   return app.use("/", router);
 };
 
 export default initWebRoute;
+  

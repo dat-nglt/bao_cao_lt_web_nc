@@ -31,7 +31,8 @@
       <th scope="col" style="width: 5%;" class="p-1">STT</th>
       <th scope="col" style="width: 30%;" class="p-1">Tiêu đề</th>
       <th scope="col" style="width: 10%;" class="p-1">Ảnh bìa</th>
-      <th scope="col" style="width: 32%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 24%;" class="p-1">Nội dung</th>
+      <th scope="col" style="width: 8%;" class="p-1">Ngày tạo</th>
       <th scope="col" style="width: 15%;" class="p-1">Loại tin</th>
       <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
     </tr>
@@ -39,13 +40,19 @@
   <tbody>
     <% 
     let stt = ((data.currentPage-1) * data.limit) + 1;
-    for(let i=0; i<data.row.length; i++){ %>
+    for(let i=0; i<data.row.length; i++){
+      const maxLengthContent = 35;
+      let content = data.row[i].content;
+      if (content.length > maxLengthContent) {
+          content = content.substring(0, maxLengthContent) + '...';
+      }
+      %>
       <tr>
-        <td scope="row" class="p-1"><%= stt%></td>
-        <td class="text_truncate p-1" style="max-width: 110px;">
+        <td scope="row"><%= stt%></td>
+        <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].title %>
         </td>
-        <td class="p-1">
+        <td>
           <% if(data.row[i].image !== '') {%>
             <a href="<%= data.row[i].image %>">
               <img src="<%= data.row[i].image %>" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
@@ -56,11 +63,14 @@
             </a>
           <% } %>  
         </td>
-        <td class="text_truncate p-1" style="max-width: 200px;">
-          <%= data.row[i].content %>
+        <td data-content="<%=data.row[i].content %>" style="max-width: 200px;">
+          <%- content %>
         </td>
-        <td class="text_truncate p-1" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
-          <%= data.row[i]['type_news.name'] %>
+        <td class="text_truncate" style="max-width: 200px;">
+          <%= data.row[i].dayCreated %>
+        </td>
+        <td class="text_truncate" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
+          <a href="http://localhost:3001/the-loai-tin-tuc?sort=desc&search=<%= data.row[i]['type_news.name'] %>"><%= data.row[i]['type_news.name'] %></a>
         </td>
         <td class="operation_group f-flex">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
@@ -124,13 +134,13 @@
         const row = this.closest('tr');
         const id = this.getAttribute('data-id');
         const title = row.cells[1].innerText;
-        const content = row.cells[3].innerText;
-        const type = row.cells[4].getAttribute('data-type-id');
+        const content = row.cells[3].getAttribute('data-content');
+        const type = row.cells[5].getAttribute('data-type-id');
         const formEdit = document.getElementById('edit_form');
         formEdit.action = `/tin-tuc/update/${id}`;
-        document.getElementById('edit_news_title').value = title;
-        document.getElementById('edit_news_content').value = content;
+        document.getElementById('edit_news_title').value = title;  
         document.getElementById('edit_news_type').value = type;
+        editorEdit.setData(content);
     });
 });
     document.querySelectorAll('.fa-trash-can').forEach(item => {
@@ -146,7 +156,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
     const successToast = document.getElementById('successToast');
     if (successToast) {
@@ -154,7 +164,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
 
     (function () {
@@ -193,7 +203,7 @@
           </div>
           <div class="form-group">
             <label for="news_content">Nội dung</label>
-            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="content" id="news_content" rows="5" required></textarea>
+            <textarea class="form-control" id="content" spellcheck="false" rows="5" name="content" style="resize: none;" placeholder="Nhập nội dung" required></textarea>
             <div class="invalid-feedback">
               Vui lòng nhập nội dung!
             </div>
@@ -290,3 +300,21 @@
       </div>
   </div>
   </div>
+  <script>
+    ClassicEditor
+            .create(document.querySelector('#content'))
+            .then(newEditor => {
+                editor = newEditor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    ClassicEditor
+            .create(document.querySelector('#edit_news_content'))
+            .then(newEditor => {
+                editorEdit = newEditor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+  </script>

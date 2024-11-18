@@ -1,4 +1,4 @@
-import { typeNewsModel, newsModel } from '../models/index.js';
+import { typeNewsModel, newsModel, sequelize } from '../models/index.js';
 import cloudinary from "../utils/cloudinary.js";
 import { IncomingForm } from "formidable";
 import fs from "fs";
@@ -26,6 +26,11 @@ const getNewsPage = async (req, res) => {
   const start = (currentPage - 1) * limit;
   const listNews = await newsModel.findAll({
     raw: true,
+    attributes: {
+      include: [
+          [sequelize.fn('DATE_FORMAT', sequelize.col('news.createdAt'), '%d-%m-%Y'), 'dayCreated']
+      ]
+    },
     where: whereConditions,
     order: [["id", sort]],
     limit: limit,

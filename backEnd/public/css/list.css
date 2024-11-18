@@ -23,3 +23,7 @@
         color: red;
     }
 }
+
+.ck.ck-editor__main>.ck-editor__editable {
+    height: 200px !important;
+}

@@ -108,6 +108,7 @@ function FormContact() {
           variant="outlined"
           fullWidth
           multiline
+          required
           rows={4}
         />
 

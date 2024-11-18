@@ -2,7 +2,7 @@
   <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">TRANG MƯỢN TRẢ SÁCH</b></h3>
   <div class="d-flex p-2 justify-content-end align-items-center gap-1">
     <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-        Thêm tin tức
+        Thêm phiếu mượn
       </button>
         <form class="form-inline my-2 my-lg-0 d-flex" method="put">
           <div class="dropdown mr-2">
@@ -12,13 +12,17 @@
             </select>
           </div>
           <div class="dropdown mr-2">
-            <select class="form-select" aria-label="select Default" name="type" >
+            <select class="form-select" aria-label="select Default" name="status" >
               <option class="dropdown-item" value="0" >Tất cả</option>
-              
+              <option class="dropdown-item" value="1" <% if(data.status === '1'){%> selected  <% } %>>Chờ xét duyệt</option>
+              <option class="dropdown-item" value="2" <% if(data.status === '2'){%> selected  <% } %>>Đang mượn</option>
+              <option class="dropdown-item" value="3" <% if(data.status === '3'){%> selected  <% } %>>Đã trả</option>
+              <option class="dropdown-item" value="4" <% if(data.status === '4'){%> selected  <% } %>>Quá hạn</option>
+              <option class="dropdown-item" value="5" <% if(data.status === '5'){%> selected  <% } %>>Đã bị hủy</option>
             </select>
           </div>         
-            <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo MSSV, tên sách" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Tìm theo MSSV, tên sách" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
     </div>
 </div>
@@ -27,48 +31,87 @@
   <thead>
     <tr>
       <th scope="col" style="width: 5%;" class="p-1">STT</th>
-      <th scope="col" style="width: 8%;" class="p-1">MSSV</th>
-      <th scope="col" style="width: 15%;" class="p-1">Họ tên</th>
-      <th scope="col" style="width: 30%;" class="p-1">Tên sách</th>
-      <th scope="col" style="width: 8%;" class="p-1">Ngày mượn</th>
-      <th scope="col" style="width: 10%;" class="p-1">Ngày đến hạn</th>
-      <th scope="col" style="width: 8%;" class="p-1">Ngày trả</th>
-      <th scope="col" style="width: 8%;" class="p-1">Trạng thái</th>
-      <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
+      <th scope="col" style="width: 5%;" class="p-1 text-center">MSSV</th>
+      <th scope="col" style="width: 21%;" class="p-1">Họ tên</th>
+      <th scope="col" style="width: 24%;" class="p-1">Tên sách</th>
+      <th scope="col" style="width: 9%;" class="p-1 text-center">Ngày mượn</th>
+      <th scope="col" style="width: 9%;" class="p-1 text-center">Ngày đến hạn</th>
+      <th scope="col" style="width: 9%;" class="p-1 text-center">Ngày trả</th>
+      <th scope="col" style="width: 11%;" class="p-1 text-center">Trạng thái</th>
+      <th scope="col" style="width: 7%;" class="p-1 text-center">Tùy chọn</th>
     </tr>
   </thead>
   <tbody>
     <% 
-    let stt = ((data.currentPage-1) * data.limit) + 1;
-    for(let i=0; i<data.row.length; i++){ %>
-      <tr>
-        <td scope="row" class="p-1"><%= stt%></td>
-        <td class="text_truncate p-1" style="max-width: 110px;">
-          <%= data.row[i].title %>
-        </td>
-        <td class="p-1">
-          <% if(data.row[i].image !== '') {%>
-            <a href="<%= data.row[i].image %>">
-              <img src="<%= data.row[i].image %>" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
-            </a>
-          <% }else{ %>
-            <a href="<%= data.row[i].image %>">
-              <img src="https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
-            </a>
-          <% } %>  
-        </td>
-        <td class="text_truncate p-1" style="max-width: 200px;">
-          <%= data.row[i].content %>
-        </td>
-        <td class="text_truncate p-1" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
-          <%= data.row[i]['type_news.name'] %>
-        </td>
-        <td class="operation_group f-flex">
-          <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
-          <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#deleteModal" data-id="<%= data.row[i].id %>"></i>
-        </td>
-      </tr>
-      <% stt++ }%>
+    let stt = ((data.currentPage - 1) * data.limit) + 1; 
+    for (let i = 0; i < data.row.length; i++) { 
+        let status;
+        switch (data.row[i].status) {
+            case '1':
+              status = "Chờ xét duyệt";
+              break;
+            case '2':
+              status = "Đang mượn";
+              break;
+            case '3':
+              status = "Đã trả";
+              break;
+            case '4':
+              status = "Quá hạn";
+              break;
+            case '5':
+              status = "Đã bị hủy";
+              break;
+            default:
+              status = "Chờ xét duyệt";
+              break; } %>
+        <tr>
+            <td scope="row"><%= stt %></td>
+            <td scope="row" class="text_truncate" style="max-width: 110px;">
+                <a href="http://localhost:3001/tai-khoan?sort=desc&search=<%= data.row[i]['user.studentCode'] %>">
+                    <%= data.row[i]['user.studentCode'] %>
+                </a>
+            </td>
+            <td class="text_truncate" style="max-width: 110px;">
+                <%= data.row[i]['user.fullName'] %>
+            </td>
+            <td class="text_truncate" style="max-width: 110px;">
+                <a href="http://localhost:3001/sach?sort=desc&search=<%= data.row[i]['book.name'] %>">
+                    <%= data.row[i]['book.name'] %>
+                </a>
+            </td>
+            <td class="text-center" style="max-width: 200px;">
+                <%= data.row[i].dayCreated %>
+            </td>
+            <td class="text-center" style="max-width: 200px;">
+                <%= data.row[i].dueDate %>
+            </td>
+            <td class="text-center" style="max-width: 200px;">
+                <% if (data.row[i].dayReturn != '00-00-0000') { %>
+                    <%= data.row[i].dayReturn %>
+                <% } %>
+            </td>
+            <td class="text-center" style="max-width: 200px;">
+              <% if((data.row[i].status === '4') && (data.row[i].overdue > 0)){ %>
+                <%= status %>(<%= data.row[i].overdue %>d)
+              <% }else{ %>
+                <%= status %>
+              <% } %>
+            </td>
+            <td class="operation_group f-flex">
+                <% if(data.row[i].status === '1'){ %>
+                  <i class="fa-solid fa-circle-check" style="color: green;" data-toggle="modal" data-target="#reviewModal" data-id="<%= data.row[i].id %>"></i>
+                  <i class="fa-solid fa-circle-xmark" style="color: red;" data-toggle="modal" data-target="#cancelModal" data-id="<%= data.row[i].id %>"></i>
+                <% } else if(data.row[i].status === '2'){ %>
+                  <i class="fa-solid fa-circle-check" style="color: green;" data-toggle="modal" data-target="#returnModal" data-return-id="<%= data.row[i].id %>"></i>
+                  <i class="fa-solid fa-circle-xmark" disabled style="color: black; pointer-events: none;"></i>
+                <% } else { %>
+                  <i class="fa-solid fa-circle-check" disabled style="color: black; pointer-events: none;"></i>
+                  <i class="fa-solid fa-circle-xmark" disabled style="color: black; pointer-events: none;"></i>
+                <% } %>
+            </td>
+        </tr>
+    <%  stt++; }%>
   </tbody>
 </table>
 <% if (data.messageError.length > 0) { %>
@@ -119,27 +162,27 @@
 </nav>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.fa-pen-to-square').forEach(item => {
-    item.addEventListener('click', function() {
-        const row = this.closest('tr');
-        const id = this.getAttribute('data-id');
-        const title = row.cells[1].innerText;
-        const content = row.cells[3].innerText;
-        const type = row.cells[4].getAttribute('data-type-id');
-        const formEdit = document.getElementById('edit_form');
-        formEdit.action = `/muon-tra/update/${id}`;
-        document.getElementById('edit_news_title').value = title;
-        document.getElementById('edit_news_content').value = content;
-        document.getElementById('edit_news_type').value = type;
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.fa-circle-check').forEach(item => {
+      item.addEventListener('click', (e) => { 
+          const id = e.target.getAttribute('data-id');
+          if(id){
+            const formDel = document.getElementById('update_borrow');
+            formDel.action = `/muon-tra/update/${id}`;
+          }else{
+            const id = e.target.getAttribute('data-return-id');
+            const formDel = document.getElementById('return_borrow');
+            formDel.action = `/muon-tra/update/${id}`;
+          }
+          
+      });
     });
-});
-    document.querySelectorAll('.fa-trash-can').forEach(item => {
-        item.addEventListener('click', function() { 
-            const id = this.getAttribute('data-id');
-            const formDel = document.getElementById('del_form');
-            formDel.action = `/muon-tra/delete/${id}`;
-        });
+    document.querySelectorAll('.fa-circle-xmark').forEach(item => {
+      item.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          const formDel = document.getElementById('cancel_form');
+          formDel.action = `/muon-tra/cancel/${id}`;
+      });
     });
     const errorToast = document.getElementById('errorToast');
     if (errorToast) {
@@ -147,7 +190,7 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
     const successToast = document.getElementById('successToast');
     if (successToast) {
@@ -155,62 +198,66 @@
       toast.show();
       setTimeout(() => {
         toast.hide();
-      }, 5000);
+      }, 3000);
     }
-
-    (function () {
-    'use strict'
-    var forms = document.querySelectorAll('.needs-validation')
-    Array.prototype.slice.call(forms)
-      .forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-          form.classList.add('was-validated')
-        }, false)
-      })
-      })()
+    $(document).ready(() => {
+      const today = new Date();
+      const dayBorrowVal = today.toISOString().split('T')[0];
+      $('#day_borrow').val(dayBorrowVal);
+      today.setDate(today.getDate() + 7);
+      const dueDateVal = today.toISOString().split('T')[0];
+      $('#due_date').val(dueDateVal);
+    });
 });
 </script>
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Thêm tin tức</h5>
+        <h5 class="modal-title" id="addModalLabel">Thêm phiếu mượn</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" class="needs-validation" novalidate action="/muon-tra" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="news_title">Tiêu đề</label>
-            <input type="text" class="form-control" maxlength="255" name="title" id="news_title" placeholder="Nhập tiêu đề..." required>
-            <div class="invalid-feedback">
-              Vui lòng nhập tiêu đề!
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="news_content">Nội dung</label>
-            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="content" id="news_content" rows="5" required></textarea>
-            <div class="invalid-feedback">
-              Vui lòng nhập nội dung!
-            </div>
-          </div>
+        <form method="post" class="needs-validation" novalidate action="/muon-tra">
           <div class="form-group">  
-            <label for="news_type">Loại tin</label>
-            <select class="form-select" id="news_type" aria-label="select Default" name="type">
-            
+            <label for="borrow_user">Độc giả</label>
+            <select class="form-select" id="borrow_user" aria-label="select Default" name="user">
+              <% for(let i=0; i<data.listUser.length; i++){ %>
+                <% 
+                  const maxLengthFullName = 50;
+                  let fullName = data.listUser[i].fullName;
+                  if (fullName.length > maxLengthFullName) {
+                      fullName = fullName.substring(0, maxLengthFullName) + '...';
+                  }
+                %>
+                <option class="dropdown-item" value="<%= data.listUser[i].id %>"><%= data.listUser[i].studentCode %> - <%= fullName %></option>
+            <% } %>
             </select>
           </div>
           <div class="form-group">  
-            <label for="news_image">Ảnh bìa</label>
-            <input class="form-control" type="file" name="image" id="news_image" required>
-            <div class="invalid-feedback">
-              Vui lòng chọn ảnh bìa!
-            </div>
+            <label for="borrow_book">Sách mượn</label>
+            <select class="form-select" id="borrow_book" aria-label="select Default" name="book">
+                <% for(let i=0; i<data.listBook.length; i++){ %>
+                    <% 
+                      const maxLengthName = 60;
+                      let bookName = data.listBook[i].name;
+                      if (bookName.length > maxLengthName) {
+                          bookName = bookName.substring(0, maxLengthName) + '...';
+                      }
+                    %>
+                    <option class="dropdown-item" title="SL: <%= data.listBook[i].count %>. Tên sách: <%= data.listBook[i].name %>" value="<%= data.listBook[i].id %>"><%= data.listBook[i].count %> - <%= bookName %></option>
+                <% } %>
+            </select>
+          </div>
+          <div class="form-group">  
+            <label for="day_borrow">Ngày mượn</label>
+            <input class="form-control" type="date" id="day_borrow" disabled required>
+          </div>
+          <div class="form-group">  
+            <label for="due_date">Ngày đến hạn</label>
+            <input class="form-control" type="date" id="due_date" disabled required>
           </div>
           <div class="modal-footer p-0" style="border: none;">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -221,69 +268,67 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">Cập nhật tin tức</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="post" class="needs-validation" id="edit_form" novalidate enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="edit_news_title">Tiêu đề</label>
-            <input type="text" class="form-control" maxlength="255" name="title" id="edit_news_title" placeholder="Nhập tiêu đề..." required>
-            <div class="invalid-feedback">
-              Vui lòng nhập tiêu đề!
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="edit_news_content">Nội dung</label>
-            <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="content" id="edit_news_content" rows="5" required></textarea>
-            <div class="invalid-feedback">
-              Vui lòng nhập nội dung!
-            </div>
-          </div>
-          <div class="form-group">  
-            <label for="edit_news_type">Loại tin</label>
-            <select class="form-select" id="edit_news_type" aria-label="select Default" name="type">
-             
-            </select>
-          </div>
-          <div class="form-group">  
-            <label for="edit_news_image">Ảnh bìa</label>
-            <input class="form-control" type="file" name="image" id="edit_news_image">
-          </div>
-          <div class="modal-footer p-0" style="border: none;">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            <button type="submit" class="btn btn-success">Cập nhật
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+              <h5 class="modal-title" id="reviewModalLabel">Xác nhận duyệt phiếu mượn</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>
           </div>
           <div class="modal-body">
-            <form method="post" id="del_form">
-              Bạn có chắc chắn muốn xóa không?  
+            <form method="post" id="update_borrow">
+              Bạn có chắc chắn muốn duyệt yêu cầu mượn này không?  
               <div class="modal-footer p-0" style="border: none;">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="submit" class="btn btn-danger" id="confirmDelete">Xóa</button>
+                <button type="submit" class="btn btn-danger" id="confirmDelete">Xác nhận</button>
               </div>
             </form>
           </div>
       </div>
   </div>
+</div>
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="returnModalLabel">Xác nhận độc giả trả sách</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <form method="post" id="return_borrow">
+              Bạn có chắc chắn muốn thay đổi trạng thái thành đã trả sách không?  
+              <div class="modal-footer p-0" style="border: none;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-danger" id="confirmDelete">Xác nhận</button>
+              </div>
+            </form>
+          </div>
+      </div>
   </div>
+</div>
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="cancelModalLabel">Xác nhận hủy yêu cầu mượn</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <form method="post" id="cancel_form">
+              Bạn có chắc chắn muốn hủy yêu cầu mượn sách không?  
+              <div class="modal-footer p-0" style="border: none;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-danger" id="confirmDelete">Xác nhận</button>
+              </div>
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
