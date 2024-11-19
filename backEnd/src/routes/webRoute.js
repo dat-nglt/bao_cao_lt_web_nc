@@ -33,7 +33,7 @@ const initWebRoute = (app) => {
   router.post("/tin-tuc/delete/:id", newsControllers.deleteNews);
 
 
-  router.get("*", (req, res) => res.send("Không có trang này"));
+  // router.get("*", (req, res) => res.send("Không có trang này"));
   return app.use("/", router);
 };
 

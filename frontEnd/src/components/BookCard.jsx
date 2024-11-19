@@ -25,14 +25,14 @@ function BookCard(props) {
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         <CardContent sx={{ flex: '1' }}>
           <Typography component="div" variant="subtitle1">
-            {props.data.title}
+            {props.data.nameBook}
           </Typography>
           <Typography
             variant="caption"
             component="div"
             sx={{ color: 'text.secondary' }}
           >
-            {props.data.author}
+            {props.data.createBook}
           </Typography>
         </CardContent>
         <Link to={'/chi-tiet-sach'}>
@@ -50,8 +50,8 @@ function BookCard(props) {
       <CardMedia
         component="img"
         sx={{ width: 160, aspectRatio: '6 / 9' }}
-        image={props.data.coverUrl}
-        alt="Đắc nhân tâm"
+        image={props.data.imgBook}
+        alt=""
       />
     </Card >
   );

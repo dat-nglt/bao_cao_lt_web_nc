@@ -44,15 +44,15 @@ function CategoryBook(props) {
       <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }} >
         {
           props.isHomePage ?
-            props.bookList.slice(0, 6).map((book, index) => (
+            props.bookList.slice(0, 6).map((books, index) => (
               <Grid2 key={index} size={{ xs: 5, sm: 4, md: 4 }}>
-                <BookCard data={book} />
+                <BookCard data={books} />
               </Grid2>
             ))
             :
-            props.bookList.map((book, index) => (
+            props.bookList.map((books, index) => (
               <Grid2 key={index} size={{ xs: 5, sm: 4, md: 4 }}>
-                <BookCard data={book} />
+                <BookCard data={books} />
               </Grid2>
             ))
         }

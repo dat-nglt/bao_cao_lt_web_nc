@@ -2,8 +2,10 @@ import express from 'express'
 import dotenv from 'dotenv'
 import viewEngine from './viewEngine'
 import initWebRoute from './src/routes/webRoute'
+import initApiRoute from './src/routes/apiRoute'
 import path from 'path'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import flash from 'connect-flash'
 import session from 'express-session'
 import sequelize from "./src/configs/connectDB.js";
@@ -26,6 +28,16 @@ app.use(session({
   cookie: { secure: false }
 }));
 
+const corsOptions = () => {
+  return {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    optionsSuccessStatus: 200
+  };
+};
+
+app.use(cors(corsOptions()));
+
 app.use(flash())
 
 app.use(
@@ -36,6 +48,7 @@ app.use(
 app.use(bodyParser.json())
 viewEngine(app)
 initWebRoute(app)
+initApiRoute(app)
 const PORT = process.env.PORT || 8081
 
 app.listen(PORT, () => {
