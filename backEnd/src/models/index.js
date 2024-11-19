@@ -9,9 +9,13 @@ import categoryModel from './CategoryModels.js'
 newsModel.belongsTo(typeNewsModel, { foreignKey: 'typeId', as: 'type_news' })
 typeNewsModel.hasMany(newsModel, { foreignKey: 'typeId', as: 'news' })
 borrowModel.belongsTo(userModel, { foreignKey: 'userId', as: 'user' })
-borrowModel.belongsTo(bookModel, { foreignKey: 'bookId', as: 'book' })
 userModel.hasMany(borrowModel, { foreignKey: 'userId', as: 'borrow' })
 bookModel.hasMany(borrowModel, { foreignKey: 'bookId', as: 'borrow' })
+borrowModel.belongsTo(bookModel, { foreignKey: 'bookId', as: 'book' })
+categoryModel.hasMany(bookModel, { foreignKey: 'categoryId', as: 'books' });
+bookModel.belongsTo(categoryModel, { foreignKey: 'categoryId', as: 'category' });
+
+sequelize.sync({ alter: true })
 
 export {
   newsModel,

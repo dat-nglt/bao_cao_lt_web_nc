@@ -5,26 +5,24 @@ import initWebRoute from './src/routes/webRoute'
 import path from 'path'
 import bodyParser from 'body-parser'
 import flash from 'connect-flash'
-import session from 'express-session'
-import sequelize from "./src/configs/connectDB.js";
+import sequelize from './src/configs/connectDB.js'
+import createSession from './src/configs/createSession.js'
 
-sequelize.sync();
+sequelize.sync()
 
 const app = express()
 
-dotenv.config({force: true})
-app.use(
-  express.static(
-    path.join(__dirname, '/public')
-  )
-)
+dotenv.config({ force: true })
+app.use(express.static(path.join(__dirname, '/public')))
 
-app.use(session({
-  secret: 'hehe',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}));
+// app.use(session({
+//   secret: 'hehe',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: false }
+// }));
+
+createSession(app)
 
 app.use(flash())
 
@@ -39,7 +37,5 @@ initWebRoute(app)
 const PORT = process.env.PORT || 8081
 
 app.listen(PORT, () => {
-  console.log(
-    `App listening on port ${PORT}`
-  )
+  console.log(`App listening on port ${PORT}`)
 })

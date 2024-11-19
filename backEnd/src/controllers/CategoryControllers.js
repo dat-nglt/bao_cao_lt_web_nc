@@ -1,4 +1,4 @@
-import { categoryModel } from '../models'
+import { bookModel, categoryModel, sequelize } from '../models'
 import { Op } from 'sequelize'
 import { IncomingForm } from 'formidable'
 
@@ -15,19 +15,48 @@ const getCategoryPage = async (req, res) => {
     }
   }
 
-  const totalCategory = await categoryModel.findAll({
-    raw: true,
-    where: whereConditions
+  // Lấy tổng số danh mục thoả mãn điều kiện tìm kiếm
+  const totalCategoryQuery = `
+    SELECT COUNT(*) AS total
+    FROM categories AS category
+    WHERE category.name LIKE :search
+  `
+  const totalCategoryResult = await sequelize.query(totalCategoryQuery, {
+    replacements: { search: `%${search}%` },
+    type: sequelize.QueryTypes.SELECT
   })
-  const totalPage = Math.ceil(totalCategory.length / limit)
+  const totalCategory = totalCategoryResult[0].total
+  const totalPage = Math.ceil(totalCategory / limit)
   const start = (currentPage - 1) * limit
 
-  const listCategory = await categoryModel.findAll({
-    raw: true,
-    where: whereConditions,
-    order: [['id', sort]],
-    limit: limit,
-    offset: start
+  // Truy vấn danh mục với số lượng sách, phân trang, tìm kiếm và sắp xếp
+  const listCategoryQuery = `
+    SELECT 
+      category.id, 
+      category.name, 
+      category.description, 
+      category.createdAt, 
+      category.updatedAt, 
+      SUM(book.count) AS bookCount
+    FROM 
+      categories AS category
+    LEFT JOIN 
+      books AS book ON category.id = book.categoryId
+    WHERE 
+      category.name LIKE :search
+    GROUP BY 
+      category.id
+    ORDER BY 
+      category.id ${sort}
+    LIMIT :limit OFFSET :start
+  `
+  const listCategoryResult = await sequelize.query(listCategoryQuery, {
+    replacements: {
+      search: `%${search}%`,
+      limit: limit,
+      start: start
+    },
+    type: sequelize.QueryTypes.SELECT
   })
 
   return res.render('layout', {
@@ -36,7 +65,7 @@ const getCategoryPage = async (req, res) => {
       messageError: req.flash('error'),
       messageSuccess: req.flash('success'),
       page: 'category',
-      row: listCategory,
+      row: listCategoryResult,
       currentPage: parseInt(currentPage),
       totalPage: parseInt(totalPage),
       sort,

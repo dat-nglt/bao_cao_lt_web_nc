@@ -37,7 +37,7 @@
         <td class="text_truncate" style="max-width: 200px;">
           <%= data.row[i].description %>
         </td>
-        <td class="d-flex justify-content-left">GETDB</td>
+        <td class="d-flex justify-content-left"><%= data.row[i].bookCount %></td>
         <td class="operation_group">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>
           <i class="fa-solid fa-eye"></i>

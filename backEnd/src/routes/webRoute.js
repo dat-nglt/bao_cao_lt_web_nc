@@ -4,10 +4,12 @@ import newsControllers from '../controllers/NewsControllers.js'
 import borrowControllers from '../controllers/BorrowControllers.js'
 import UserController from '../controllers/UserController.js'
 import CategoryControllers from '../controllers/CategoryControllers.js'
+import BookControllers from '../controllers/BookControllers.js'
 const router = express.Router()
 const initWebRoute = (app) => {
   //tài khoản
   router.get('/dang-nhap', UserController.getLoginPage)
+  router.post('/dang-nhap', UserController.handleLogin)
 
   //thể loại
   router.get('/the-loai', CategoryControllers.getCategoryPage)
@@ -16,6 +18,7 @@ const initWebRoute = (app) => {
   router.put('/the-loai/:id', CategoryControllers.updateCategory)
 
   //sách
+  router.get('/sach', BookControllers.getBookPage)
 
   //mượn trả
   router.get('/muon-tra', borrowControllers.getBorrowPage)
