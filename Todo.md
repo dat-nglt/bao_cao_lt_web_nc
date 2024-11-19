@@ -22,7 +22,7 @@
 - Quản lý tin tức (như trên)
 - Thiết lập các validate, base cho api, xác thực
 ### Phạm Phúc Đạt
-- Quản lý phản hồi (thêm(tự cook), sửa(same), phân trang, sắp xếp, tìm kiếm)
+- Quản lý phản hồi (phân trang, sắp xếp, tìm kiếm)----thêm(tự cook),sửa(same) ?????????????? phản hồi từ người dùng thì làm gì có dụ mình thêm hay sửa xóa thì maybe
 - Quản lý phí phạt (thêm(tự cook), sửa(sửa chỉ sửa giá vs lý do nộp phạt), phân
   trang, sắp xếp, tìm kiếm)
 

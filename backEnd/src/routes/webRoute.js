@@ -1,10 +1,8 @@
-import express from 'express'
-import typeNewsControllers from '../controllers/TypeNewsControllers.js'
-import newsControllers from '../controllers/NewsControllers.js'
-import borrowControllers from '../controllers/BorrowControllers.js'
-import UserController from '../controllers/UserController.js'
-import CategoryControllers from '../controllers/CategoryControllers.js'
-const router = express.Router()
+import express from "express";
+import typeNewsControllers from "../controllers/TypeNewsControllers.js";
+import newsControllers from "../controllers/NewsControllers.js";
+import borrowControllers from "../controllers/BorrowControllers.js";
+const router = express.Router();
 const initWebRoute = (app) => {
   //tài khoản
   router.get('/dang-nhap', UserController.getLoginPage)
@@ -26,7 +24,10 @@ const initWebRoute = (app) => {
   //phí phạt
 
   //phản hồi
-
+  router.get('/api/get-all-contact', contactControllers.getAllContacts);
+  router.get('/api/get-contact/:id', contactControllers.getContactById);
+  router.get("/phan-hoi", contactControllers.getContactPage);
+  router.delete('/phan-hoi/:id/delete',contactControllers.deleteContact);
   //loại tin tức
   router.get('/the-loai-tin-tuc', typeNewsControllers.getTypeNewsPage)
   router.post('/the-loai-tin-tuc', typeNewsControllers.createTypeNews)
@@ -45,8 +46,8 @@ const initWebRoute = (app) => {
   router.post('/tin-tuc/update/:id', newsControllers.updateNews)
   router.post('/tin-tuc/delete/:id', newsControllers.deleteNews)
 
-  router.get('*', (req, res) => res.send('Không có trang này'))
-  return app.use('/', router)
-}
+  router.get("*", (req, res) => res.send("Không có trang này"));
+  return app.use("/", router);
+};
 
-export default initWebRoute
+export default initWebRoute;

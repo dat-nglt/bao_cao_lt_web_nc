@@ -1,0 +1,215 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">QUẢN LÝ LIÊN HỆ</b></h3>
+  <div class="d-flex p-2 justify-content-end align-items-center gap-1">
+    <form class="form-inline my-2 my-lg-0 d-flex" method="get">
+      <div class="dropdown mr-2">
+        <select class="form-select" aria-label="select Default" name="sort" >
+          <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
+          <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
+        </select>
+      </div>
+      <input
+        class="form-control mr-sm-1"
+        type="search"
+        name="search"
+        value="<%= data.search %>"
+        placeholder="Tìm kiếm liên hệ"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+<table class="table" style="height: fit-content;">
+  <thead>
+    <tr>
+      <th scope="col" style="width: 5%;" class="p-1">STT</th>
+      <th scope="col" style="width: 15%;" class="p-1">Tên</th>
+      <th scope="col" style="width: 15%;" class="p-1">Email</th>
+      <th scope="col" style="width: 15%;" class="p-1">Số điện thoại</th>
+      <th scope="col" style="width: 30%;" class="p-1">Mô tả</th>
+      <th scope="col" style="width: 10%;" class="p-1">Thời gian</th>
+      <th scope="col" style="width: 10%;" class="p-1">Tùy chọn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% let stt = (data.currentPage - 1) * data.limit + 1; %>
+    <% for (let contact of data.row) { %>
+      <tr>
+        <td class="p-1"><%= stt++ %></td>
+        <td class="p-1"><%= contact.name %></td>
+        <td class="p-1"><%= contact.email %></td>
+        <td class="p-1"><%= contact.tel %></td>
+        <td class="p-1">
+          <% 
+            let description = contact.description;
+            if (description.length > 100) {
+              description = description.substring(0, 100) + '...';
+            }
+          %>
+          <%= description %>
+        </td>
+        <td class="p-1">
+          <% 
+            let date = new Date(contact.timeContact);
+            let formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+          %>
+          <%= formattedDate %>
+        </td>
+        <td class="operation_group f-flex">
+          <i class="fa-solid fa-eye" data-toggle="modal" data-target="#showModal" data-id="<%= contact.id %>"></i>
+          <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#deleteModal" data-id="<%= contact.id %>"></i>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-end">
+      <% if (data.totalPage > 1) {
+          if (data.currentPage > 3) { %>
+             <li class="page-item"><a class="page-link" href="/phan-hoi?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+          <% }
+          if (data.currentPage > 1) { %>
+            <li class="page-item"><a class="page-link" href="/phan-hoi?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
+          <% }
+          for (let i = 1; i <= data.totalPage; i++) {
+            if (i == data.currentPage) { %>
+                <li class="page-item active"><a class="page-link" href="#" aria-disabled="true"><%= i %></a></li>
+                <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
+                <li class="page-item"><a class="page-link" href="/phan-hoi?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
+                <%
+            }
+        }
+          if (data.currentPage < data.totalPage) { %>
+            <li class="page-item"><a class="page-link" href="/phan-hoi?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
+          <% }
+          if (data.currentPage < data.totalPage - 2) { %>
+            <li class="page-item"><a class="page-link" href="/phan-hoi?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
+          <% }
+      } %>
+    </ul>
+</nav>
+
+<!-- modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">
+          <i class="fas fa-trash-alt"></i> Xóa Liên Hệ
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p>Bạn có chắc chắn muốn xóa liên hệ này?</p>
+        <p class="text-muted">Việc xóa sẽ không thể khôi phục được. Hãy chắc chắn rằng bạn đã kiểm tra kỹ.</p>
+        <p class="text-muted">Việc xóa liên hệ mà không có sự chấp thuận từ độc giả có thể gây ra những hiểu lầm không mong muốn.</p>
+        <p class="text-muted">Hãy đảm bảo rằng việc xóa liên hệ đã được xác nhận và có sự giám sát phù hợp từ thủ thư và các bên có liên quan.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Hủy
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+          Xóa
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Hiển Thị Thông Tin -->
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content rounded-4 shadow-lg">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title d-flex align-items-center" id="showModalLabel">
+          <span>Chi tiết</span>
+        </h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div id="contactDetails" class="p-3">
+          <div class="mb-3">
+            <p><strong>Tên:</strong> <span id="contactName"></span></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Email:</strong> <span id="contactEmail"></span></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Số điện thoại:</strong> <span id="contactTel"></span></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Mô tả:</strong> <span id="contactDescription"></span></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Thời gian:</strong> <span id="contactTime"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var DeleteBtn = document.getElementById('confirmDeleteBtn');
+    var id;
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        id = button.data('id');
+    })
+    DeleteBtn.onclick = function () {
+      if (id) {
+          var formDelete = document.createElement('form');
+          formDelete.method = "POST";
+          formDelete.action = '/phan-hoi/' + id + '/delete?_method=DELETE';
+          document.body.appendChild(formDelete);
+          formDelete.submit();
+      }
+    }
+
+
+    $('#showModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var contactId = button.data('id'); 
+
+    fetch(`/api/get-contact/${contactId}`)
+      .then(response => response.json())
+      .then(contact => {
+        const data = contact.data
+        console.log(data);
+        
+        if (data) {
+          document.getElementById('contactName').textContent = data.name;
+          document.getElementById('contactEmail').textContent = data.email;
+          document.getElementById('contactTel').textContent = data.tel;
+          document.getElementById('contactDescription').textContent = data.description;
+          let date = new Date(data.timeContact);
+          let formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+          document.getElementById('contactTime').textContent = formattedDate;
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  });
+  })
+</script>
