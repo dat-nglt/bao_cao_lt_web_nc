@@ -24,6 +24,18 @@ const getBorrowPage = async (req, res) => {
   if (status !== '0') {
       whereConditions.status = status;
   }
+  const today = new Date();
+  const currentDate = today.toISOString().split('T')[0]; 
+  const updateOverDue = await borrowModel.update(
+    { status: 4 },
+    {
+        where: {
+            dueDate: {
+                [Op.lt]: currentDate
+            }
+        }
+    }
+  );
   const totalBorrow = await borrowModel.findAll({
       raw: true,
       where: whereConditions,

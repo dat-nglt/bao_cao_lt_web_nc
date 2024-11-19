@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
         element: <CategoryAll />
       },
       {
-        path: '/chi-tiet-sach', 
+        path: '/chi-tiet-sach/:id', 
         element: <BookDetails /> 
       }
     ]

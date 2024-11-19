@@ -10,6 +10,7 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 function BookCard(props) {
   const theme = useTheme()
+
   return (
     <Card sx={{
       display: 'flex',
@@ -26,17 +27,17 @@ function BookCard(props) {
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         <CardContent sx={{ flex: '1' }}>
           <Typography component="div" variant="subtitle1">
-            {props.data.nameBook}
+            {props.data.name}
           </Typography>
           <Typography
             variant="caption"
             component="div"
             sx={{ color: 'text.secondary' }}
           >
-            {props.data.createBook}
+            {props.data.creatorBook}
           </Typography>
         </CardContent>
-        <Link to={'/chi-tiet-sach'}>
+        <Link to={`/chi-tiet-sach/${props.data.id}`}>
           <Button variant='contained' sx={{
             textTransform: 'unset',
             fontSize: '12px',

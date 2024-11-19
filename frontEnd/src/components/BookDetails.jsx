@@ -3,25 +3,28 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Box, Card, CardMedia, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import bookService from "../services/bookService";
 
-function BookDetails() {
+function BookDetails(props) {
+
+  const [book, setBook] = React.useState([]);
+
   const { id } = useParams();
+  
   const navigate = useNavigate();
-  const book = {
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "Classic",
-    publisher: "Charles Scribner's Sons",
-    year: 1925,
-    description:
-      "Day la sach sachs sah hasch ash ash sachs sah hasch ash ash sachs sah hasch ash ash sachs sah hasch ash ash ",
-    coverUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPj1vUFsc1tTIjxqbX1bwUxOYFNL8_9KNmOSOfhRCtAu7Bqz68I9ASkfDowE93RWfbDJM&usqp=CAU",
-  };
 
-  if (!book) {
-    return <div>Không tìm thấy sách.</div>;
-  }
+  React.useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const bookByID = await bookService.getBookById(id);
+        setBook(bookByID);
+        console.log(bookByID);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+    fetchBook();
+  }, []);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -56,8 +59,8 @@ function BookDetails() {
           variant="outlined"
           component="img"
           sx={{ width: 260, aspectRatio: "6 / 9" }}
-          image={book.coverUrl}
-          alt={book.title}
+          image={book.imgBook}
+          alt={book.name}
         />
         <Box
           sx={{
@@ -70,22 +73,22 @@ function BookDetails() {
         >
           <div>
             <Typography component="div" variant="h4">
-              {book.title}
+              {book.name}
             </Typography>
             <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Tác giả: {book.author}
+              Tác giả: {book.creatorBook}
             </Typography>
             <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Thể loại: {book.genre}
+              Thể loại: {book.categoryBook}
             </Typography>
             <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Nhà xuát bản: {book.publisher}
+              Nhà xuát bản: {book.publisherBook}
             </Typography>
             <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Năm xuất bản: {book.year}
+              Năm xuất bản: {book.dateBook}
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
-              Mô tả: {book.description}
+              Mô tả: {book.desBook}
             </Typography>
           </div>
           <Button

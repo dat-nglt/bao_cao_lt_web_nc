@@ -94,7 +94,6 @@ function Home(props) {
           <SideBar menuItems={menuItems} />
         </Stack>
         <Stack sx={{ width: "100%" }}>
-          <SearchInput />
           <Outlet />
         </Stack>
       </Box>

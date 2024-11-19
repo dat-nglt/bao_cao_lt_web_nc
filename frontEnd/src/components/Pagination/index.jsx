@@ -17,7 +17,6 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
         start = Math.max(end - 4, 1);
       }
     }
-
     for (let i = start; i <= end; i++) {
       range.push(i);
     }

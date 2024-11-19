@@ -5,10 +5,12 @@ import { useTheme } from '@emotion/react';
 
 function CategoryBook(props) {
   const theme = useTheme();
+
   return (
     <Box sx={{
       width: '95%',
-      margin: '10px auto'
+      margin: '10px auto',
+      minHeight: '515px'
     }}>
       <Stack sx={{
         bgcolor: theme.palette.primary.main,
@@ -17,7 +19,7 @@ function CategoryBook(props) {
       }}>
         {
           props.isHomePage ?
-            props.title && (
+            props.name && (
               <Typography sx={{
                 padding: '10px 20px',
                 color: theme.palette.white.main,
@@ -28,7 +30,7 @@ function CategoryBook(props) {
               </Typography>
             )
             :
-            props.title && <Typography sx={{
+            props.name && <Typography sx={{
               padding: '10px 20px',
               color: theme.palette.white.main,
               textTransform: 'unset',
@@ -44,13 +46,13 @@ function CategoryBook(props) {
       <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }} >
         {
           props.isHomePage ?
-            props.bookList.slice(0, 6).map((books, index) => (
+            props.bookList.slice(props.start, props.end).map((books, index) => (
               <Grid2 key={index} size={{ xs: 5, sm: 4, md: 4 }}>
                 <BookCard data={books} />
               </Grid2>
             ))
             :
-            props.bookList.map((books, index) => (
+            props.bookList.slice(props.start, props.end).map((books, index) => (
               <Grid2 key={index} size={{ xs: 5, sm: 4, md: 4 }}>
                 <BookCard data={books} />
               </Grid2>

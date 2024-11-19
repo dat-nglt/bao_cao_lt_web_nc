@@ -41,7 +41,7 @@ function ContactList() {
   ];
 
   const countContact = data.length;
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
   const totalPages = Math.ceil(countContact / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * itemsPerPage;

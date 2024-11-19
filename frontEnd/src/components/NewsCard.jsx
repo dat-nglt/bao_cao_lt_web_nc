@@ -55,19 +55,10 @@ function NewsCard(props) {
           <Typography
             variant="caption"
             component="div"
-            sx={{ color: 'text.secondary', mt: '10px' }}
-          >
-            {props.data.author}
-          </Typography>
-
-          <Typography
-            variant="caption"
-            component="div"
             sx={{ color: 'text.secondary' }}
           >
             {props.data.year}
           </Typography>
-
         </CardContent>
         <Link to={'/chi-tiet-sach'}>
           <Button variant='contained' sx={{
@@ -81,12 +72,18 @@ function NewsCard(props) {
           }}>Chi tiết</Button>
         </Link>
       </Box>
-      <CardMedia
+      {props.data.image ? <CardMedia
         component="img"
-        sx={{ width: 160, aspectRatio: '6 / 9' }}
-        image={props.data.coverUrl}
-        alt="Đắc nhân tâm"
+        sx={{ width: 200, aspectRatio: '9 / 9' }}
+        image={props.data.image}
+        alt={props.data.title}
+      /> : <CardMedia
+      component="img"
+      sx={{ width: 200, aspectRatio: '9 / 9' }}
+      image='https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png'
+      alt={props.data.title}
       />
+    }   
     </Card >
   );
 }

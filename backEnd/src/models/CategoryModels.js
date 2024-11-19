@@ -1,19 +1,24 @@
-import { DataTypes } from 'sequelize'
-import sequelize from '../configs/connectDB.js';
+import { DataTypes } from "sequelize";
+import sequelize from "../configs/connectDB.js";
 
-const categoryModel = sequelize.define('category', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
+const categoryModel = sequelize.define(
+  "category",
+  {
+    idCategory: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
+    nameCategory: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
-  description: {
-    type: DataTypes.STRING
+  {
+    tableName: "category",
+    timestamps: false,
   }
-})
+);
 
-export default categoryModel
+export default categoryModel;

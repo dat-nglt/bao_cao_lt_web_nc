@@ -6,9 +6,10 @@ import { useTheme } from '@emotion/react';
 function CategoryNews(props) {
   const theme = useTheme();
   return (
-    <Box sx={{
+    <Box  sx={{
       width: '95%',
-      margin: '10px auto'
+      margin: '10px auto',
+      minHeight: '500px'
     }}>
       <Stack sx={{
         bgcolor: theme.palette.primary.main,

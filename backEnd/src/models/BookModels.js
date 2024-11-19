@@ -4,24 +4,17 @@ import sequelize from "../configs/connectDB.js";
 const bookModel = sequelize.define(
   "book",
   {
-    // name: {
-    //     type: DataTypes.STRING,
-    //     allowNull: false,
+    // id: {
+    //   type: DataTypes.INTEGER,
+    //   primaryKey: true,
+    //   autoIncrement: true,
+    //   allowNull: false,
     // },
-    // count: {
-    //     type: DataTypes.INTEGER,
-    //     allowNull: false,
-    // },
-    idBook: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    nameBook: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    quantityBook: {
+    count: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
