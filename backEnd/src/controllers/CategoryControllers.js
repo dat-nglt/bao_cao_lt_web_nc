@@ -15,7 +15,6 @@ const getCategoryPage = async (req, res) => {
     }
   }
 
-  // Lấy tổng số danh mục thoả mãn điều kiện tìm kiếm
   const totalCategoryQuery = `
     SELECT COUNT(*) AS total
     FROM categories AS category
