@@ -58,7 +58,7 @@ function CategoryNews(props) {
               </Grid2>
             ))
             :
-            props.newsList.map((news, index) => (
+            props.newsList.slice(props.start, props.end).map((news, index) => (
               <Grid2 key={index} size={{ xs: 1, sm: 1, md: 2 }}>
                 <NewsCard data={news} />
               </Grid2>

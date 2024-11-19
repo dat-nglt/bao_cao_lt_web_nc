@@ -116,6 +116,27 @@ const news = [
     content: "Trong một thông báo gây sốc, thư viện trường đã đưa ra quy định mới rằng sinh viên mượn sách quá hạn sẽ gặp phải những hình phạt nghiêm khắc, bao gồm việc không được tham gia các hoạt động học tập và thậm chí có thể bị đuổi học. Điều này đã khiến nhiều sinh viên hoang mang và lo lắng. Nhiều người đã lên tiếng phản đối quy định này, cho rằng nó quá khắc nghiệt và không công bằng. Thư viện nhấn mạnh rằng mục đích của quy định là để nâng cao ý thức tự giác của sinh viên trong việc quản lý thời gian và tài nguyên học tập."
   },
   {
+    title: "Sách quá hạn, mẹ kiếp về nhà liền!",
+    author: "Thủ thư Nguyễn Văn A",
+    year: '20/10/2024',
+    coverUrl: "https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png",
+    content: "Trong một thông báo gây sốc, thư viện trường đã đưa ra quy định mới rằng sinh viên mượn sách quá hạn sẽ gặp phải những hình phạt nghiêm khắc, bao gồm việc không được tham gia các hoạt động học tập và thậm chí có thể bị đuổi học. Điều này đã khiến nhiều sinh viên hoang mang và lo lắng. Nhiều người đã lên tiếng phản đối quy định này, cho rằng nó quá khắc nghiệt và không công bằng. Thư viện nhấn mạnh rằng mục đích của quy định là để nâng cao ý thức tự giác của sinh viên trong việc quản lý thời gian và tài nguyên học tập."
+  },
+  {
+    title: "Sách quá hạn, mẹ kiếp về nhà liền!",
+    author: "Thủ thư Nguyễn Văn A",
+    year: '20/10/2024',
+    coverUrl: "https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png",
+    content: "Trong một thông báo gây sốc, thư viện trường đã đưa ra quy định mới rằng sinh viên mượn sách quá hạn sẽ gặp phải những hình phạt nghiêm khắc, bao gồm việc không được tham gia các hoạt động học tập và thậm chí có thể bị đuổi học. Điều này đã khiến nhiều sinh viên hoang mang và lo lắng. Nhiều người đã lên tiếng phản đối quy định này, cho rằng nó quá khắc nghiệt và không công bằng. Thư viện nhấn mạnh rằng mục đích của quy định là để nâng cao ý thức tự giác của sinh viên trong việc quản lý thời gian và tài nguyên học tập."
+  },
+  {
+    title: "Sách quá hạn, mẹ kiếp về nhà liền!",
+    author: "Thủ thư Nguyễn Văn A",
+    year: '20/10/2024',
+    coverUrl: "https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png",
+    content: "Trong một thông báo gây sốc, thư viện trường đã đưa ra quy định mới rằng sinh viên mượn sách quá hạn sẽ gặp phải những hình phạt nghiêm khắc, bao gồm việc không được tham gia các hoạt động học tập và thậm chí có thể bị đuổi học. Điều này đã khiến nhiều sinh viên hoang mang và lo lắng. Nhiều người đã lên tiếng phản đối quy định này, cho rằng nó quá khắc nghiệt và không công bằng. Thư viện nhấn mạnh rằng mục đích của quy định là để nâng cao ý thức tự giác của sinh viên trong việc quản lý thời gian và tài nguyên học tập."
+  },
+  {
     title: "Tác giả 'cực phẩm' đến thăm thư viện!",
     author: "Nhà báo Trần Thị B",
     year: '15/09/2024',
