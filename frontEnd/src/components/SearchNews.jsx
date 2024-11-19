@@ -13,7 +13,7 @@ const SearchNews = (props) => {
   const [valueSearch, setValueSearch] = React.useState('');
   const { searchTerm, setSearchTerm } = React.useContext(SearchContext);
 
-  const handleChangeOptionSearch = (event) => setOptionSearch(event.target.value);
+  
   const handleChangeValueSearch = (event) => setValueSearch(event.target.value);
 
   React.useEffect(() => {
@@ -23,6 +23,11 @@ const SearchNews = (props) => {
     };
     getTypeNews();    
 },[]);
+
+const handleChangeOptionSearch = (event) => {
+  setOptionSearch(event.target.value);
+  setSearchTerm(event.target.value);
+} 
 
   return (
     <Box
