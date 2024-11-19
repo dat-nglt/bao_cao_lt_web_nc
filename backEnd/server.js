@@ -33,7 +33,7 @@ app.use(
     extended: false
   })
 )
-app.use(bodyParser.json())
+app.use(bodyParzser.json())
 viewEngine(app)
 app.use(methodOverride('_method'));
 initWebRoute(app)
