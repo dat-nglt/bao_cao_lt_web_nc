@@ -31,6 +31,14 @@ const initApiRoute = (app) => {
   router.get("/tin-tuc", apiNews.getAllNews);
   router.get("/chi-tiet-tin-tuc/:id", apiNews.getNews);
 
+
+
+
+
+  // liên hệ
+  router.get("/", apiNews.getNews);
+  
+
   return app.use("/api/v1/", router);
 };
 

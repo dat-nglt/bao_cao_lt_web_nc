@@ -85,7 +85,7 @@ const getBorrowPage = async (req, res) => {
     limit: limit,
     offset: start,
   });
-console.log(listBorrow);
+// console.log(listBorrow);
   const listUser = await userModel.findAll({raw: true, attributes: ["id", "fullName", "studentCode"]});
   const listBook = await bookModel.findAll({raw: true, attributes: ['id', 'name', 'count']});
   return res.render("layout", {

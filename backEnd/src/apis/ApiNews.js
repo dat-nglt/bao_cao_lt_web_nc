@@ -35,7 +35,14 @@ const getAllNews = async (req, res) => {
 
 const getNews = async (req, res) => {
   try {
-      const id =req.params.id;
+      const id = req.params.id;
+      const updateViewNews = await newsModel.update(
+        { view: sequelize.literal('view + 1') },
+        { where: { id } }
+      )
+      if(!updateViewNews){
+        res.status(400).json({ message: 'Có lỗi xảy ra.' });
+      }
       const news = await newsModel.findOne({
         attributes: {
           include: [

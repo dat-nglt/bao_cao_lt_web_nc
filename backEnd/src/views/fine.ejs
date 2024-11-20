@@ -48,7 +48,7 @@
           <%= formattedDate %>
         </td>
         <td class="p-1">
-          <% if(fine['borrow.status'] === '4'){ %>
+          <% if(fine['borrow.status'] === 4){ %>
             <i class="fa-solid fa-circle-check" style="color: green;"  onclick="showPaymentModal('<%= fine.id_borrow %>','<%= fine.amount %>')"></i>
           <% } else { %>
             <i class="fa-solid fa-circle-check" disabled style="color: black; pointer-events: none;"></i>
