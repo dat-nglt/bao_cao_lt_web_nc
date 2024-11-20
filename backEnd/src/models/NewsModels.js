@@ -14,6 +14,11 @@ const newsModel = sequelize.define('news', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
+    view: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    },
     typeId: {
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -7,34 +7,31 @@ import apiTypeNews from "../apis/ApiTypeNews.js";
 
 const router = express.Router();
 const initApiRoute = (app) => {
-
-
   // Trang danh mục sách
-    router.get('/danh-muc/xem-tat-ca', apiBooks.getAllBooks);
-    router.get('/danh-muc/:id', apiBooks.getBooksByCategory);
-    router.get('/chi-tiet-sach/:id', apiBooks.getBookById);
-    router.get('/danh-muc', apiCategory.getAllCategory);
+  router.get("/danh-muc/xem-tat-ca", apiBooks.getAllBooks);
+  router.get("/danh-muc/:id", apiBooks.getBooksByCategory);
+  router.get("/chi-tiet-sach/:id", apiBooks.getBookById);
+  router.get("/danh-muc", apiCategory.getAllCategory);
+  router.get("/danh-muc", apiCategory.getAllCategory);
+  router.post("/yeu-cau-muon", apiBooks.requestBook);
 
+  // router.post('/the-loai', categoryController.addCategory);
+  // router.post('/the-loai/:id', categoryController.updateCategory);
+  // router.delete('/the-loai/:id', categoryController.deleteCategory);
+  // Trang sách
+  // router.get('/sach', apiBooks.getBookPage);
+  // router.post('/sach', ApibookController.addBook);
+  // router.post('/sach/:id', ApibookController.updateBook);
+  // router.delete('/sach/:id', ApibookController.deleteBook);
 
-    // router.post('/the-loai', categoryController.addCategory);
-    // router.post('/the-loai/:id', categoryController.updateCategory);
-    // router.delete('/the-loai/:id', categoryController.deleteCategory);
-    // Trang sách
-    // router.get('/sach', apiBooks.getBookPage);
-    // router.post('/sach', ApibookController.addBook);
-    // router.post('/sach/:id', ApibookController.updateBook);
-    // router.delete('/sach/:id', ApibookController.deleteBook);
+  //loại tin tức
+  router.get("/loai-tin-tuc", apiTypeNews.getAllTypeNews);
 
-    //loại tin tức
-    router.get('/loai-tin-tuc', apiTypeNews.getAllTypeNews);
-    
-    // Tin tức
-    router.get('/tin-tuc', apiNews.getAllNews);
-    
+  // Tin tức
+  router.get("/tin-tuc", apiNews.getAllNews);
+  router.get("/chi-tiet-tin-tuc/:id", apiNews.getNews);
 
-    return app.use('/api/v1/', router);
-}
+  return app.use("/api/v1/", router);
+};
 
-export default initApiRoute
-
-
+export default initApiRoute;

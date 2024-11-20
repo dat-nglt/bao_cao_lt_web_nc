@@ -4,6 +4,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EventIcon from '@mui/icons-material/Event';
 import { useTheme } from '@emotion/react';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -22,7 +24,7 @@ function NewsCard(props) {
         transform: 'scale(1.01)',
       }
     }} >
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, width: '500px' }}>
         <CardContent sx={{ flex: '1' }}>
           <Typography component="div" variant="subtitle1"
             sx={{
@@ -32,7 +34,7 @@ function NewsCard(props) {
               textOverflow: 'ellipsis',
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 1 //
+              WebkitLineClamp: 3,
             }}
           >
             {props.data.title}
@@ -40,27 +42,19 @@ function NewsCard(props) {
           <Typography
             variant="caption"
             component="div"
-            sx={{
-              color: 'text.secondary',
-              height: '40px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 2 // Số dòng hiển thị trước khi bị cắt
-            }}
+            sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: '5px' }}
           >
-            {props.data.content}
+            <VisibilityIcon fontSize='13px'/> {props.data.view}
           </Typography>
           <Typography
             variant="caption"
             component="div"
-            sx={{ color: 'text.secondary' }}
+            sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: '5px' }}
           >
-            {props.data.year}
+            <EventIcon fontSize="13px"/>{props.data.dayCreated}
           </Typography>
         </CardContent>
-        <Link to={'/chi-tiet-sach'}>
+        <Link to={`/chi-tiet-tin-tuc/${props.data.id}`}>
           <Button variant='contained' sx={{
             textTransform: 'unset',
             fontSize: '12px',
@@ -74,12 +68,12 @@ function NewsCard(props) {
       </Box>
       {props.data.image ? <CardMedia
         component="img"
-        sx={{ width: 200, aspectRatio: '9 / 9' }}
+        sx={{ width: 200, aspectRatio: '7 / 9' }}
         image={props.data.image}
         alt={props.data.title}
       /> : <CardMedia
       component="img"
-      sx={{ width: 200, aspectRatio: '9 / 9' }}
+      sx={{ width: 200, aspectRatio: '7 / 9' }}
       image='https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png'
       alt={props.data.title}
       />

@@ -5,7 +5,7 @@ import fs from 'fs'
 import { Op } from 'sequelize'
 
 const getNewsPage = async (req, res) => {
-  const limit = 5
+  const limit = 10
   const search = req.query.search ? req.query.search : ''
   const sort = req.query.sort ? req.query.sort : 'desc'
   const currentPage = req.query.page ? req.query.page : 1
@@ -52,7 +52,8 @@ const getNewsPage = async (req, res) => {
   })
   const listTypeNews = await typeNewsModel.findAll({
     raw: true,
-    attributes: ['id', 'name']
+    attributes: ['id', 'name'],
+    order: [['name', 'asc']],
   })
   return res.render('layout', {
     data: {
@@ -151,6 +152,7 @@ const updateNews = async (req, res) => {
   const form = new IncomingForm()
   form.parse(req, async (err, fields, files) => {
     if (err) {
+      console.log(err)
       req.flash('error', 'Ảnh bìa không hợp lệ!')
       res.status(400).redirect('/tin-tuc')
       return

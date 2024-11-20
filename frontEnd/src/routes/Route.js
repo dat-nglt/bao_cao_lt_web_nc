@@ -8,6 +8,7 @@ import SearchPage from '../pages/SearchPage'
 import Feed from '../components/Feed'
 import CategoryAll from '../components/CategoryAll'
 import BookDetails from '../components/BookDetails'
+import NewsDetail from '../components/NewsDetail'
 import Contact from '../pages/Contact'
 import Profile from '../components/Profile'
 import RentHistory from '../components/RentHistory'
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: '/chi-tiet-sach/:id', 
         element: <BookDetails /> 
+      },
+      {
+        path: '/chi-tiet-tin-tuc/:id', 
+        element: <NewsDetail /> 
       }
     ]
   },

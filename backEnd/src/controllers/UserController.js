@@ -36,6 +36,11 @@ const handleLogin = async (req, res) => {
     return res.status(400).redirect('/dang-nhap')
   }
 
+  if (existUser.dataValues.roleAccess !== 2) {
+    req.flash('error', 'Vui lòng sử dụng tài khoản quản trị viên để truy cập hệ thống!')
+    return res.status(200).redirect('/dang-nhap')
+  }
+
   req.session.admin = existUser.dataValues
   req.flash('success', 'Đăng nhập thành công')
   return res.status(200).redirect('/the-loai')

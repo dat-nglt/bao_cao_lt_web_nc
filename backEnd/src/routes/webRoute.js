@@ -35,7 +35,9 @@ const initWebRoute = (app) => {
   );
 
   //sách
-  router.get("/sach", BookControllers.getBookPage);
+  router.get("/quan-li-sach", BookControllers.getBookPage);
+  router.post("/quan-li-sach", BookControllers.addBook);
+  router.delete("/quan-li-sach/:id", BookControllers.deleteBook);
 
   //mượn trả
   router.get("/muon-tra", checkLoggedIn, borrowControllers.getBorrowPage);
@@ -64,8 +66,16 @@ const initWebRoute = (app) => {
   router.get("/phan-hoi", contactControllers.getContactPage);
   router.delete("/phan-hoi/:id/delete", contactControllers.deleteContact);
   //loại tin tức
-  router.get("/the-loai-tin-tuc", checkLoggedIn, typeNewsControllers.getTypeNewsPage);
-  router.post("/the-loai-tin-tuc", checkLoggedIn, typeNewsControllers.createTypeNews);
+  router.get(
+    "/the-loai-tin-tuc",
+    checkLoggedIn,
+    typeNewsControllers.getTypeNewsPage
+  );
+  router.post(
+    "/the-loai-tin-tuc",
+    checkLoggedIn,
+    typeNewsControllers.createTypeNews
+  );
   router.post(
     "/the-loai-tin-tuc/update/:id",
     checkLoggedIn,

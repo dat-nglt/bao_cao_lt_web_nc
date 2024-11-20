@@ -28,12 +28,13 @@
 <table class="table" style="height: fit-content;">
   <thead>
     <tr>
-      <th scope="col" style="width: 5%;" class="p-1">STT</th>
-      <th scope="col" style="width: 30%;" class="p-1">Tiêu đề</th>
-      <th scope="col" style="width: 10%;" class="p-1">Ảnh bìa</th>
-      <th scope="col" style="width: 24%;" class="p-1">Nội dung</th>
-      <th scope="col" style="width: 8%;" class="p-1">Ngày tạo</th>
-      <th scope="col" style="width: 15%;" class="p-1">Loại tin</th>
+      <th scope="col" style="width: 5%;" class="p-1 text-center">STT</th>
+      <th scope="col" style="width: 40%;" class="p-1">Tiêu đề</th>
+      <th scope="col" style="width: 10%;" class="p-1 text-center">Ảnh bìa</th>
+      <th scope="col" style="width: 0%;" class="p-1 d-none">Nội dung</th>
+      <th scope="col" style="width: 9%;" class="p-1">Ngày tạo</th>
+      <th scope="col" style="width: 20%;" class="p-1">Loại tin</th>
+      <th scope="col" style="width: 8%;" class="p-1 text-center">Lượt xem</th>
       <th scope="col" style="width: 8%;" class="p-1">Tùy chọn</th>
     </tr>
   </thead>
@@ -41,36 +42,32 @@
     <% 
     let stt = ((data.currentPage-1) * data.limit) + 1;
     for(let i=0; i<data.row.length; i++){
-      const maxLengthContent = 35;
+      const maxLengthContent = 40;
       let content = data.row[i].content;
       if (content.length > maxLengthContent) {
           content = content.substring(0, maxLengthContent) + '...';
       }
       %>
       <tr>
-        <td scope="row"><%= stt%></td>
+        <td scope="row" class="text-center"><%= stt%></td>
         <td class="text_truncate" style="max-width: 110px;">
           <%= data.row[i].title %>
         </td>
         <td>
-          <% if(data.row[i].image !== '') {%>
-            <a href="<%= data.row[i].image %>">
-              <img src="<%= data.row[i].image %>" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
-            </a>
-          <% }else{ %>
-            <a href="<%= data.row[i].image %>">
-              <img src="https://res.cloudinary.com/dta7fdnph/image/upload/v1729434759/soft_shadow_ocndts.png" class="img-fluid" style="width: 95px; height: 95px;" alt="<%= data.row[i].title %>">
-            </a>
-          <% } %>  
+          <a href="<%= data.row[i].image %>">
+            Xem ảnh bìa
+          </a>
         </td>
-        <td data-content="<%=data.row[i].content %>" style="max-width: 200px;">
-          <%- content %>
+        <td data-content="<%=data.row[i].content %>" class="d-none" style="max-width: 200px;">
         </td>
         <td class="text_truncate" style="max-width: 200px;">
           <%= data.row[i].dayCreated %>
         </td>
         <td class="text_truncate" style="max-width: 100px;" data-type-id="<%= data.row[i]['type_news.id'] %>">
           <a href="http://localhost:3001/the-loai-tin-tuc?sort=desc&search=<%= data.row[i]['type_news.name'] %>"><%= data.row[i]['type_news.name'] %></a>
+        </td>
+        <td class="text_truncate text-center" style="max-width: 200px;">
+          <%= data.row[i].view %>
         </td>
         <td class="operation_group f-flex">
           <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= data.row[i].id %>"></i>

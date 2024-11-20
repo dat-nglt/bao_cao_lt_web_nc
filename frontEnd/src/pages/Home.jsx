@@ -23,7 +23,7 @@ function Home(props) {
 
         const fetchedCategories = response.map((category) => ({
           link: `danh-muc/${category.id}`,
-          text: category.nameCategory,
+          text: category.name,
         }));
 
         // Thêm mục "Xem tất cả" vào đầu mảng danh mục

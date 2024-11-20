@@ -85,8 +85,7 @@ const getBorrowPage = async (req, res) => {
     limit: limit,
     offset: start,
   });
-
-  
+console.log(listBorrow);
   const listUser = await userModel.findAll({raw: true, attributes: ["id", "fullName", "studentCode"]});
   const listBook = await bookModel.findAll({raw: true, attributes: ['id', 'name', 'count']});
   return res.render("layout", {
@@ -154,7 +153,7 @@ const updateBorrow = async (req, res) =>{
     res.status(400).redirect("/muon-tra");
     return
   }
-  if(checkBorrow.status === '1'){
+  if(checkBorrow.status === 1){
     const checkBook = await bookModel.findByPk(checkBorrow.bookId);
     if (checkBook) {
       if (checkBook.count > 0) {
@@ -183,7 +182,7 @@ const updateBorrow = async (req, res) =>{
       res.status(200).redirect("/muon-tra");
       return
     }
-  }else if(checkBorrow.status === '2'){
+  }else if(checkBorrow.status === 2){
     const today = new Date();
     const dayReturn = today.toISOString().split('T')[0]; 
     const checkBook = await bookModel.findByPk(checkBorrow.bookId);

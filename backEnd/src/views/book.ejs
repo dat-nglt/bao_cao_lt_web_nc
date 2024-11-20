@@ -2,20 +2,18 @@
   <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
       Thêm sách
     </button>
-   
-      <form style="display: flex;" class="form-inline my-2 my-lg-0">
+    <form style="display: flex;" class="form-inline my-2 my-lg-0">
+      <div class="dropdown mr-2">
         <div class="dropdown mr-2">
-          <button style="padding: 5px 12px;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Bộ lọc
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <div class="dropdown-item">Mới nhất</div>
-            <div class="dropdown-item">Cũ nhất</div>
-          </div>
+          <select class="form-select" aria-label="select Default" name="sort" >
+            <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
+            <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
+          </select>
         </div>
-          <input class="form-control mr-sm-1" type="search" style="width: 300px;" placeholder="Tìm tên sách/ tác giả/ nhà xuất bản" aria-label="Search" name="search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </form>
+      </div>
+        <input class="form-control mr-sm-1" type="search" name="search" placeholder="Tìm tên thể loại" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
   </div>
   
   <table class="table" style="height: fit-content;">
@@ -85,73 +83,29 @@
     <ul class="pagination justify-content-end">
         <% if (data.totalPage > 1) {
             if (data.currentPage > 3) { %>
-               <li class="page-item"><a class="page-link" href="/sach?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+               <li class="page-item"><a class="page-link" href="/quan-li-sach?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
             <% }
             if (data.currentPage > 1) { %>
-              <li class="page-item"><a class="page-link" href="/sach?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
+              <li class="page-item"><a class="page-link" href="/quan-li-sach?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
             <% }
             for (let i = 1; i <= data.totalPage; i++) {
               if (i == data.currentPage) { %>
                   <li class="page-item active"><a class="page-link" href="#" aria-disabled="true"><%= i %></a></li>
                   <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
-                  <li class="page-item"><a class="page-link" href="/sach?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
+                  <li class="page-item"><a class="page-link" href="/quan-li-sach?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
                   <%
               }
           }
             if (data.currentPage < data.totalPage) { %>
-              <li class="page-item"><a class="page-link" href="/sach?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
+              <li class="page-item"><a class="page-link" href="/quan-li-sach?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
             <% }
             if (data.currentPage < data.totalPage - 2) { %>
-              <li class="page-item"><a class="page-link" href="/sach?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
+              <li class="page-item"><a class="page-link" href="/quan-li-sach?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
             <% }
         } %>
       </ul>
   </nav>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.fa-pen-to-square').forEach(item => {
-            item.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const tenTheLoai = row.cells[1].innerText;
-                const moTa = row.cells[2].innerText;
-                document.getElementById('categoryName').value = tenTheLoai;
-                document.getElementById('description').value = moTa;
-            });
-        });
-        document.getElementById('saveChanges').addEventListener('click', function() {
-            $('#editModal').modal('hide');
-        });
-  
-        document.querySelectorAll('.fa-trash-can').forEach(item => {
-            item.addEventListener('click', function() { 
-                const deleteId = this.getAttribute('data-id');
-  
-                document.getElementById('confirmDelete').onclick = function() {
-                  $('#deleteModal').modal('hide');
-                  fetch(`/sach/${deleteId}`, {
-                      method: 'DELETE',
-                  })
-                  .then(response => {
-                      console.log(response);
-                      if (response.ok) {
-                          alert("Xóa thành công");
-                          location.reload();
-                      } else {
-                          alert('Có lỗi xảy ra khi xóa thể loại.');
-                      }
-                  })
-                  .catch(error => {
-                      console.error(error);
-                  });
-              };
-            });
-        });
-        document.getElementById('book_count').addEventListener('input', function(e) {
-              this.value = this.value.replace(/[^0-9]/g, '');
-          });
-    });
-  
-  </script>
+
   
   <!-- thêm -->
   <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
@@ -164,30 +118,30 @@
           </button>
         </div>
         <div class="modal-body">
-          <form method="post" action="/sach">
+          <form method="post" action="/quan-li-sach" enctype="multipart/form-data">
             <div class="form-group">
               <label for="book_name">Tên sách</label>
-              <input type="text" class="form-control" name="name" id="book_name" placeholder="Nhập tên..." required>
+              <input type="text" class="form-control" name="name" id="book_name" placeholder="Nhập tên..." >
             </div>
             <div class="form-group custom-file">  
                 <label for="book_image">Hình ảnh</label>
-                <input class="form-control" type="file" name="img" id="book_image">
+                <input class="form-control" type="file" name="image" id="book_image">
             </div>
             <div class="form-group mt-4">
               <label for="book_author">Tác giả</label>
-              <input type="text" class="form-control" name="author" id="book_author" placeholder="Nhập tác giả" required>
+              <input type="text" class="form-control" name="author" id="book_author" placeholder="Nhập tác giả" >
             </div>
             <div class="form-group">
               <label for="book_publisher">Nhà xuất bản</label>
-              <input type="text" class="form-control" name="publisher" id="book_publisher" placeholder="Nhập nhà xuất bản" required>
+              <input type="text" class="form-control" name="publisher" id="book_publisher" placeholder="Nhập nhà xuất bản" >
             </div>
             <div class="form-group">
               <label for="book_yearOfRelease">Ngày xuất bản</label>
-              <input type="date" class="form-control" name="yearOfRelease" id="book_yearOfRelease" required>
+              <input type="date" class="form-control" name="yearOfRelease" id="book_yearOfRelease" >
             </div>
             <div class="form-group">
               <label for="book_count">Số lượng</label>
-              <input type="text" class="form-control" name="count" id="book_count" required>
+              <input type="text" class="form-control" name="count" id="book_count" >
             </div>
             <div class="form-group">
               <label for="book_category">Thể loại</label>
@@ -198,7 +152,7 @@
             </div>
             <div class="form-group">
               <label for="book_description">Mô tả </label>
-              <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="description" id="book_description" rows="5" required></textarea>
+              <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="description" id="book_description" rows="5" ></textarea>
             </div>
             <div class="modal-footer" style="border: none;">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -225,11 +179,11 @@
                 <form id="editForm">
                     <div class="form-group">
                         <label for="categoryName">Tên thể loại</label>
-                        <input type="text" class="form-control" id="categoryName" required>
+                        <input type="text" class="form-control" id="categoryName" >
                     </div>
                     <div class="form-group">
                         <label for="description">Mô tả</label>
-                        <textarea class="form-control" id="description" rows="5" style="resize: none;" spellcheck="false" required></textarea>
+                        <textarea class="form-control" id="description" rows="5" style="resize: none;" spellcheck="false" ></textarea>
                     </div>
                 </form>
             </div>
@@ -262,3 +216,90 @@
     </div>
     </div>
     
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        
+        const showToast = (toastId) => {
+          const toastElement = document.getElementById(toastId);
+          if (toastElement) {
+            const toast = new bootstrap.Toast(toastElement, { autohide: true, delay: 3000 });
+            toast.show();
+          }
+        };
+    
+        document.querySelectorAll('.fa-pen-to-square').forEach(item => {
+          item.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const updateId = this.getAttribute('data-id');
+            const tenTheLoai = row.cells[1].innerText;
+            const moTa = row.cells[2].innerText;
+    
+            document.getElementById('categoryName').value = tenTheLoai;
+            document.getElementById('description').value = moTa;
+    
+            // Xử lý lưu thay đổi
+            const saveButton = document.getElementById('saveChanges');
+            saveButton.onclick = function () {
+              const nameCategory = document.getElementById('categoryName').value;
+              const descriptionCategory = document.getElementById('description').value;
+              console.log(nameCategory, descriptionCategory);
+              
+              $('#editModal').modal('hide');
+              fetch(`/the-loai/${updateId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  nameCategory,
+                  descriptionCategory
+                })
+              })
+                .then(response => {
+                  if (response.ok) {
+                    showToast('successToast');
+                    setTimeout(() => location.reload(), 1000); 
+                  } else {
+                    showToast('errorToast');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error updating category:', error);
+                  showToast('errorToast');
+                });
+            };
+          });
+        });
+    
+        // Xử lý sự kiện xóa thể loại
+        document.querySelectorAll('.fa-trash-can').forEach(item => {
+          item.addEventListener('click', function () {
+            const deleteId = this.getAttribute('data-id');
+    
+            document.getElementById('confirmDelete').onclick = function () {
+              $('#deleteModal').modal('hide');
+              fetch(`/quan-li-sach/${deleteId}`, {
+                method: 'DELETE',
+              })
+                .then(response => {
+                  if (response.ok) {
+                    showToast('successToast');
+                    location.reload()
+                  } else {
+                    showToast('errorToast');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error deleting category:', error);
+                  showToast('errorToast');
+                });
+            };
+          });
+        });
+    
+        // Hiển thị toast ban đầu nếu tồn tại
+        showToast('successToast');
+        showToast('errorToast');
+      });
+    </script>

@@ -30,7 +30,7 @@
 <table class="table" style="height: fit-content;">
   <thead>
     <tr>
-      <th scope="col" style="width: 7%; text-align: center;" class="p-1">Mã phiếu mượn</th>
+      <th scope="col" style="width: 7%; text-align: center;" class="p-1">STT</th>
       <th scope="col" style="width: 5%;" class="p-1 text-center">MSSV</th>
       <th scope="col" style="width: 20%;" class="p-1">Họ tên</th>
       <th scope="col" style="width: 23%;" class="p-1">Tên sách</th>
@@ -47,26 +47,28 @@
     for (let i = 0; i < data.row.length; i++) { 
         let status;
         switch (data.row[i].status) {
-            case '1':
+            case 1:
               status = "Chờ xét duyệt";
               break;
-            case '2':
+            case 2:
               status = "Đang mượn";
               break;
-            case '3':
+            case 3:
               status = "Đã trả";
               break;
-            case '4':
+            case 4:
               status = "Quá hạn";
               break;
-            case '5':
+            case 5:
               status = "Đã bị hủy";
               break;
             default:
               status = "Chờ xét duyệt";
-              break; } %>
+              break; 
+          }
+          %>
         <tr>
-            <td scope="row" style="text-align: center;"><%= data.row[i].id %></td>
+            <td scope="row" style="text-align: center;"><%= stt %></td>
             <td scope="row" class="text_truncate" style="max-width: 110px;">
                 <a href="http://localhost:3001/tai-khoan?sort=desc&search=<%= data.row[i]['user.studentCode'] %>">
                     <%= data.row[i]['user.studentCode'] %>
@@ -76,7 +78,7 @@
                 <%= data.row[i]['user.fullName'] %>
             </td>
             <td class="text_truncate" style="max-width: 110px;">
-                <a href="http://localhost:3001/sach?sort=desc&search=<%= data.row[i]['book.name'] %>">
+                <a href="http://localhost:3001/quan-li-sach=desc&search=<%= data.row[i]['book.name'] %>">
                     <%= data.row[i]['book.name'] %>
                 </a>
             </td>
@@ -92,17 +94,17 @@
                 <% } %>
             </td>
             <td class="text-center" style="max-width: 200px;">
-              <% if((data.row[i].status === '4') && (data.row[i].overdue > 0)){ %>
+              <% if((data.row[i].status === 4) && (data.row[i].overdue > 0)){ %>
                 <%= status %>(<%= data.row[i].overdue %>d)
               <% }else{ %>
                 <%= status %>
               <% } %>
             </td>
             <td class="operation_group f-flex">
-                <% if(data.row[i].status === '1'){ %>
+                <% if(data.row[i].status.toString() === '1'){ %>
                   <i class="fa-solid fa-circle-check" style="color: green;" data-toggle="modal" data-target="#reviewModal" data-id="<%= data.row[i].id %>"></i>
                   <i class="fa-solid fa-circle-xmark" style="color: red;" data-toggle="modal" data-target="#cancelModal" data-id="<%= data.row[i].id %>"></i>
-                <% } else if(data.row[i].status === '2'){ %>
+                <% } else if(data.row[i].status.toString() === '2'){ %>
                   <i class="fa-solid fa-circle-check" style="color: green;" data-toggle="modal" data-target="#returnModal" data-return-id="<%= data.row[i].id %>"></i>
                   <i class="fa-solid fa-circle-xmark" disabled style="color: black; pointer-events: none;"></i>
                 <% } else { %>

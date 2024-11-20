@@ -5,7 +5,7 @@ import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import bookService from "../services/bookService";
 
-function BookDetails(props) {
+function NewsDetail(props) {
   const [book, setBook] = React.useState([]);
 
   const { id } = useParams();
@@ -126,4 +126,4 @@ function BookDetails(props) {
   );
 }
 
-export default BookDetails;
+export default NewsDetail;
