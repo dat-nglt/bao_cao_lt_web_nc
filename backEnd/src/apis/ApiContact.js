@@ -3,7 +3,11 @@ const { Op } = require('sequelize');
 
 const getAllContact = async (req, res) => {
     try {
-        const contacts = await contactModel.findAll();
+        const contacts = await contactModel.findAll({
+            order: [
+                ['timeContact', 'ASC'],
+            ],
+        });
         res.status(200).json({
             message: 'lấy thành công',
             data: contacts,
@@ -20,7 +24,7 @@ const createContact = async (req, res) => {
     try {
         const { name, email, tel, des} = req.body;
 
-        if (!name || !email || !tel || !description) {
+        if (!name || !email || !tel || !des) {
             return res.status(400).json({
                 message: 'Vui lòng cung cấp đầy đủ thông tin (name, email, tel, description)',
             });
@@ -30,7 +34,7 @@ const createContact = async (req, res) => {
             email,
             tel,
             description:des,
-            timeContact: timeContact || new Date(),
+            timeContact: new Date(),
         });
 
         res.status(201).json({
@@ -46,4 +50,4 @@ const createContact = async (req, res) => {
 };
 
 
-export default { getAllContact };
+export default { getAllContact, createContact };

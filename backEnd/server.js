@@ -13,7 +13,7 @@ import methodOverride from "method-override";
 import createSession from "./src/configs/createSession.js";
 
 // sequelize.sync();
-sequelize.sync({ alter: true })
+// sequelize.sync({ alter: true })
 
 const app = express();
 

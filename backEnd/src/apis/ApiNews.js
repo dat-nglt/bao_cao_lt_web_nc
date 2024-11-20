@@ -13,6 +13,7 @@ const getAllNews = async (req, res) => {
             whereConditions.typeId = type
           }
         const news = await newsModel.findAll({
+          raw: true,
             where: whereConditions,
             attributes: {
               include: [
@@ -31,6 +32,38 @@ const getAllNews = async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: 'Có lỗi xảy ra.' });
     }
+}
+
+const getAllNewsHome = async (req, res) => {
+  try {
+      const dayAgo = new Date();
+      dayAgo.setDate(dayAgo.getDate() - 30);
+      const news = await newsModel.findAll({
+        raw: true,
+        where:{
+          createAt: {
+            [Op.gt]: dayAgo
+        },
+        },
+          attributes: {
+            include: [
+              [sequelize.fn('DATE_FORMAT', sequelize.col('news.createdAt'), '%d-%m-%Y'), 'dayCreated'],
+            ]
+          },
+          include: [
+              {
+                model: typeNewsModel,
+                as: 'type_news',
+                attributes: []
+              }
+          ],
+          limit: 6,
+          offset: 0,
+      });
+      res.json(news);
+  } catch (error) {
+      res.status(400).json({ message: 'Có lỗi xảy ra.' });
+  }
 }
 
 const getNews = async (req, res) => {
@@ -60,4 +93,4 @@ const getNews = async (req, res) => {
 }
 
 
-export default { getAllNews, getNews };
+export default { getAllNews, getNews, getAllNewsHome };

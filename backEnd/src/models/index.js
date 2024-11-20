@@ -8,6 +8,7 @@ import contactModel from "./ContactModels.js";
 import fineModel from "./FineModels.js";
 import categoryModel from "./CategoryModels.js";
 
+
 newsModel.belongsTo(typeNewsModel, { foreignKey: "typeId", as: "type_news" });
 typeNewsModel.hasMany(newsModel, { foreignKey: "typeId", as: "news" });
 borrowModel.belongsTo(userModel, { foreignKey: "userId", as: "user" });
@@ -20,8 +21,7 @@ bookModel.belongsTo(categoryModel, {
   foreignKey: "categoryId",
   as: "category",
 });
-categoryModel.hasMany(bookModel, { foreignKey: "categoryId", as: "books" });
-
+categoryModel.hasMany(bookModel, { foreignKey: "categoryId", as: "category" });
 
 export {
   newsModel,

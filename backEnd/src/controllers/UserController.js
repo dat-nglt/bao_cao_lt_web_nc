@@ -10,6 +10,15 @@ const getLoginPage = async (req, res) => {
   })
 }
 
+const getUserPage = async (req, res) => {
+  return res.render('user', {
+  data: {
+    messageError: req.flash('error'),
+    messageSuccess: req.flash('success'),
+  }
+})
+}
+
 const handleLogin = async (req, res) => {
   const { adminAccount, adminPassword } = req.body
   if (!adminAccount || !adminPassword) {
@@ -25,11 +34,6 @@ const handleLogin = async (req, res) => {
     req.flash('error', 'Tên tài khoản không tồn tại, vui lòng kiểm tra lại')
     return res.status(400).redirect('/dang-nhap')
   }
-
-  // const isPasswordValid = await bcrypt.compare(
-  //   adminPassword,
-  //   existUser.password
-  // )
 
   if (existUser.dataValues.passWord !== adminPassword) {
     req.flash('error', 'Mật khẩu không chính xác, vui lòng kiểm tra lại')
@@ -56,4 +60,54 @@ const handleLogout = async (req, res) => {
   })
 }
 
-export default { getLoginPage, handleLogin, handleLogout }
+
+
+const addUser = async (req, res) => {
+  try {
+    const { studentCode, passWord, fullName, dateOfBirth, addressUser, phoneNumber, email, identificationNumber } = req.body;
+    if (!studentCode || !passWord || !fullName) {
+      req.flash('error', 'Vui lòng nhập đầy đủ mã sinh viên, mật khẩu và họ tên.');
+      return res.status(400).redirect('/them-nguoi-dung');
+    }
+    const existingUser = await userModel.findOne({ where: { studentCode } });
+    if (existingUser) {
+      req.flash('error', 'Mã sinh viên đã tồn tại. Vui lòng kiểm tra lại.');
+      return res.status(400).redirect('/them-nguoi-dung');
+    }
+    const hashedPassword = await bcrypt.hash(passWord, 10);
+    await userModel.create({
+      studentCode,
+      passWord: hashedPassword,
+      fullName,
+      dateOfBirth,
+      addressUser,
+      phoneNumber,
+      email,
+      identificationNumber,
+      roleAccess: 1, 
+    });
+
+    req.flash('success', 'Thêm người dùng quản trị thành công!');
+    return res.status(200).redirect('/');
+  } catch (error) {
+    console.error('Lỗi khi thêm người dùng quản trị:', error);
+    req.flash('error', 'Có lỗi xảy ra. Vui lòng thử lại.');
+    return res.status(500).redirect('/them-nguoi-dung');
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export default { getLoginPage, handleLogin, handleLogout, getUserPage }

@@ -8,16 +8,19 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
       integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer" />
+      referrerpolicy="no-referrer"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous" />
+      crossorigin="anonymous"
+    />
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/login.css" />
     <title>Đăng nhập quản trị viên</title>
@@ -30,14 +33,16 @@
       id="errorToast"
       role="alert"
       aria-live="assertive"
-      aria-atomic="true">
+      aria-atomic="true"
+    >
       <div class="d-flex">
         <div class="toast-body"><%= data.messageError %></div>
         <button
           type="button"
           class="btn-close btn-close-white me-2 m-auto"
           data-bs-dismiss="toast"
-          aria-label="Close"></button>
+          aria-label="Close"
+        ></button>
       </div>
     </div>
     <% } %> <% if (data.messageSuccess.length > 0) { %>
@@ -47,28 +52,32 @@
       id="successToast"
       role="alert"
       aria-live="assertive"
-      aria-atomic="true">
+      aria-atomic="true"
+    >
       <div class="d-flex">
         <div class="toast-body"><%= data.messageSuccess %></div>
         <button
           type="button"
           class="btn-close btn-close-white me-2 m-auto"
           data-bs-dismiss="toast"
-          aria-label="Close"></button>
+          aria-label="Close"
+        ></button>
       </div>
     </div>
     <% } %>
     <div class="header-login-div">
       <img
         src="https://cdn.haitrieu.com/wp-content/uploads/2022/12/Artboard-2.png"
-        alt="" />
+        alt=""
+      />
       <h1>Trường Đại Học Kỹ Thuật - Công Nghệ Cần Thơ</h1>
     </div>
     <div class="login-form-container">
       <div class="img-box">
         <img
           src="https://media.istockphoto.com/id/1066987572/vector/isometric-web-banner-e-learning-online-library-online-concept-landing-page-template-modern.jpg?s=612x612&w=0&k=20&c=cKO710gsRRexoDL_j7fcT8M56N1dIOGAe0iCvJX-5y8="
-          alt="" />
+          alt=""
+        />
       </div>
       <div class="form-box">
         <div class="wrapper">
@@ -85,7 +94,8 @@
                 name="adminAccount"
                 class="form-control"
                 aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default" />
+                aria-describedby="inputGroup-sizing-default"
+              />
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text" id="inputGroup-sizing-default"
@@ -96,7 +106,8 @@
                 name="adminPassword"
                 class="form-control"
                 aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default" />
+                aria-describedby="inputGroup-sizing-default"
+              />
             </div>
             <button class="btn mt-3">Đăng nhập</button>
             <a href="http://localhost:3000/dang-nhap">
@@ -108,18 +119,22 @@
           <div class="d-flex justify-content-center mt-3 gap-2">
             <a
               href="https://www.facebook.com/CTUT.CT"
-              class="text-decoration-none">
+              class="text-decoration-none"
+            >
               <i
                 <i
                 class="fa-brands fa-facebook"
-                style="color: #004ac2; font-size: 24px"></i>
+                style="color: #004ac2; font-size: 24px"
+              ></i>
             </a>
             <a
               href="https://www.youtube.com/embed/9aE-jHfyXTw"
-              class="text-decoration-none">
+              class="text-decoration-none"
+            >
               <i
                 class="fa-brands fa-youtube"
-                style="color: #004ac2; font-size: 24px"></i>
+                style="color: #004ac2; font-size: 24px"
+              ></i>
             </a>
           </div>
         </div>
@@ -129,20 +144,19 @@
 </html>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener("DOMContentLoaded", function () {
     const showToast = (toastId) => {
-      const toastElement = document.getElementById(toastId)
+      const toastElement = document.getElementById(toastId);
       if (toastElement) {
         const toast = new bootstrap.Toast(toastElement, {
           autohide: true,
-          delay: 3000
-        })
-        toast.show()
+          delay: 3000,
+        });
+        toast.show();
       }
-    }
+    };
 
-    showToast('successToast')
-    showToast('errorToast')
-  })
+    showToast("successToast");
+    showToast("errorToast");
+  });
 </script>
-  

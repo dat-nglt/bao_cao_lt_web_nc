@@ -26,6 +26,9 @@ const getBorrowPage = async (req, res) => {
   }
   const today = new Date();
   const currentDate = today.toISOString().split('T')[0];
+  const oneDayAgo = new Date(today);
+  oneDayAgo.setDate(today.getDate() - 1);
+  
   const updateOverDue = await borrowModel.update(
     { status: 4 },
     {
@@ -34,7 +37,21 @@ const getBorrowPage = async (req, res) => {
                 [Op.lt]: currentDate
             },
             status: {
-                [Op.ne]: 3
+              [Op.notIn]: [1,3,4,5]
+            }
+        }
+    }
+  );
+
+  const updateCancelRequest = await borrowModel.update(
+    { status: 5 },
+    {
+        where: {
+            createdAt: {
+                [Op.lt]: oneDayAgo
+            },
+            status: {
+                [Op.notIn]: [2,3,4,5]
             }
         }
     }
@@ -85,7 +102,6 @@ const getBorrowPage = async (req, res) => {
     limit: limit,
     offset: start,
   });
-// console.log(listBorrow);
   const listUser = await userModel.findAll({raw: true, attributes: ["id", "fullName", "studentCode"]});
   const listBook = await bookModel.findAll({raw: true, attributes: ['id', 'name', 'count']});
   return res.render("layout", {
@@ -115,6 +131,18 @@ const createBorrow = async (req, res) =>{
   const checkUser = await userModel.findByPk(user);
   if(!checkUser){
     req.flash("error", "Người dùng không tồn tại!");
+    res.status(400).redirect("/muon-tra");
+    return;
+  }
+  const checkCountBorrow = await borrowModel.findAll({
+    raw: true,
+    where: {
+        status: 2,
+        userId: user
+    }
+  });
+  if(checkCountBorrow.length > 4){
+    req.flash("error", "Người dùng đang mượn 5 sách, không thể thêm phiếu mượn!");
     res.status(400).redirect("/muon-tra");
     return;
   }
@@ -154,6 +182,18 @@ const updateBorrow = async (req, res) =>{
     return
   }
   if(checkBorrow.status === 1){
+    const checkCountBorrow = await borrowModel.findAll({
+      raw: true,
+      where: {
+          status: 2,
+          userId: user
+      }
+    });
+    if(checkCountBorrow.length > 4){
+      req.flash("error", "Người dùng đang mượn 5 sách, không thể thêm phiếu mượn!");
+      res.status(400).redirect("/muon-tra");
+      return;
+    }
     const checkBook = await bookModel.findByPk(checkBorrow.bookId);
     if (checkBook) {
       if (checkBook.count > 0) {

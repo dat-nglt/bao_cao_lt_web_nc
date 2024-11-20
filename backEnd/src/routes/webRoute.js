@@ -19,6 +19,7 @@ const initWebRoute = (app) => {
   router.get("/dang-nhap", checkNotLoggedIn, UserController.getLoginPage);
   router.post("/dang-nhap", UserController.handleLogin);
   router.get("/dang-xuat", UserController.handleLogout);
+  router.get("doc-gia")
 
   //thể loại
   router.get("/the-loai", checkLoggedIn, CategoryControllers.getCategoryPage);
@@ -37,6 +38,7 @@ const initWebRoute = (app) => {
   //sách
   router.get("/quan-li-sach", BookControllers.getBookPage);
   router.post("/quan-li-sach", BookControllers.addBook);
+  router.post("/quan-li-sach/cap-nhap/:id", BookControllers.updateBook);
   router.delete("/quan-li-sach/:id", BookControllers.deleteBook);
 
   //mượn trả

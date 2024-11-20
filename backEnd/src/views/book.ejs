@@ -11,7 +11,7 @@
           </select>
         </div>
       </div>
-        <input class="form-control mr-sm-1" type="search" name="search" placeholder="Tìm tên thể loại" aria-label="Search">
+        <input class="form-control mr-sm-1" type="search" name="search" placeholder="Tìm theo tên sách" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
       </form>
   </div>
@@ -22,7 +22,6 @@
         <th scope="col" class="text-center" style="width: 5%;">STT</th>
         <th scope="col" style="width: 25%;">Tên sách</th>
         <th scope="col" style="width: 20%;">Hình ảnh</th>
-        <!-- <th scope="col" style="width: 8%;">Năm XB</th> -->
         <th scope="col" style="width: 30%;">Mô tả</th>
         <th scope="col" style="width: 10%;">SL</th>
         <th scope="col" style="width: 20%;">Tùy chọn</th>
@@ -36,9 +35,9 @@
             <%= data.row[i].name %>
           </td>
           <td class="text_truncate text-left " style="max-width: 110px;">
-            <img style="height: 80px; width: 55px;" src="<%= data.row[i].imgBook %>>" class="rounded" alt="...">
+            <a href="<%= data.row[i].imgBook %>" target="_blank">Xem ảnh</a>
+           
           </td>
-       
           <!-- <td class="text_truncate yearOfRelease" style="max-width: 110px;">
             <%= data.row[i].dateBook %>
           </td> -->
@@ -49,9 +48,20 @@
             <%= data.row[i].count %>
           </td>
           <td class="operation_group">
-            <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal"></i>
-            <i class="fa-solid fa-eye"></i>
-            <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#deleteModal" data-id="<%= data.row[i].id %>"></i>
+            <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal"
+            data-id="<%= data.row[i].id %>" data-author="<%= data.row[i].creatorBook%>"
+              data-publisher="<%=data.row[i].publisherBook%>"
+              data-category="<%=data.row[i].categoryId%>"
+            ></i>
+            <i class="fa-solid fa-eye" data-toggle="modal" data-target="#detailModal"
+            data-author="<%= data.row[i].creatorBook%>"
+              data-publisher="<%=data.row[i].publisherBook%>"
+              data-category="<%=data.row[i].categoryId%>"
+            ></i>
+            <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#deleteModal" data-id="<%= data.row[i].id %>" data-author="<%= data.row[i].creatorBook%>"
+              data-publisher="<%=data.row[i].publisherBook%>"
+              data-category="<%=data.row[i].categoryId%>"
+              ></i>
           </td>
         </tr>
         <% }%>
@@ -106,6 +116,57 @@
       </ul>
   </nav>
 
+
+  <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Chi tiết sách</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex gap-3">
+            <img style="width: 240px; height: 340px; border-radius: 10px;" src="https://res.cloudinary.com/dz0mm7ify/image/upload/v1732110354/hrp4fdfshvlw90k1hglh.jpg" alt="">
+            <div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="bookNameLabel">Tên sách: </h6>
+                <h6 class="modal-title" id="bookNameValue"></h6>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="authorLabel">Tác giả: </h6>
+                <h6 class="modal-title" id="authorValue"></h6>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="categoryLabel">Thể loại: </h6>
+                <h6 class="modal-title" id="categoryValue"></h6>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="quantityLabel">Số lượng: </h6>
+                <h6 class="modal-title" id="quantityValue"></h6>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="publisherLabel">Nhà xuất bản: </h6>
+                <h6 class="modal-title" id="publisherValue"></h6>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="dateAddedLabel">Ngày thêm: </h6>
+                <h6 class="modal-title" id="dateAddedValue"></h6>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <h6 class="modal-title" id="descriptionLabel">Mô tả chung: </h6>
+                <h6 class="modal-title" id="descriptionValue"></h6>
+              </div>
+            </div>
+                    
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
   
   <!-- thêm -->
   <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
@@ -133,7 +194,7 @@
             </div>
             <div class="form-group">
               <label for="book_publisher">Nhà xuất bản</label>
-              <input type="text" class="form-control" name="publisher" id="book_publisher" placeholder="Nhập nhà xuất bản" >
+              <input type="text" class="form-control" name="publisherBook" id="book_publisher" placeholder="Nhập nhà xuất bản" >
             </div>
             <div class="form-group">
               <label for="book_yearOfRelease">Ngày xuất bản</label>
@@ -177,21 +238,47 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p id="modal-description"></p>
-                <form id="editForm">
-                    <div class="form-group">
-                        <label for="categoryName">Tên thể loại</label>
-                        <input type="text" class="form-control" id="categoryName" >
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Mô tả</label>
-                        <textarea class="form-control" id="description" rows="5" style="resize: none;" spellcheck="false" ></textarea>
-                    </div>
-                </form>
-            </div>
+              <form method="post"  enctype="multipart/form-data" id="update_book_form">
+                <div class="form-group">
+                  <label for="book_name">Tên sách</label>
+                  <input type="text" class="form-control" name="name" id="update_book_name" placeholder="Nhập tên..." >
+                </div>
+                <div class="form-group custom-file">  
+                    <label for="book_image">Hình ảnh</label>
+                    <input class="form-control" type="file" name="image" id="update_book_image">
+                </div>
+                <div class="form-group mt-4">
+                  <label for="book_author">Tác giả</label>
+                  <input type="text" class="form-control" name="author" id="update_book_author" placeholder="Nhập tác giả" >
+                </div>
+                <div class="form-group">
+                  <label for="book_publisher">Nhà xuất bản</label>
+                  <input type="text" class="form-control" name="publisherBook" id="update_book_publisher" placeholder="Nhập nhà xuất bản" >
+                </div>
+                <div class="form-group">
+                  <label for="book_yearOfRelease">Ngày xuất bản</label>
+                  <input type="date" class="form-control" name="dateBook" id="update_book_yearOfRelease" >
+                </div>
+                <div class="form-group">
+                  <label for="book_count">Số lượng</label>
+                  <input type="number" class="form-control" name="count" id="update_book_count" >
+                </div>
+                <div class="form-group">
+                  <label for="book_category">Thể loại</label>
+                    <select class="form-select" name="categoryId" id="update_book_category">
+                      <option selected>Chọn thể loại</option>
+                      <% data.listCategories.forEach(category => { %>
+                        <option value="<%= category.id %>"><%= category.name %></option>
+                        <% })%>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="book_description">Mô tả </label>
+                  <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="desBook" id="update_book_description" rows="5" ></textarea>
+                </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="saveChanges">Lưu thay đổi</button>
+                <button type="submit" class="btn btn-primary" id="saveChanges">Lưu thay đổi</button>
             </div>
         </div>
     </div>
@@ -229,47 +316,60 @@
             toast.show();
           }
         };
+
+        document.querySelectorAll('.fa-eye').forEach(item => {
+          item.addEventListener('click', function () {
+            const row = this.closest('tr');
+
+            console.log(row.cells[3].innerText);
+            
+
+            // const nameBook = row.cells[1].innerText;
+            // const description = row.cells[3].innerText;
+            // const count = row.cells[4].innerText;
+            // const author = this.getAttribute('data-author');
+            // const publisher = this.getAttribute('data-publisher');
+            // const categoryId = this.getAttribute('data-category');
+
+            document.querySelector('#bookNameValue').innerText = row.cells[1].innerText
+            document.querySelector('#authorValue').innerText = this.getAttribute('data-author')
+            document.querySelector('#publisherValue').innerText = this.getAttribute('data-publisher');
+            // document.querySelector('#dateAddedValue').innerText = nameBook
+            document.querySelector('#quantityValue').innerText = row.cells[4].innerText;
+            document.querySelector('#categoryValue').innerText = this.getAttribute('data-category');
+            document.querySelector('#descriptionValue').innerText = row.cells[3].innerText;
+          });
+        });
     
         document.querySelectorAll('.fa-pen-to-square').forEach(item => {
           item.addEventListener('click', function () {
             const row = this.closest('tr');
             const updateId = this.getAttribute('data-id');
-            const tenTheLoai = row.cells[1].innerText;
-            const moTa = row.cells[2].innerText;
-    
-            document.getElementById('categoryName').value = tenTheLoai;
-            document.getElementById('description').value = moTa;
-    
+
+            document.querySelector('#update_book_form').action = `/quan-li-sach/cap-nhap/${updateId}`;
+            const nameBook = row.cells[1].innerText;
+            const description = row.cells[3].innerText;
+            const count = row.cells[4].innerText;
+            const author = this.getAttribute('data-author');
+            const publisher = this.getAttribute('data-publisher');
+            const categoryId = this.getAttribute('data-category');
+
+            document.querySelector('#update_book_name').value = nameBook
+            document.querySelector('#update_book_author').value = author
+            document.querySelector('#update_book_publisher').value = publisher
+            document.querySelector('#update_book_yearOfRelease').value = nameBook
+            document.querySelector('#update_book_count').value = count
+            document.querySelector('#update_book_category').value = categoryId
+            document.querySelector('#update_book_description').value = description
+
+
+
             // Xử lý lưu thay đổi
             const saveButton = document.getElementById('saveChanges');
             saveButton.onclick = function () {
-              const nameCategory = document.getElementById('categoryName').value;
-              const descriptionCategory = document.getElementById('description').value;
-              console.log(nameCategory, descriptionCategory);
-              
+                           
               $('#editModal').modal('hide');
-              fetch(`/the-loai/${updateId}`, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  nameCategory,
-                  descriptionCategory
-                })
-              })
-                .then(response => {
-                  if (response.ok) {
-                    showToast('successToast');
-                    setTimeout(() => location.reload(), 1000); 
-                  } else {
-                    showToast('errorToast');
-                  }
-                })
-                .catch(error => {
-                  console.error('Error updating category:', error);
-                  showToast('errorToast');
-                });
+              
             };
           });
         });

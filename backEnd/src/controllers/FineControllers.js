@@ -108,7 +108,8 @@ const paidFine = async (req, res) => {
       req.flash("error", "Số lượng sách không đủ để duyệt phiếu mượn!");
       return res.status(400).redirect("/phi-phat");
     }
-    await checkBook.update({ count: checkBook.count - 1 });
+    //sửa r đó hã :>>>>>
+    await checkBook.update({ count: checkBook.count + 1 });
     const result = await borrowModel.update(
       {
         status: 3,

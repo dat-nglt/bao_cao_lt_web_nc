@@ -28,6 +28,9 @@ const userModel = sequelize.define("user", {
   },
   email: {
     type: DataTypes.STRING,
+    validate: {
+      isEmail: true,
+    },
   },
   identificationNumber: {
     type: DataTypes.STRING,
@@ -41,7 +44,7 @@ const userModel = sequelize.define("user", {
 
 },
 {
-  timestamps: false,
+  timestamps: true,
 });
 
 export default userModel;

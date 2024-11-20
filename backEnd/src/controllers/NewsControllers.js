@@ -153,8 +153,7 @@ const updateNews = async (req, res) => {
   form.parse(req, async (err, fields, files) => {
     console.log(err)
     if (err) {
-      
-      req.flash('error', 'Ảnh bìa không hợp lệ!')
+            req.flash('error', 'Ảnh bìa không hợp lệ!')
       res.status(400).redirect('/tin-tuc')
       return
     }

@@ -39,7 +39,7 @@ const bookModel = sequelize.define("book", {
     },
   },
 },{
-  timestamps: false,
+  timestamps: true,
 });
 
 export default bookModel;
