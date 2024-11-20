@@ -48,6 +48,10 @@ export const router = createBrowserRouter([
         element: <CategoryAll />
       },
       {
+        path: '/danh-muc/:id',
+        element: <CategoryAll />
+      },
+      {
         path: '/chi-tiet-sach/:id', 
         element: <BookDetails /> 
       }

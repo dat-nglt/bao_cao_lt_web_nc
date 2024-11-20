@@ -25,13 +25,16 @@ const getBorrowPage = async (req, res) => {
       whereConditions.status = status;
   }
   const today = new Date();
-  const currentDate = today.toISOString().split('T')[0]; 
+  const currentDate = today.toISOString().split('T')[0];
   const updateOverDue = await borrowModel.update(
     { status: 4 },
     {
         where: {
             dueDate: {
                 [Op.lt]: currentDate
+            },
+            status: {
+                [Op.ne]: 3
             }
         }
     }
@@ -82,6 +85,8 @@ const getBorrowPage = async (req, res) => {
     limit: limit,
     offset: start,
   });
+
+  
   const listUser = await userModel.findAll({raw: true, attributes: ["id", "fullName", "studentCode"]});
   const listBook = await bookModel.findAll({raw: true, attributes: ['id', 'name', 'count']});
   return res.render("layout", {
@@ -179,6 +184,8 @@ const updateBorrow = async (req, res) =>{
       return
     }
   }else if(checkBorrow.status === '2'){
+    const today = new Date();
+    const dayReturn = today.toISOString().split('T')[0]; 
     const checkBook = await bookModel.findByPk(checkBorrow.bookId);
     if (checkBook) {
       checkBook.count += 1;
@@ -194,7 +201,7 @@ const updateBorrow = async (req, res) =>{
       return;
     }
     const updateBorrow = await borrowModel.update(
-      { status: 3 },
+      { dayReturn, status: 3 },
       { where: { id } }
     );
     if(updateBorrow){

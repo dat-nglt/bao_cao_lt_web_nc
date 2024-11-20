@@ -8,37 +8,58 @@ import { Outlet } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import FeedIcon from "@mui/icons-material/Feed";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import MenuBookIcon from '@mui/icons-material/MenuBook';
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
-const menuItems = [
-  { link: "/", text: "Trang chủ", icon: <HomeIcon fontSize="medium" /> },
-  { link: "/tin-tuc", text: "Tin tức", icon: <FeedIcon fontSize="medium" /> },
-  {
-    link: "/sach-moi",
-    text: "Sách mới",
-    icon: <AutoStoriesIcon fontSize="medium" />,
-  },
-  {
-    text: "Danh mục",
-    icon: <MenuBookIcon fontSize="medium" />,
-    subItems: [
-      { link: "/danh-muc", text: "Xem tất cả" },
-      { link: "/sach/van-hoc", text: "Văn học" },
-      { link: "/sach/khoa-hoc", text: "Khoa học" },
-      { link: "/sach/lich-su", text: "Lịch sử" },
-      // Add more subcategories as needed
-    ],
-  },
-  {
-    link: "/ho-so-doc-gia/yeu-thich",
-    text: "Sách yêu thích",
-    icon: <FavoriteIcon fontSize="medium" />,
-  },
-];
+import categoryService from "../services/categoryService";
 
 function Home(props) {
+  const [categories, setCategories] = useState([]);
   const [visible, setVisible] = useState(false);
+  useEffect(() => {
+
+    const fetchCategories = async () => {
+      try {
+        const response = await categoryService.getAllCategories();
+
+        const fetchedCategories = response.map((category) => ({
+          link: `danh-muc/${category.id}`,
+          text: category.nameCategory,
+        }));
+
+        // Thêm mục "Xem tất cả" vào đầu mảng danh mục
+        const allCategories = [
+          { link: "/danh-muc", text: "Xem tất cả" }, // Mục "Xem tất cả"
+          ...fetchedCategories,
+        ];
+
+        setCategories(allCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const menuItems = [
+    { link: "/", text: "Trang chủ", icon: <HomeIcon fontSize="medium" /> },
+    { link: "/tin-tuc", text: "Tin tức", icon: <FeedIcon fontSize="medium" /> },
+    {
+      link: "/sach-moi",
+      text: "Sách mới",
+      icon: <AutoStoriesIcon fontSize="medium" />,
+    },
+    {
+      text: "Danh mục",
+      icon: <MenuBookIcon fontSize="medium" />,
+      subItems: categories, 
+    },
+    {
+      link: "/ho-so-doc-gia/yeu-thich",
+      text: "Sách yêu thích",
+      icon: <FavoriteIcon fontSize="medium" />,
+    },
+  ];
 
   const toggleVisibility = () => {
     if (window.scrollY > 300) {

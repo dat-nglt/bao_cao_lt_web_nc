@@ -4,9 +4,11 @@ import bookService from "../services/bookService";
 import Pagination from "./Pagination";
 import { Stack } from "@mui/material";
 import SearchInput from "../components/SearchInput";
+import { useParams } from "react-router-dom";
 
 function CategoryAll(props) {
   const [books, setBooks] = React.useState([]);
+  const { id } = useParams();
 
   const countNews = books.length;
   const itemsPerPage = 6;
@@ -21,19 +23,31 @@ function CategoryAll(props) {
   React.useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const bookAll = await bookService.getAllBooks();
-        setBooks(bookAll);
+        let bookList;
+        if (id) {
+          // Fetch books by category if id is present
+          bookList = await bookService.getBooksByCategory(id);
+        } else {
+          // Fetch all books if no category id
+          bookList = await bookService.getAllBooks();
+        }
+        setBooks(bookList);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
     };
     fetchBooks();
-  }, []);
+  }, [id]);
+
+  React.useEffect(() => {
+    setCurrentPage(1); 
+  }, [id]);
+
   return (
     <>
       <SearchInput />
       <CategoryBook
-        title={"Tin tức mới"}
+        title={id ? "Sách theo danh mục" : "Tất cả sách"}
         bookList={books}
         start={startIndex}
         end={endIndex}
@@ -48,10 +62,12 @@ function CategoryAll(props) {
       ) : null}
       {books.length === 0 ? (
         <Stack sx={{ margin: "0 auto", textAlign: "center", fontSize: "2rem" }}>
-          Hiện không có tin tức
+          Hiện không có sách
         </Stack>
       ) : null}
     </>
   );
 }
 export default CategoryAll;
+
+

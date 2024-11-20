@@ -1,1 +1,174 @@
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+<div class="d-flex justify-content-between align-items-center">
+  <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">QUẢN LÝ PHÍ PHẠT</b></h3>
+  <div class="d-flex p-2 justify-content-end align-items-center gap-1">
+    <form class="form-inline my-2 my-lg-0 d-flex" method="get">
+      <div class="dropdown mr-2">
+        <select class="form-control" aria-label="Select Default" name="sort">
+          <option value="desc" <% if (data.sort === 'desc') { %> selected <% } %>>Mới nhất</option>
+          <option value="asc" <% if (data.sort === 'asc') { %> selected <% } %>>Cũ nhất</option>
+        </select>
+      </div>
+      <div class="dropdown mr-2">
+        <select class="form-control" aria-label="Select Default" name="status">
+          <option value="">Tất cả</option>
+          <option value="4" <% if (data.status === '4') { %> selected <% } %>>Chưa trả</option>
+          <option value="3" <% if (data.status === '3') { %> selected <% } %>>Đã trả</option>
+        </select>
+      </div>
+      <input class="form-control mr-sm-1" type="search" name="search" value="<%= data.search %>" placeholder="Mã phiếu mượn" aria-label="Search" />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col" class="p-1" style="width: 20%;">Mã phiếu mượn</th>
+      <th scope="col" class="p-1" style="width: 20%;">Tên Đọc giả</th>
+      <th scope="col" class="p-1" style="width: 20%;">Tổng tiền phạt</th>
+      <th scope="col" class="p-1" style="width: 20%;">Ngày cập nhật</th>
+      <th scope="col" class="p-1" style="width: 20%;">Tùy chọn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% let stt = (data.currentPage - 1) * data.limit + 1; %>
+    <% for (let fine of data.row) { %>
+      <tr>
+        <td class="p-1"><%= fine.id_borrow %></td>
+        <td class="p-1"><%= fine['borrow.user.fullName'] %></td>
+        <td class="p-1"><%= fine.amount %></td>
+        <td class="p-1">
+          <% 
+            let date = new Date(fine.fineDate);
+            let formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+          %>
+          <%= formattedDate %>
+        </td>
+        <td class="p-1">
+          <% if(fine['borrow.status'] === '4'){ %>
+            <i class="fa-solid fa-circle-check" style="color: green;"  onclick="showPaymentModal('<%= fine.id_borrow %>','<%= fine.amount %>')"></i>
+          <% } else { %>
+            <i class="fa-solid fa-circle-check" disabled style="color: black; pointer-events: none;"></i>
+          <% } %>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+  <% if (data.messageError.length > 0) { %>
+    <div class="toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0" style="z-index: 1050;" id="errorToast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <%= data.messageError %>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  <% } %>
+  <% if (data.messageSuccess.length > 0) { %>
+    <div class="toast align-items-center text-white bg-primary border-0 position-fixed bottom-0 end-0" style="z-index: 1050;" id="successToast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <%= data.messageSuccess %>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  <% } %>
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-end">
+    <% if (data.totalPage > 1) { 
+      if (data.currentPage > 3) { %>
+        <li class="page-item">
+          <a class="page-link" href="/phi-phat?sort=<%= data.sort %>&search=<%= data.search %>&page=1">
+            <i class="fa-solid fa-angles-left"></i>
+          </a>
+        </li>
+      <% }
+      if (data.currentPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="/phi-phat?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= data.currentPage - 1 %>">
+            <i class="fa-solid fa-angle-left"></i>
+          </a>
+        </li>
+      <% }
+      for (let i = 1; i <= data.totalPage; i++) {
+        if (i == data.currentPage) { %>
+          <li class="page-item active">
+            <a class="page-link" href="#" aria-disabled="true"><%= i %></a>
+          </li>
+        <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
+          <li class="page-item">
+            <a class="page-link" href="/phi-phat?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a>
+          </li>
+        <% }
+      }
+      if (data.currentPage < data.totalPage) { %>
+        <li class="page-item">
+          <a class="page-link" href="/phi-phat?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= data.currentPage + 1 %>">
+            <i class="fa-solid fa-angle-right"></i>
+          </a>
+        </li>
+      <% }
+      if (data.currentPage < data.totalPage - 2) { %>
+        <li class="page-item">
+          <a class="page-link" href="/phi-phat?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= data.totalPage %>">
+            <i class="fa-solid fa-angles-right"></i>
+          </a>
+        </li>
+      <% }
+    } %>
+  </ul>
+</nav>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="paymentConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="paymentConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentConfirmationModalLabel">Xác nhận thanh toán</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn chắc chắn đã thanh toán tiền phạt này chưa? Hành động này không thể hoàn tác.</p>
+        <p><strong>Mã phiếu mượn:</strong> <span id="borrowId"></span></p>
+        <p><strong>Số tiền phạt:</strong> <span id="fineAmount"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-primary" id="confirmPaymentBtn">Đã thanh toán</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPaymentModal(borrowId, fineAmount) {
+    document.getElementById('borrowId').textContent = borrowId;
+    document.getElementById('fineAmount').textContent = fineAmount;
+
+    $('#paymentConfirmationModal').modal('show');
+  }
+
+document.getElementById('confirmPaymentBtn').addEventListener('click', function() {
+    
+    const borrowId = document.getElementById('borrowId').textContent;
+    // console.log(borrowId);
+    
+    var formPaid = document.createElement('form');
+    formPaid.method = "POST";
+    formPaid.action = '/tra-tien-phat/' + borrowId + '?_method=PUT';
+    document.body.appendChild(formPaid);
+    formPaid.submit();
+
+  });
+</script>
+

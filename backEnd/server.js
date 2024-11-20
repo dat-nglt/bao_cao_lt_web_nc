@@ -11,7 +11,9 @@ import session from "express-session";
 import sequelize from "./src/configs/connectDB.js";
 import methodOverride from "method-override";
 import createSession from "./src/configs/createSession.js";
-sequelize.sync();
+
+// sequelize.sync();
+sequelize.sync({ alter: true })
 
 const app = express();
 

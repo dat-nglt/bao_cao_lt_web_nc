@@ -13,12 +13,12 @@ function NewsCard(props) {
     <Card sx={{
       display: 'flex',
       width: '100%',
-      m: '0 auto',
+      m: '-4px auto',
       boxShadow: theme.boxShadow.main,
       cursor: 'pointer',
       transition: 'transform 0.2s ease',
+      height: '190px',
       '&:hover': {
-        // boxShadow: theme.boxShadow.hover,
         transform: 'scale(1.01)',
       }
     }} >

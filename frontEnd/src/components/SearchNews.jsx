@@ -8,13 +8,9 @@ import { SearchContext } from './News'
 
 const SearchNews = (props) => {
   const theme = useTheme();
-  const [optionSearch, setOptionSearch] = React.useState('');
   const [listTypeNews, setListTypeNews] = React.useState([]);
   const [valueSearch, setValueSearch] = React.useState('');
-  const { searchTerm, setSearchTerm } = React.useContext(SearchContext);
-
-  
-  const handleChangeValueSearch = (event) => setValueSearch(event.target.value);
+  const { searchType, setSearchType, searchTitle, setSearchTitle } = React.useContext(SearchContext);
 
   React.useEffect(() => {
     const getTypeNews = async () => {
@@ -24,9 +20,12 @@ const SearchNews = (props) => {
     getTypeNews();    
 },[]);
 
-const handleChangeOptionSearch = (event) => {
-  setOptionSearch(event.target.value);
-  setSearchTerm(event.target.value);
+const handleChangeSearchType = (event) => {
+  setSearchType(event.target.value);
+} 
+
+const handleChangeSearchTitle = (event) => {
+  setSearchTitle(event.target.value);
 } 
 
   return (
@@ -41,13 +40,13 @@ const handleChangeOptionSearch = (event) => {
       }}
     >
       <FormControl sx={{ width: '150px' }} size="small" variant="standard">
-        <InputLabel id="category-select-label">Danh mục</InputLabel>
+        <InputLabel id="category-select-label">Loại tin</InputLabel>
         <Select
           labelId="category-select-label"
           id="category-select"
-          value={optionSearch}
-          label="Danh mục"
-          onChange={handleChangeOptionSearch}
+          value={searchType}
+          label="Loại tin"
+          onChange={handleChangeSearchType}
           sx={{
             paddingLeft: '10px',
             color: theme.text.primary.main,
@@ -66,6 +65,9 @@ const handleChangeOptionSearch = (event) => {
             },
           }}
         >
+          <MenuItem key={0} value='' sx={{ fontSize: '14px' }}>
+            Tất cả
+          </MenuItem>
           {listTypeNews.map((item) => (
             <MenuItem key={item.id} value={item.id} sx={{ fontSize: '14px' }}>
               {item.name}
@@ -75,7 +77,7 @@ const handleChangeOptionSearch = (event) => {
       </FormControl>
 
       <TextField
-        value={valueSearch}
+        value={searchTitle}
         id="search-input"
         label="Nhập từ khóa cần tìm kiếm"
         variant="standard"
@@ -86,15 +88,8 @@ const handleChangeOptionSearch = (event) => {
             color: theme.text.primary.main,
           },
         }}
-        onChange={handleChangeValueSearch}
+        onChange={handleChangeSearchTitle}
       />
-
-      <Link to={`/tim-kiem?danhmuc=${optionSearch}&tukhoa=${valueSearch}`} style={{ textDecoration: 'none' }}>
-        <Button variant="contained" sx={{ fontFamily: 'Arial', textTransform: 'unset' }}>
-          <ManageSearchIcon sx={{ mr: '5px' }} />
-          Tìm kiếm
-        </Button>
-      </Link>
     </Box>
   );
 };

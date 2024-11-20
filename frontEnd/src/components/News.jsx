@@ -12,13 +12,24 @@ function News(props) {
   const [searchTitle, setSearchTitle] = useState('');
   useEffect(() => {
     const getNews = async () => {
-        const response = await newsServices.getAllNews();
-        setListNews(response); 
+      const response = await newsServices.getAllNews(searchType, searchTitle);
+      setListNews(response);
     };
-    getNews();    
-}, [searchType]);
-console.log(searchType);
-console.log(searchTitle);
+    getNews();
+    setCurrentPage(1)
+  }, [searchType]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const getNews = async () => {
+        const response = await newsServices.getAllNews(searchType, searchTitle);
+        setListNews(response);
+      };
+      getNews();
+    }, 500);
+    setCurrentPage(1)
+    return () => clearTimeout(timer);
+  }, [searchTitle]);
 
   const countNews = listNews.length;
   const itemsPerPage = 4;

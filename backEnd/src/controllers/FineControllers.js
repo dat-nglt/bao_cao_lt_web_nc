@@ -1,80 +1,135 @@
-import { fineModel } from '../models/index.js';
+import { fineModel, userModel, borrowModel, bookModel } from '../models/index.js';
 import { Op } from 'sequelize';
-
-////api
-const getAllFines = async (req, res) => {
-  try {
-    const fines = await fineModel.findAll({
-      raw: true,
-    });
-
-    return res.status(200).json({
-      success: true,
-      data: fines,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: 'Đã xảy ra lỗi khi lấy danh sách liên hệ',
-    });
-  }
-};
-const getFineById = async (req, res) => {
-  try {
-    const fineId = req.params.id;
-    const fine = await fineModel.findByPk(fineId);
-
-    if (!fine) {
-      return res.status(404).json({
-        success: false,
-        message: 'Liên hệ không tồn tại',
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      data: fine,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: 'Đã xảy ra lỗi khi lấy thông tin liên hệ',
-    });
-  }
-};
-
 
 /// controller
 const getFinePage = async (req, res) => {
+  const limit = 5;
+  const search = req.query.search ? req.query.search : "";
+  const status = req.query.status ? req.query.status : "";
+  const sort = req.query.sort ? req.query.sort : "desc";
+  const currentPage = req.query.page ? req.query.page : 1;
+
+  const whereConditions = {
+    [Op.or]: [
+      { id_borrow: { [Op.like]: `%${search}%` } },
+    ],
+  };
+  if (status) {
+    whereConditions['$borrow.status$'] = status;
+  }
+
+  const totalFine = await fineModel.count({
+    where: whereConditions,
+    include: [
+      {
+        model: borrowModel,
+        as: "borrow",
+        attributes: [] 
+      }
+    ]
+  });
+
+  const totalPage = Math.ceil(totalFine / limit);
+  const start = (currentPage - 1) * limit;
   
+  const listFine = await fineModel.findAll({
+    raw: true,
+    where: whereConditions,
+    include: [
+      {
+        model: borrowModel,
+        as: "borrow",
+        include: [
+          {
+            model: userModel,
+            as: "user",
+            attributes: ["fullName"],
+          }
+        ],
+        attributes: ["status"],
+      },
+    ],
+    attributes: ["id_borrow", "amount", "fineDate"],
+    order: [["id", sort]],
+    limit: limit,
+    offset: start,
+  });
+
+  if (totalFine === 0) {
+    return res.render("layout", {
+      data: {
+        title: "Phản hồi",
+        messageError: req.flash("error"),
+        messageSuccess: req.flash("success"),
+        page: "fine",
+        row: [],
+        currentPage: parseInt(currentPage),
+        totalPage: 0,
+        sort,
+        status,
+        search,
+        limit,
+      },
+    });
+  }
+
   return res.render("layout", {
     data: {
-      title: "Phí Phạt",
+      title: "Phản hồi",
+      messageError: req.flash("error"),
+      messageSuccess: req.flash("success"),
       page: "fine",
-     
+      row: listFine,
+      currentPage: parseInt(currentPage),
+      totalPage: parseInt(totalPage),
+      sort,
+      status,
+      search,
+      limit,
     },
   });
 };
-const deleteFine = async (req, res) => {
-  try {
-    const fineId = req.params.id;
 
-    const fine = await fineModel.findByPk(fineId);
-    if (!fine) {
-      req.flash('error', 'Liên hệ không tồn tại');
-      return res.redirect('/phan-hoi');
+const paidFine = async (req, res) => {
+  const { borrowId } = req.params;
+
+  try {
+    const checkBorrow = await borrowModel.findByPk(borrowId);
+    if (!checkBorrow) {
+      req.flash("error", "Phiếu mượn không tồn tại!");
+      return res.status(400).redirect("/phi-phat");
+    }
+    const checkBook = await bookModel.findByPk(checkBorrow.bookId);
+    if (!checkBook) {
+      req.flash("error", "Sách không tồn tại!");
+      return res.status(400).redirect("/phi-phat");
+    }
+    if (checkBook.count <= 0) {
+      req.flash("error", "Số lượng sách không đủ để duyệt phiếu mượn!");
+      return res.status(400).redirect("/phi-phat");
+    }
+    await checkBook.update({ count: checkBook.count - 1 });
+    const result = await borrowModel.update(
+      {
+        status: 3,
+        dayReturn: new Date(),
+      },
+      { where: { id: borrowId } }
+    );
+
+    if (result[0] === 0) {
+      req.flash("error", "Không tìm thấy phiếu mượn hoặc phiếu mượn đã được cập nhật");
+      return res.redirect("/phi-phat");
     }
 
-    await fineModel.destroy({ where: { id: fineId } });
+    req.flash("success", "Cập nhật trạng thái thanh toán thành công!");
+    return res.redirect("/phi-phat");
+  } catch (error) {
+    console.error("Error updating status:", error);
+    req.flash("error", "Có lỗi xảy ra khi cập nhật trạng thái");
+    return res.redirect("/phi-phat");
+  }
+};
 
-    req.flash('success', 'Xóa liên hệ thành công');
-    return res.redirect('/phan-hoi');
-    } catch (error) {
-      console.error(error);
-      req.flash('error', 'Đã xảy ra lỗi khi xóa liên hệ');
-      return res.redirect('/phan-hoi');
-  };
-}
-export default { getFinePage, deleteFine, getAllFines, getFineById };
+
+export default { getFinePage, paidFine };

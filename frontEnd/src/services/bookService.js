@@ -10,4 +10,9 @@ const getBookById = async (id) => {
     return response.data; 
 };
 
-export default { getAllBooks, getBookById };
+const getBooksByCategory = async (categoryId) => {
+    const response = await axios.get(`http://localhost:3001/api/v1/danh-muc/${categoryId}`);
+    return response.data;
+};
+
+export default { getAllBooks, getBookById, getBooksByCategory };

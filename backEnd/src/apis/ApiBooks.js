@@ -25,4 +25,19 @@ const getBookById = async (req, res) => {
     }
 }
 
-export default { getAllBooks, getBookById};
+const getBooksByCategory = async (req, res) => {
+    try {
+        const books = await bookModel.findAll({
+            where: { id_Category: req.params.id },
+        });
+        if (books.length > 0) {
+            res.json(books);
+        } else {
+            res.status(404).json({ error: 'No books found for this category' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Database query error' });
+    }
+}
+
+export default { getAllBooks, getBookById, getBooksByCategory};

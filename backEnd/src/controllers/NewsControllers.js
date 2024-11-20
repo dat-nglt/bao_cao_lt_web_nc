@@ -87,6 +87,11 @@ const createNews = async (req, res) => {
       return
     }
     const title = fields.title[0]
+    if(title.length > 255){
+      req.flash('error', 'Tiêu đề không vượt quá 255 kí tự!')
+      res.status(400).redirect('/tin-tuc')
+      return
+    }
     const news = await newsModel.findOne({
       where: {
         title: title

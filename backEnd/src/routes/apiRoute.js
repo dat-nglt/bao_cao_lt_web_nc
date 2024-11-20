@@ -11,8 +11,9 @@ const initApiRoute = (app) => {
 
   // Trang danh mục sách
     router.get('/danh-muc/xem-tat-ca', apiBooks.getAllBooks);
-    router.get('/danh-muc', apiCategory.getAllCategory);
+    router.get('/danh-muc/:id', apiBooks.getBooksByCategory);
     router.get('/chi-tiet-sach/:id', apiBooks.getBookById);
+    router.get('/danh-muc', apiCategory.getAllCategory);
 
 
     // router.post('/the-loai', categoryController.addCategory);
