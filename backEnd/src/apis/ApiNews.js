@@ -36,29 +36,16 @@ const getAllNews = async (req, res) => {
 const getNews = async (req, res) => {
   try {
       const id =req.params.id;
-      const whereConditions = {
-          title: {
-            [Op.like]: `%${title}%`
-          }
-        }
-        if (type !== '') {
-          whereConditions.typeId = type
-        }
-      const news = await newsModel.findAll({
-          where: whereConditions,
-          attributes: {
-            include: [
-              [sequelize.fn('DATE_FORMAT', sequelize.col('news.createdAt'), '%d-%m-%Y'), 'dayCreated'],
-            ]
-          },
+      const news = await newsModel.findOne({
+        attributes: {
           include: [
-              {
-                model: typeNewsModel,
-                as: 'type_news',
-                attributes: []
-              }
+            [sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'), '%d-%m-%Y'), 'dayCreated'],
           ]
-      });
+        },
+        where: {
+          id
+        }
+      });   
       res.json(news);
   } catch (error) {
       res.status(400).json({ message: 'Có lỗi xảy ra.' });

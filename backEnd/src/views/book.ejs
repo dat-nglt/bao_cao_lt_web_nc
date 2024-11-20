@@ -36,7 +36,7 @@
             <%= data.row[i].name %>
           </td>
           <td class="text_truncate text-left " style="max-width: 110px;">
-            <img style="height: 80px; width: 55px;" src="https://noithatbn.vn/image/catalog/dac-nhan-tam/1123-1493801476304.jpg" class="rounded" alt="...">
+            <img style="height: 80px; width: 55px;" src="<%= data.row[i].imgBook %>>" class="rounded" alt="...">
           </td>
        
           <!-- <td class="text_truncate yearOfRelease" style="max-width: 110px;">
@@ -137,22 +137,24 @@
             </div>
             <div class="form-group">
               <label for="book_yearOfRelease">Ngày xuất bản</label>
-              <input type="date" class="form-control" name="yearOfRelease" id="book_yearOfRelease" >
+              <input type="date" class="form-control" name="dateBook" id="book_yearOfRelease" >
             </div>
             <div class="form-group">
               <label for="book_count">Số lượng</label>
-              <input type="text" class="form-control" name="count" id="book_count" >
+              <input type="number" class="form-control" name="count" id="book_count" >
             </div>
             <div class="form-group">
               <label for="book_category">Thể loại</label>
-                <select class="form-select" name="category" id="book_category">
+                <select class="form-select" name="categoryId" id="book_category">
                   <option selected>Chọn thể loại</option>
-                  <option value="35">One</option>
+                  <% data.listCategories.forEach(category => { %>
+                    <option value="<%= category.id %>"><%= category.name %></option>
+                    <% })%>
                 </select>
             </div>
             <div class="form-group">
               <label for="book_description">Mô tả </label>
-              <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="description" id="book_description" rows="5" ></textarea>
+              <textarea class="form-control" spellcheck="false" style="resize: none;" placeholder="Nhập mô tả..." name="desBook" id="book_description" rows="5" ></textarea>
             </div>
             <div class="modal-footer" style="border: none;">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

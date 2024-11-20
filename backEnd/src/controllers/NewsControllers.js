@@ -151,8 +151,9 @@ const createNews = async (req, res) => {
 const updateNews = async (req, res) => {
   const form = new IncomingForm()
   form.parse(req, async (err, fields, files) => {
+    console.log(err)
     if (err) {
-      console.log(err)
+      
       req.flash('error', 'Ảnh bìa không hợp lệ!')
       res.status(400).redirect('/tin-tuc')
       return

@@ -1,5 +1,5 @@
 import express from "express";
-import { bookModel, sequelize } from "../models";
+import { bookModel, sequelize, categoryModel } from "../models";
 import cloudinary from "../utils/cloudinary.js";
 import { IncomingForm } from "formidable";
 import fs from "fs";
@@ -32,6 +32,12 @@ const getBookPage = async (req, res) => {
   const totalPage = Math.ceil(totalBook / limit);
   const start = (currentPage - 1) * limit;
 
+  const listCategories = await categoryModel.findAll();
+
+  if (!listCategories) {
+    throw new Error("Tải dữ liệu thể loại không thành công");
+  }
+
   const listBookQuery = `
     SELECT
         books.id,
@@ -61,6 +67,10 @@ const getBookPage = async (req, res) => {
     type: sequelize.QueryTypes.SELECT,
   });
 
+  if (!listBookResult) {
+    throw new Error("Tải dữ liệu sách không thành công");
+  }
+
   return res.render("layout", {
     data: {
       title: "Quản lý sách",
@@ -68,6 +78,7 @@ const getBookPage = async (req, res) => {
       messageSuccess: req.flash("success"),
       page: "book",
       row: listBookResult,
+      listCategories,
       currentPage: parseInt(currentPage),
       totalPage: parseInt(totalPage),
       sort,
@@ -79,28 +90,87 @@ const getBookPage = async (req, res) => {
 
 const addBook = async (req, res) => {
   const addBookForm = new IncomingForm();
-
   addBookForm.parse(req, async (err, fields, files) => {
-    if (err) {
-      req.flash("error", "Đã có lỗi xảy ra!");
-      res.status(400).redirect("/quan-li-sach");
-    }
-
+    // if (err) {
+    //   console.log(1)
+    //   req.flash("error", "Đã có lỗi xảy ra!");
+    //   return res.status(400).redirect("/quan-li-sach");
+    // }
     try {
+      // Kiểm tra hình ảnh có tồn tại không
       const imageFile = files.image;
-
       if (!imageFile) {
         throw new Error("Không tìn thấy hình ảnh");
       }
+      // Kiểm tra độ dài tên sách
+      const name = fields.name[0];
+      if (name.length > 255) {
+        throw new Error("Tên sách không được vượt quá 255 ký tự");
+      }
 
-      const name = files.name[0]
-      const author = files.author[0]
-      const publisherBook = files.publisher[0]
-      const 
+      // Kiểm tra sách đã có tồn tại chưa
+      const existBook = await bookModel.findOne({
+        where: {
+          name: name,
+        },
+      });
+
+      if (existBook) {
+        throw new Error("Sách đã tồn tại trong hệ thống");
+      }
+
+      // Kiểm tra thể loại có tồn tại không
+      const categoryId = fields.categoryId[0];
+      const existCategory = await categoryModel.findOne({
+        where: {
+          id: categoryId,
+        },
+      });
+
+      if (!existCategory) {
+        throw new Error("Thể loại sách không tồn tại trong hệ thống");
+      }
+
+      // Kiểm tra số lượng sách nhập vào
+      const count = fields.count[0];
+      if (parseInt(count) <= 0 || null) {
+        throw new Error("Số lượng sách phải lớn hơn 0");
+      }
+
+      // Lưu ảnh sách lên clound
+      cloudinary.uploader.upload(imageFile[0].filepath, async (err, result) => {
+        fs.unlink(imageFile[0].filepath, (unlinkErr) => {
+          if (unlinkErr) {
+            throw new Error("Không tìn thấy hình ảnh");
+          }
+        });
+
+        if (err) {
+          throw new Error("Tải lên thông tin sách thất bại");
+        }
+
+        const imageURL = result.secure_url;
+        const newBook = await bookModel.create({
+          name: name,
+          count: count,
+          imgBook: imageURL,
+          creatorBook: fields.author[0],
+          dateBook: fields.dateBook[0],
+          desBook: fields.desBook[0],
+          categoryId: fields.categoryId[0],
+        });
+
+        if (!newBook) {
+          throw new Error("Thêm sách thất bại");
+        }
+
+        req.flash("success", "Thêm sách thành công");
+        return res.status(200).redirect("/quan-li-sach");
+      });
     } catch (error) {
       console.error("Error adding category:", error.message);
       req.flash("error", error.message || "Lỗi hệ thống!");
-      return res.status(400).redirect("/the-loai");
+      return res.status(400).redirect("/quan-li-sach");
     }
   });
 };
