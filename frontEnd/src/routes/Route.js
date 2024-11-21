@@ -14,6 +14,7 @@ import Profile from '../components/Profile'
 import RentHistory from '../components/RentHistory'
 import News from '../components/News'
 import FavoritBooks from '../components/FavoriteBooks'
+import AllFavoriteBooks from '../components/AllFavoriteBooks'
 import UpdatePassword from '../components/UpdatePassword'
 import Punish from '../components/Punish'
 import BooksNew from '../components/BooksNew'
@@ -39,10 +40,10 @@ export const router = createBrowserRouter([
         path: '/tin-tuc',
         element: <News />
       },
-      // {
-      //   path: '/sach-yeu-thich',
-      //   element: <FavoritBooks />
-      // },
+      {
+        path: '/sach-yeu-thich',
+        element: <AllFavoriteBooks />
+      },
       {
         path: '/sach-moi',
         element: <BooksNew />

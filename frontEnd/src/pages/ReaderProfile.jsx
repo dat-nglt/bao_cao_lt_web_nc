@@ -8,6 +8,7 @@ import MoneyIcon from '@mui/icons-material/Money'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import PasswordIcon from '@mui/icons-material/Password'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import BookIcon from '@mui/icons-material/Book';
 import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { userContext } from '../components/Context'
@@ -27,6 +28,11 @@ const menuItems = [
     link: '/ho-so-doc-gia/phi-phat',
     text: 'Thông tin phí phạt',
     icon: <MoneyIcon fontSize='medium' />
+  },
+  {
+    link: '/ho-so-doc-gia/yeu-thich',
+    text: 'Sách yêu thích',
+    icon: <BookIcon fontSize='medium' />
   },
   {
     link: '/ho-so-doc-gia/cap-nhat-mat-khau',

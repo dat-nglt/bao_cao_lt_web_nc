@@ -108,12 +108,22 @@ const getBookById = async (req, res) => {
   const { id } = req.params; // Lấy ID từ tham số URL
 
   try {
-    const book = await bookModel.findByPk(id);
+    const book = await bookModel.findAll({
+      where: { id },
+      include: [
+        {
+          model: categoryModel,
+          as: "category",
+          attributes: ["name"],
+        },
+      ],
+    });
 
     if (!book) {
       return res.status(404).json({ error: "Sách không tìm thấy." });
     }
-    res.json(book);
+    
+    res.json(book[0]);
   } catch (error) {
     res.status(500).json({ error: "Có lỗi xảy ra." });
   }
@@ -124,6 +134,8 @@ const getBooksByCategory = async (req, res) => {
     const books = await bookModel.findAll({
       where: { categoryId: req.params.id },
     });
+
+    
     if (books.length > 0) {
       res.json(books);
     } else {
@@ -150,8 +162,6 @@ const requestBook = async (req, res) => {
 
     // Check if the book exists
     const checkBook = await bookModel.findByPk(book);
-    console.log(checkBook);
-    
     
     if (!checkBook) {
       return res.status(200).json({ message: "Sách không tồn tại" });

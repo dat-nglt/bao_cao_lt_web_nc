@@ -7,16 +7,12 @@ import favoriteBooksService from "../services/favoriteBooksService";
 function FavoritBooks(props) {
   const { loggedInUser } = useContext(userContext);
 
-  const userId = loggedInUser ? loggedInUser.userData.id : null;
-
   const [favoriteBooks, setFavoriteBooks] = useState([]);
 
   useEffect(() => {
-    if (!userId) return;
-
     const checkFavoriteStatus = async () => {
       try {
-        const response = await favoriteBooksService.getFavoriteBooksByUserId(userId);
+        const response = await favoriteBooksService.getFavoriteBooks();
         setFavoriteBooks(response.data);
         console.log(response);
         
@@ -24,10 +20,8 @@ function FavoritBooks(props) {
         console.error('Lỗi khi kiểm tra sách yêu thích:', error);
       }
     };
-
     checkFavoriteStatus();
-  }, [userId]); 
-
+  }, []); 
   const theme = useTheme();
   console.log(favoriteBooks);
 

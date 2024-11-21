@@ -38,7 +38,7 @@ const initApiRoute = (app) => {
   router.get('/chi-tiet-sach/:id', apiBooks.getBookById)
   router.get('/danh-muc', apiCategory.getAllCategory)
   router.get('/danh-muc', apiCategory.getAllCategory)
-  router.post('/yeu-cau-muon', apiBooks.requestBook)
+  router.post('/yeu-cau-muon',authenticateToken, apiBooks.requestBook)
   router.get('/sach-moi', apiBooks.getNewBooks)
 
   // router.post('/the-loai', categoryController.addCategory);
@@ -73,8 +73,11 @@ const initApiRoute = (app) => {
 
   //sách yêu thích
   
-  router.post('/them-yeu-thich-sach', apiFavoriteBook.addFavoriteBook)
-  router.post('/xoa-yeu-thich-sach', apiFavoriteBook.removeFavoriteBook)
+  router.post('/them-yeu-thich-sach',authenticateToken, apiFavoriteBook.addFavoriteBook)
+  router.post('/xoa-yeu-thich-sach',authenticateToken, apiFavoriteBook.removeFavoriteBook)
+  router.get('/lay-ta-ca-yeu-thich-sach', apiFavoriteBook.getFavoriteBooks)
+  router.get('/lay-yeu-thich-sach/:userId',authenticateToken, apiFavoriteBook.getFavoriteBooksByUserId)
+  router.get('/lay-id-yeu-thich-sach/:userId',authenticateToken, apiFavoriteBook.getIdFavoriteBooksByUserId)
 
 
 

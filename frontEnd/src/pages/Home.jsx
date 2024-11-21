@@ -17,7 +17,7 @@ function Home(props) {
   const [categories, setCategories] = useState([]);
   const [visible, setVisible] = useState(false);
   const { loggedInUser, loginContext, logoutContext } = useContext(userContext);
-  console.log(loggedInUser);
+  // console.log(loggedInUser);
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -57,11 +57,11 @@ function Home(props) {
       icon: <MenuBookIcon fontSize="medium" />,
       subItems: categories,
     },
-    // {
-    //   link: "/ho-so-doc-gia/yeu-thich",
-    //   text: "Sách yêu thích",
-    //   icon: <FavoriteIcon fontSize="medium" />,
-    // },
+    {
+      link: "sach-yeu-thich",
+      text: "Sách yêu thích",
+      icon: <FavoriteIcon fontSize="medium" />,
+    },
   ];
 
   const toggleVisibility = () => {

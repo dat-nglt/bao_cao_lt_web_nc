@@ -1,6 +1,13 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Card, CardMedia, Typography, Button, Snackbar } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardMedia,
+  Typography,
+  Button,
+  Snackbar,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import bookService from "../services/bookService";
@@ -8,7 +15,12 @@ import { userContext } from "./Context";
 
 function BookDetails(props) {
   const [book, setBook] = React.useState([]);
-  const [notification, setNotification] = React.useState({ message: "", open: false });
+  const [notification, setNotification] = React.useState({
+    message: "",
+    open: false,
+  });
+
+  const [redirectTimeout, setRedirectTimeout] = React.useState(null);
 
   const { id } = useParams();
 
@@ -29,15 +41,36 @@ function BookDetails(props) {
     fetchBook();
   }, []);
 
+  React.useEffect(() => {
+    if (redirectTimeout !== null) {
+      const timer = setTimeout(() => {
+        navigate('/ho-so-doc-gia/lich-su-muon');
+      }, redirectTimeout);
+
+      return () => clearTimeout(timer);
+    }
+  }, [redirectTimeout, navigate]);
+
   const handleGoBack = () => {
     navigate(-1);
   };
 
   const handleBorrowRequest = async () => {
+    if (!loggedInUser.auth) {
+      setNotification({
+        message: "Bạn cần đăng nhập để yêu cầu mượn sách.",
+        open: true,
+      });
+      return;
+    }
     try {
-      const response = await bookService.requestBook({ user: loggedInUser.userData.id, book: id });
+      const response = await bookService.requestBook({
+        user: loggedInUser.userData.id,
+        book: id,
+      });
       console.log(response);
       setNotification({ message: response.message, open: true });
+      setRedirectTimeout(2000);
     } catch (error) {
       console.error("Error sending borrow request:", error);
       setNotification({ message: response.message, open: true });
@@ -47,6 +80,11 @@ function BookDetails(props) {
   const handleCloseNotification = () => {
     setNotification({ ...notification, open: false });
   };
+  console.log(book);
+
+  if (!book || !book.category) {
+    return ;
+  }
 
   return (
     <Box
@@ -129,7 +167,7 @@ function BookDetails(props) {
               Tác giả: {book.creatorBook}
             </Typography>
             <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Thể loại: {book.categoryBook}
+              Thể loại: {book.category.name}
             </Typography>
             <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
               Nhà xuát bản: {book.publisherBook}
@@ -139,6 +177,9 @@ function BookDetails(props) {
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
               Mô tả: {book.desBook}
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              Số lượng: {book.count}
             </Typography>
           </div>
           <Button

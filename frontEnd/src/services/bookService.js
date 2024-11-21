@@ -16,7 +16,7 @@ const getBookById = async (id) => {
 };
 
 const requestBook = async ({ user, book }) => {
-    const response = await axios.post(`http://localhost:3001/api/v1/yeu-cau-muon`, { user, book });
+    const response = await axios.post(`http://localhost:3001/api/v1/yeu-cau-muon`, { user, book }, { withCredentials: true });
     return response.data; 
 };
 
