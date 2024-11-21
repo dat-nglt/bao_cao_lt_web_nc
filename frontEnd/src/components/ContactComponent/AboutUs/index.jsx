@@ -4,7 +4,7 @@ import { LocationOn, Phone, Email, Web, Facebook, Instagram, Twitter, LinkedIn, 
 
 function AboutUs() {
   return (
-    <Box sx={{ backgroundColor: '#F7F8FA', minHeight: '100vh', padding: '20px' }}>
+    <Box sx={{ minHeight: '100%', padding: '20px' , width: "95%"}}>
 
     <Typography 
       variant="h3" 

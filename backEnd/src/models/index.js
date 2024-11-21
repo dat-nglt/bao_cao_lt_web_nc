@@ -7,7 +7,7 @@ import borrowModel from "./BorrowModels.js";
 import contactModel from "./ContactModels.js";
 import fineModel from "./FineModels.js";
 import categoryModel from "./CategoryModels.js";
-
+import favoriteBookModel from "./FavouriteBookModels.js";
 
 newsModel.belongsTo(typeNewsModel, { foreignKey: "typeId", as: "type_news" });
 typeNewsModel.hasMany(newsModel, { foreignKey: "typeId", as: "news" });
@@ -23,6 +23,12 @@ bookModel.belongsTo(categoryModel, {
 });
 categoryModel.hasMany(bookModel, { foreignKey: "categoryId", as: "category" });
 
+favoriteBookModel.belongsTo(userModel, { foreignKey: "userId", as: "user" });
+favoriteBookModel.belongsTo(bookModel, { foreignKey: "bookId", as: "book" });
+userModel.hasMany(favoriteBookModel, { foreignKey: "userId", as: "favoriteBooks" });
+bookModel.hasMany(favoriteBookModel, { foreignKey: "bookId", as: "favoritedBy" });
+
+
 export {
   newsModel,
   typeNewsModel,
@@ -32,5 +38,6 @@ export {
   contactModel,
   fineModel,
   categoryModel,
+  favoriteBookModel,
   sequelize,
 };

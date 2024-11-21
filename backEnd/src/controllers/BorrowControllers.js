@@ -146,6 +146,18 @@ const createBorrow = async (req, res) =>{
     res.status(400).redirect("/muon-tra");
     return;
   }
+  const checkOverDate = await borrowModel.findAll({
+    raw: true,
+    where: {
+        status: 4,
+        userId: user
+    }
+  });
+  if(checkOverDate.length > 0){
+    req.flash("error", "Người dùng có phiếu mượn quá hạn. Vui lòng hoàn tất trả phạt trước khi thêm phiếu mượn!");
+    res.status(400).redirect("/muon-tra");
+    return;
+  }
   const checkBook = await bookModel.findByPk(book);
   if (checkBook) {
     if (checkBook.count > 0) {
@@ -186,11 +198,23 @@ const updateBorrow = async (req, res) =>{
       raw: true,
       where: {
           status: 2,
-          userId: user
+          userId: checkBorrow.userId
       }
     });
     if(checkCountBorrow.length > 4){
       req.flash("error", "Người dùng đang mượn 5 sách, không thể thêm phiếu mượn!");
+      res.status(400).redirect("/muon-tra");
+      return;
+    }
+    const checkOverDate = await borrowModel.findAll({
+      raw: true,
+      where: {
+          status: 4,
+          userId: checkBorrow.userId
+      }
+    });
+    if(checkOverDate.length > 0){
+      req.flash("error", "Người dùng có phiếu mượn quá hạn. Vui lòng hoàn tất trả phạt trước khi thêm phiếu mượn!");
       res.status(400).redirect("/muon-tra");
       return;
     }
@@ -293,4 +317,3 @@ const cancelBorrow = async (req, res) =>{
 }
 
 export default { getBorrowPage, createBorrow, updateBorrow, cancelBorrow };
-nào tắt share nha

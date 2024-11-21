@@ -9,20 +9,21 @@ export const SearchContext = createContext();
 function News(props) {
   const [ listNews, setListNews ] = useState([])
   const [searchType, setSearchType] = useState('');
+  const [searchSort, setSearchSort] = useState('desc');
   const [searchTitle, setSearchTitle] = useState('');
   useEffect(() => {
     const getNews = async () => {
-      const response = await newsServices.getAllNews(searchType, searchTitle);
+      const response = await newsServices.getAllNews(searchType, searchSort, searchTitle);
       setListNews(response);
     };
     getNews();
     setCurrentPage(1)
-  }, [searchType]);
+  }, [searchType,searchSort]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const getNews = async () => {
-        const response = await newsServices.getAllNews(searchType, searchTitle);
+        const response = await newsServices.getAllNews(searchType, searchSort, searchTitle);
         setListNews(response);
       };
       getNews();
@@ -42,7 +43,7 @@ function News(props) {
   };
   return (
     <>
-   <SearchContext.Provider value={{ searchType, setSearchType, searchTitle, setSearchTitle }}>
+   <SearchContext.Provider value={{ searchType, setSearchType, searchTitle, setSearchTitle, searchSort, setSearchSort }}>
       <SearchNews/>
       <CategoryNews title={'Tin tức'} newsList={listNews} start={startIndex} end={endIndex} isHomePage={false} />
       {(totalPages > 1) ? <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} /> : null}

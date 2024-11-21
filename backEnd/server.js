@@ -1,25 +1,24 @@
-import express from "express";
-import dotenv from "dotenv";
-import viewEngine from "./viewEngine";
-import initWebRoute from "./src/routes/webRoute";
-import initApiRoute from "./src/routes/apiRoute";
-import path from "path";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import flash from "connect-flash";
-import session from "express-session";
-import sequelize from "./src/configs/connectDB.js";
-import methodOverride from "method-override";
-import createSession from "./src/configs/createSession.js";
+import express from 'express'
+import dotenv from 'dotenv'
+import viewEngine from './viewEngine'
+import initWebRoute from './src/routes/webRoute'
+import initApiRoute from './src/routes/apiRoute'
+import path from 'path'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import flash from 'connect-flash'
+import session from 'express-session'
+import sequelize from './src/configs/connectDB.js'
+import methodOverride from 'method-override'
+import createSession from './src/configs/createSession.js'
 
-// sequelize.sync();
-// sequelize.sync({ alter: true })
+sequelize.sync({ alter: true })
 
-const app = express();
+const app = express()
 
-dotenv.config({ force: true });
-app.use(express.static(path.join(__dirname, "/public")));
+dotenv.config({ force: true })
+app.use(express.static(path.join(__dirname, '/public')))
 
 // app.use(session({
 //   secret: 'hehe',
@@ -28,34 +27,34 @@ app.use(express.static(path.join(__dirname, "/public")));
 //   cookie: { secure: false }
 // }));
 
-createSession(app);
+createSession(app)
 
 const corsOptions = () => {
   return {
-    origin: ["http://localhost:3000"],
+    origin: ['http://localhost:3000'],
     credentials: true,
-    optionsSuccessStatus: 200,
-  };
-};
+    optionsSuccessStatus: 200
+  }
+}
 
-app.use(cors(corsOptions()));
+app.use(cors(corsOptions()))
 
-app.use(flash());
-app.use(cookieParser());
+app.use(flash())
+app.use(cookieParser())
 
 app.use(
   bodyParser.urlencoded({
-    extended: false,
+    extended: false
   })
-);
+)
 
-app.use(bodyParser.json());
-viewEngine(app);
-app.use(methodOverride("_method"));
-initWebRoute(app);
-initApiRoute(app);
-const PORT = process.env.PORT || 8081;
+app.use(bodyParser.json())
+viewEngine(app)
+app.use(methodOverride('_method'))
+initWebRoute(app)
+initApiRoute(app)
+const PORT = process.env.PORT || 8081
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+  console.log(`App listening on port ${PORT}`)
+})

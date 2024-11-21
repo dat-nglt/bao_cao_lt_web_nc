@@ -222,7 +222,7 @@ function Login(props) {
                 justifyContent={"space-between"}
                 alignItems={"center"}
               >
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Checkbox size="small" />}
                   label={
                     <Typography
@@ -232,15 +232,15 @@ function Login(props) {
                       Ghi nhớ đăng nhập
                     </Typography>
                   }
-                />
-                <Link to={"/quen-mat-khau"}>
+                /> */}
+                {/* <Link to={"/quen-mat-khau"}>
                   <Typography
                     variant="caption"
                     sx={{ color: theme.palette.primary.main }}
                   >
                     Quên mật khẩu?
                   </Typography>
-                </Link>
+                </Link> */}
               </Stack>
 
               <Button

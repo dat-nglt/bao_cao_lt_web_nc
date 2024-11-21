@@ -1,3 +1,5 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h3 style="padding: .5rem 0;"><b class="text-primary">QUẢN LÝ SÁCH</b></h3>
 <div style="display: flex; padding: 10px; justify-content: flex-end; align-items: center; gap: 10px;">
   <button type="button" style="padding: 5px 12px;" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
       Thêm sách
@@ -15,6 +17,7 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
       </form>
   </div>
+</div>
   
   <table class="table" style="height: fit-content;">
     <thead>
@@ -56,7 +59,8 @@
             <i class="fa-solid fa-eye" data-toggle="modal" data-target="#detailModal"
             data-author="<%= data.row[i].creatorBook%>"
               data-publisher="<%=data.row[i].publisherBook%>"
-              data-category="<%=data.row[i].categoryId%>"
+              data-category="<%=data.row[i].categoryName%>" 
+              data-url="<%= data.row[i].imgBook %>"
             ></i>
             <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#deleteModal" data-id="<%= data.row[i].id %>" data-author="<%= data.row[i].creatorBook%>"
               data-publisher="<%=data.row[i].publisherBook%>"
@@ -118,7 +122,7 @@
 
 
   <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xs" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addModalLabel">Chi tiết sách</h5>
@@ -128,35 +132,35 @@
         </div>
         <div class="modal-body">
           <div class="d-flex gap-3">
-            <img style="width: 240px; height: 340px; border-radius: 10px;" src="https://res.cloudinary.com/dz0mm7ify/image/upload/v1732110354/hrp4fdfshvlw90k1hglh.jpg" alt="">
-            <div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="bookNameLabel">Tên sách: </h6>
-                <h6 class="modal-title" id="bookNameValue"></h6>
+            <img style="width: 180px; height: 250px; border-radius: 10px;" src="" alt="" id="img_details_book">
+            <div  style="padding: 10px 0">
+              <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="bookNameLabel">Tên sách: </p>
+                <p class="modal-title" id="bookNameValue"></p>
               </div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="authorLabel">Tác giả: </h6>
-                <h6 class="modal-title" id="authorValue"></h6>
+              <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="authorLabel">Tác giả: </p>
+                <p class="modal-title" id="authorValue"></p>
               </div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="categoryLabel">Thể loại: </h6>
-                <h6 class="modal-title" id="categoryValue"></h6>
+              <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="categoryLabel">Thể loại: </p>
+                <p class="modal-title" id="categoryValue"></p>
               </div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="quantityLabel">Số lượng: </h6>
-                <h6 class="modal-title" id="quantityValue"></h6>
+              <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="quantityLabel">Số lượng: </p>
+                <p class="modal-title" id="quantityValue"></p>
               </div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="publisherLabel">Nhà xuất bản: </h6>
-                <h6 class="modal-title" id="publisherValue"></h6>
+              <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="publisherLabel">Nhà xuất bản: </p>
+                <p class="modal-title" id="publisherValue"></p>
               </div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="dateAddedLabel">Ngày thêm: </h6>
-                <h6 class="modal-title" id="dateAddedValue"></h6>
-              </div>
-              <div class="d-flex gap-3 mb-3">
-                <h6 class="modal-title" id="descriptionLabel">Mô tả chung: </h6>
-                <h6 class="modal-title" id="descriptionValue"></h6>
+              <!-- <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="dateAddedLabel">Ngày xuất bản: </p>
+                <p class="modal-title" id="dateAddedValue"></p>
+              </div> -->
+              <div class="d-flex gap-2 mb-3">
+                <p class="modal-title fw-bold" id="descriptionLabel">Mô tả chung: </p>
+                <p class="modal-title" id="descriptionValue"></p>
               </div>
             </div>
                     
@@ -321,20 +325,11 @@
           item.addEventListener('click', function () {
             const row = this.closest('tr');
 
-            console.log(row.cells[3].innerText);
-            
-
-            // const nameBook = row.cells[1].innerText;
-            // const description = row.cells[3].innerText;
-            // const count = row.cells[4].innerText;
-            // const author = this.getAttribute('data-author');
-            // const publisher = this.getAttribute('data-publisher');
-            // const categoryId = this.getAttribute('data-category');
+            document.querySelector('#img_details_book').setAttribute('src', this.getAttribute('data-url'))
 
             document.querySelector('#bookNameValue').innerText = row.cells[1].innerText
             document.querySelector('#authorValue').innerText = this.getAttribute('data-author')
             document.querySelector('#publisherValue').innerText = this.getAttribute('data-publisher');
-            // document.querySelector('#dateAddedValue').innerText = nameBook
             document.querySelector('#quantityValue').innerText = row.cells[4].innerText;
             document.querySelector('#categoryValue').innerText = this.getAttribute('data-category');
             document.querySelector('#descriptionValue').innerText = row.cells[3].innerText;

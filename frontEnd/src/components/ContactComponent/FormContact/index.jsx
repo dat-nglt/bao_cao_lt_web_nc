@@ -67,7 +67,7 @@ function FormContact() {
         </Typography>
 
         <TextField
-          label="Full Name"
+          label="Họ và tên sinh viên"
           name="name"
           value={formData.name}
           onChange={handleChange}
@@ -77,7 +77,7 @@ function FormContact() {
         />
 
         <TextField
-          label="Phone Number"
+          label="Số điện thoại liên hệ"
           name="tel"
           value={formData.tel}
           onChange={handleChange}
@@ -88,7 +88,7 @@ function FormContact() {
         />
 
         <TextField
-          label="Email Address"
+          label="Email"
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -99,7 +99,7 @@ function FormContact() {
         />
 
         <TextField
-          label="Description"
+          label="Nội dung phản hồi"
           name="des"
           value={formData.des}
           onChange={handleChange}

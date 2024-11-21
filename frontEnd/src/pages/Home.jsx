@@ -57,11 +57,11 @@ function Home(props) {
       icon: <MenuBookIcon fontSize="medium" />,
       subItems: categories,
     },
-    {
-      link: "/ho-so-doc-gia/yeu-thich",
-      text: "Sách yêu thích",
-      icon: <FavoriteIcon fontSize="medium" />,
-    },
+    // {
+    //   link: "/ho-so-doc-gia/yeu-thich",
+    //   text: "Sách yêu thích",
+    //   icon: <FavoriteIcon fontSize="medium" />,
+    // },
   ];
 
   const toggleVisibility = () => {

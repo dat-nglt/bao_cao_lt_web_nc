@@ -1,43 +1,43 @@
-import React from "react";
-import CategoryBook from "./CategoryBook";
-import bookService from "../services/bookService";
-import Pagination from "./Pagination";
-import { Stack } from "@mui/material";
-import SearchInput from "../components/SearchInput";
-import { useParams } from "react-router-dom";
+import React from 'react'
+import CategoryBook from './CategoryBook'
+import bookService from '../services/bookService'
+import Pagination from './Pagination'
+import { Stack } from '@mui/material'
+import SearchInput from '../components/SearchInput'
+import { useParams } from 'react-router-dom'
 
 function BooksNew(props) {
-  const [books, setBooksNew] = React.useState([]);
-  const { id } = useParams();
+  const [books, setBooksNew] = React.useState([])
+  const { id } = useParams()
 
-  const countNews = books.length;
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(countNews / itemsPerPage);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const countNews = books.length
+  const itemsPerPage = 6
+  const totalPages = Math.ceil(countNews / itemsPerPage)
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   React.useEffect(() => {
     const fetchBooksNew = async () => {
       try {
-        const booksNew = await bookService.getBooksNew();
-        setBooksNew(booksNew);
+        const booksNew = await bookService.getBooksNew()
+        setBooksNew(booksNew)
       } catch (error) {
-        console.error("Error fetching books:", error);
+        console.error('Error fetching books:', error)
       }
-    };
+    }
 
-    fetchBooksNew();
-  }, []);
+    fetchBooksNew()
+  }, [])
 
   return (
     <>
       <SearchInput />
       <CategoryBook
-        title={"Sách mới"}
+        title={'Sách mới'}
         bookList={books}
         start={startIndex}
         end={endIndex}
@@ -51,11 +51,11 @@ function BooksNew(props) {
         />
       ) : null}
       {books.length === 0 ? (
-        <Stack sx={{ margin: "0 auto", textAlign: "center", fontSize: "2rem" }}>
+        <Stack sx={{ margin: '0 auto', textAlign: 'center', fontSize: '2rem' }}>
           Hiện không có sách mới
         </Stack>
       ) : null}
     </>
-  );
+  )
 }
-export default BooksNew;
+export default BooksNew

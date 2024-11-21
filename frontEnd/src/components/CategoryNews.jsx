@@ -2,6 +2,7 @@ import { Box, Grid2, Stack, Typography } from '@mui/material';
 import React from 'react';
 import NewsCard from './NewsCard';
 import { useTheme } from '@emotion/react';
+import { Link } from 'react-router-dom'
 
 function CategoryNews(props) {
   const theme = useTheme();
@@ -17,11 +18,10 @@ function CategoryNews(props) {
       }}>
         <Typography sx={{
           padding: '10px 20px',
-          color: theme.palette.white.main,
           textTransform: 'unset',
           fontWeight: 600,
         }}>
-          {props.title}
+           <Link to={props.linkTo} style={{color: '#fff'}}>{props.title}</Link>
         </Typography>
       </Stack>
 

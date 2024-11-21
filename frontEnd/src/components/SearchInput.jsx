@@ -23,7 +23,7 @@ const SearchInput = (props) => {
   return (
     <Box
       width="95%"
-      m="10px auto"
+      m="10px auto 0 auto"
       sx={{
         display: 'flex',
         flexDirection: 'row',

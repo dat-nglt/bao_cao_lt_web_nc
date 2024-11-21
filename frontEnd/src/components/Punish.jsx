@@ -1,47 +1,34 @@
-import { Divider, Stack, Typography, useTheme } from '@mui/material';
+import { Divider, Stack, Typography, useTheme, Box } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+
 import React from 'react';
 import PunishItem from './PunishItem';
 import { userContext } from './Context';
 import fineService from "../services/fineService";
-// Dữ liệu mẫu, bạn có thể thay thế bằng dữ liệu từ API
-const rentList = [
-  {
-    title: 'Đắc nhân tâm',
-    imageUrl: 'https://nhasachphuongnam.com/images/detailed/217/dac-nhan-tam-bc.jpg',
-    quantity: 2,
-    borrowDate: '01/01/2024',
-    returnDate: '08/01/2024',
-    requestStatus: 'Chờ xét duyệt'
-  },
-  {
-    title: 'The Catcher in the Rye',
-    imageUrl: 'https://example.com/the-catcher.jpg',
-    quantity: 1,
-    borrowDate: '15/01/2024',
-    returnDate: '22/01/2024',
-    requestStatus: 'Đã duyệt'
-  }
-];
 
-function Punish(props) {
+function Punish() {
   const theme = useTheme();
   const [fine, setFine] = React.useState([]);
-  const { loggedInUser, loginContext, logoutContext } = React.useContext(userContext);
+  const [error, setError] = React.useState(null);
+  const { loggedInUser } = React.useContext(userContext);
 
+  // Hàm lấy dữ liệu phí phạt
+  const fetchFines = async () => {
+    try {
+      const response = await fineService.getFines(loggedInUser.userData.id);
+      setFine(response.data);
+    } catch (err) {
+      console.error("Lỗi khi lấy danh sách phí phạt:", err);
+      setError("Không thể tải danh sách phí phạt.");
+    }
+  };
+
+  // Lấy dữ liệu khi component mount
   React.useEffect(() => {
-    const getFine = async () => {
-      try {
-        const response = await fineService.getFines(loggedInUser.userData.id);
-        console.log(response);
-        
-        setFine(response.data);  
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách phí phạt:", error);
-      }
-    };
-
-    getFine(); 
-  }, []);
+    if (loggedInUser?.userData?.id) {
+      fetchFines();
+    }
+  }, [loggedInUser]);
 
   return (
     <Stack
@@ -60,20 +47,45 @@ function Punish(props) {
         }}
       >
         <Typography
-          variant='h6'
+          variant="h6"
           sx={{ color: theme.text.primary.main, fontWeight: 600 }}
         >
           Thông tin phí phạt
         </Typography>
 
-        <Divider />
+        <Divider sx={{ marginY: 2 }} />
 
-        {fine.length > 0 ? (
+        {error ? (
+          <Typography sx={{ color: theme.palette.error.main }}>
+            {error}
+          </Typography>
+        ) : fine.length > 0 ? (
           fine.map((item, index) => (
             <PunishItem key={index} fine={item} />
           ))
         ) : (
-          <Typography>Không có phí phạt nào</Typography> 
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              padding: 2,
+              backgroundColor: theme.palette.background.default,
+              borderRadius: 2,
+            }}
+          >
+            <InfoIcon sx={{ fontSize: 50, color: theme.palette.text.secondary }} />
+            <Typography
+              sx={{
+                marginTop: 1,
+                color: theme.palette.text.secondary,
+                fontStyle: 'italic',
+              }}
+            >
+              Không có Phiếu phạt nào
+            </Typography>
+          </Box>
         )}
       </Stack>
     </Stack>
