@@ -1,0 +1,151 @@
+<style>
+    .chart-container {
+        position: relative;
+        width: 100%; /* Chiều rộng 100% để thích ứng với kích thước của container */
+        height: 400px; /* Chiều cao cố định */
+        margin-bottom: 20px; /* Khoảng cách giữa các biểu đồ */
+    }
+</style>
+
+<div class="container">
+    <select id="statisticSelector">
+        <option value="books">Thống kê sách</option>
+        <option value="students">Thống kê sinh viên</option>
+    </select>
+
+    <div class="chart-container" id="booksChartContainer">
+        <canvas id="booksChart"></canvas>
+    </div>
+
+    <div class="chart-container" id="studentsChartContainer" style="display: none;">
+        <canvas id="studentsChart"></canvas>
+    </div>
+
+    <div id="booksDataContainer">
+ 
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Thể loại</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody id="books-table">
+                <% data.book.forEach(stat => { %>
+                    <tr>
+                        <td><%= stat.label %></td>
+                        <td class="text-end"><%= stat.count %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="studentsDataContainer" style="display: none;">
+
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Trạng thái</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody id="statistics-table">
+                <% data.user.forEach(stat => { %>
+                    <tr>
+                        <td><%= stat.label %></td>
+                        <td class="text-end"><%= stat.count %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu cho biểu đồ sách
+    const booksData = {
+        labels: <%- JSON.stringify(data.book.map(stat => stat.label)) %>,
+        datasets: [{
+            data: <%- JSON.stringify(data.book.map(stat => stat.count)) %>,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)', // Đỏ
+                'rgba(255, 159, 64, 0.8)', // Cam
+                'rgba(255, 205, 86, 0.8)', // Vàng
+                'rgba(54, 162, 235, 0.8)', // Xanh dương
+                'rgba(75, 192, 192, 0.8)'  // Xanh lá
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)', 
+                'rgba(255, 159, 64, 1)', 
+                'rgba(255, 205, 86, 1)', 
+                'rgba(54, 162, 235, 1)', 
+                'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // Dữ liệu cho biểu đồ sinh viên
+    const studentsData = {
+        labels: <%- JSON.stringify(data.user.map(stat => stat.label)) %>,
+        datasets: [{
+            data: <%- JSON.stringify(data.user.map(stat => stat.count)) %>,
+            backgroundColor: [
+
+                'rgba(255, 99, 132, 0.8)',  // Đỏ
+                'rgba(255, 159, 64, 0.8)',   // Cam
+
+            ],
+            borderColor: [
+
+                'rgba(255, 99, 132, 1)', 
+                'rgba(255, 159, 64, 1)',
+
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const booksCtx = document.getElementById('booksChart').getContext('2d');
+    const studentsCtx = document.getElementById('studentsChart').getContext('2d');
+
+    const booksChart = new Chart(booksCtx, {
+        type: 'pie',
+        data: booksData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+
+    const studentsChart = new Chart(studentsCtx, {
+        type: 'pie',
+        data: studentsData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+
+    // Xử lý sự kiện thay đổi lựa chọn
+    document.getElementById('statisticSelector').addEventListener('change', function() {
+        const value = this.value;
+
+        // Ẩn hoặc hiện biểu đồ và bảng dữ liệu tương ứng
+        if (value === 'books') {
+            document.getElementById('booksChartContainer').style.display = 'block';
+            document.getElementById('studentsChartContainer').style.display = 'none';
+            document.getElementById('booksDataContainer').style.display = 'block';
+            document.getElementById('studentsDataContainer').style.display = 'none';
+        } else {
+            document.getElementById('booksChartContainer').style.display = 'none';
+            document.getElementById('studentsChartContainer').style.display = 'block';
+            document.getElementById('booksDataContainer').style.display = 'none';
+            document.getElementById('studentsDataContainer').style.display = 'block';
+        }
+    });
+
+    // Khởi đầu hiển thị
+    document.getElementById('studentsDataContainer').style.display = 'none'; // Ẩn dữ liệu sinh viên ban đầu
+</script>

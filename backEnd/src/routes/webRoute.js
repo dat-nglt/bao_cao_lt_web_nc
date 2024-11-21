@@ -9,6 +9,7 @@ import FineControllers from "../controllers/FineControllers.js";
 import checkLoggedIn from "../middlewares/checkLoggedIn.js";
 import checkNotLoggedIn from "../middlewares/checkNotLoggedIn.js";
 import BookControllers from "../controllers/BookControllers.js";
+import ChartControllers from "../controllers/ChartControllers.js";
 //middlewere
 
 import AutoGenerateFineMiddleware from "../middlewares/AutoGenerateFineMiddleware.js";
@@ -115,6 +116,8 @@ const initWebRoute = (app) => {
   router.post("/tin-tuc/update/:id", checkLoggedIn, newsControllers.updateNews);
   router.post("/tin-tuc/delete/:id", checkLoggedIn, newsControllers.deleteNews);
 
+  //thong-ke
+  router.get("/thong-ke", checkLoggedIn, ChartControllers.getBorrowStatistics)
   // router.get("*", (req, res) => res.send("Không có trang này")); 
   return app.use("/", router);
 };
