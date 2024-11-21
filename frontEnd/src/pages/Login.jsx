@@ -21,16 +21,16 @@ import SimpleSnackbar from "../components/SimpleSnackbar";
 
 function Login(props) {
   const theme = useTheme();
-
   const { loggedInUser, loginContext, logoutContext } = useContext(userContext);
 
+  if (loggedInUser?.auth) {
+    window.location.href = "http://localhost:3000/ho-so-doc-gia";
+  }
+
   const [visibilityPassword, setVisibilityPassword] = useState(false);
-
   const [loginError, setLoginError] = useState("");
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
@@ -56,12 +56,12 @@ function Login(props) {
         setLoginError(response.message);
       }
     } catch (error) {
-      console.log(error);
+      setLoginError(response.message);
     }
   };
   return (
     <Box>
-      {loginError && <SimpleSnackbar message={loginError} />}
+      <SimpleSnackbar message={loginError} />
       <Stack>
         <Link to={"/"}>
           <Stack

@@ -1,19 +1,21 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Card, CardMedia, Typography, Button } from "@mui/material";
+import { Box, Card, CardMedia, Typography, Button, Snackbar } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import bookService from "../services/bookService";
-import { userContext } from './Context';
+import { userContext } from "./Context";
 
 function BookDetails(props) {
   const [book, setBook] = React.useState([]);
+  const [notification, setNotification] = React.useState({ message: "", open: false });
 
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const { loggedInUser, loginContext, logoutContext } = React.useContext(userContext);
+  const { loggedInUser, loginContext, logoutContext } =
+    React.useContext(userContext);
 
   React.useEffect(() => {
     const fetchBook = async () => {
@@ -30,17 +32,20 @@ function BookDetails(props) {
   const handleGoBack = () => {
     navigate(-1);
   };
-  
+
   const handleBorrowRequest = async () => {
     try {
-
-      const response = await bookService.requestBook({ user: loggedInUser.userData.id, book: id }); 
-      console.log(response); 
-      alert('Yêu cầu mượn đã được gửi thành công!');
+      const response = await bookService.requestBook({ user: loggedInUser.userData.id, book: id });
+      console.log(response);
+      setNotification({ message: response.message, open: true });
     } catch (error) {
       console.error("Error sending borrow request:", error);
-      alert('Có lỗi xảy ra khi gửi yêu cầu mượn.');
+      setNotification({ message: response.message, open: true });
     }
+  };
+
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
   };
 
   return (
@@ -56,17 +61,17 @@ function BookDetails(props) {
     >
       <Button
         variant="contained"
-        startIcon={<ArrowBackIcon sx={{color: 'primary.main'}}/>}
+        startIcon={<ArrowBackIcon sx={{ color: "primary.main" }} />}
         onClick={handleGoBack}
         sx={{
           alignSelf: "start",
           justifyContent: "flex-end",
           width: "50px",
           mb: 2,
-          position: 'absolute',
-          top: '148px',
-          bgcolor: '#fff',
-          margin: '0 10px'
+          position: "absolute",
+          top: "148px",
+          bgcolor: "#fff",
+          margin: "0 10px",
         }}
       ></Button>
       <Box
@@ -75,10 +80,19 @@ function BookDetails(props) {
           justifyContent: "center",
           bgcolor: "primary.main",
           boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.5)",
-          borderRadius: '4px 4px 0 0',
+          borderRadius: "4px 4px 0 0",
         }}
       >
-        <Typography variant="h5" gutterBottom sx={{color: "#fff", padding: '10px 0', margin: "0", textTransform: 'uppercase'}}>
+        <Typography
+          variant="h5"
+          gutterBottom
+          sx={{
+            color: "#fff",
+            padding: "10px 0",
+            margin: "0",
+            textTransform: "uppercase",
+          }}
+        >
           Thông tin sách
         </Typography>
       </Box>
@@ -89,7 +103,7 @@ function BookDetails(props) {
           width: "100%",
           minWidth: 900,
           boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.5)",
-          borderRadius: '0 0 4px 4px',
+          borderRadius: "0 0 4px 4px",
         }}
       >
         <CardMedia
@@ -137,6 +151,12 @@ function BookDetails(props) {
           </Button>
         </Box>
       </Card>
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={4000}
+        onClose={handleCloseNotification}
+        message={notification.message}
+      />
     </Box>
   );
 }

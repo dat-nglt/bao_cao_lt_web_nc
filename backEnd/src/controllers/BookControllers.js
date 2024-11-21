@@ -1,5 +1,5 @@
 import express from "express";
-import { bookModel, sequelize, categoryModel } from "../models";
+import { bookModel, sequelize, categoryModel, borrowModel } from "../models";
 import cloudinary from "../utils/cloudinary.js";
 import { IncomingForm } from "formidable";
 import fs from "fs";
@@ -91,36 +91,31 @@ const getBookPage = async (req, res) => {
 const addBook = async (req, res) => {
   const addBookForm = new IncomingForm();
   addBookForm.parse(req, async (err, fields, files) => {
-    // if (err) {
-    //   console.log(1)
-    //   req.flash("error", "Đã có lỗi xảy ra!");
-    //   return res.status(400).redirect("/quan-li-sach");
-    // }
+    if (err) {
+      req.flash("error", "Đã có lỗi xảy ra!");
+      return res.status(400).redirect("/quan-li-sach");
+    }
     try {
-      // Kiểm tra hình ảnh có tồn tại không
       const imageFile = files.image;
-      if (!imageFile) {
-        throw new Error("Không tìn thấy hình ảnh");
+      if (!imageFile) { // Kiểm tra sự tồn tại của hình ảnh gửi lên
+        throw new Error("Không tìm thấy hình ảnh");
       }
-      // Kiểm tra độ dài tên sách
       const name = fields.name[0];
-      if (name.length > 255) {
+      if (name.length > 255) { // Kiểm tra tính đúng đắng của dữ liệu tên sách
         throw new Error("Tên sách không được vượt quá 255 ký tự");
       }
 
-      // Kiểm tra sách đã có tồn tại chưa
-      const existBook = await bookModel.findOne({
+      const existBook = await bookModel.findOne({// Kiểm tra sách có tồn tại trong hệ thống hay chưa
         where: {
           name: name,
         },
       });
 
-      if (existBook) {
+      if (existBook) { 
         throw new Error("Sách đã tồn tại trong hệ thống");
       }
 
-      // Kiểm tra thể loại có tồn tại không
-      const categoryId = fields.categoryId[0];
+      const categoryId = fields.categoryId[0]; // Kiểm tra tính đúng đắn của thể loại sách
       const existCategory = await categoryModel.findOne({
         where: {
           id: categoryId,
@@ -131,13 +126,11 @@ const addBook = async (req, res) => {
         throw new Error("Thể loại sách không tồn tại trong hệ thống");
       }
 
-      // Kiểm tra số lượng sách nhập vào
-      const count = fields.count[0];
+      const count = fields.count[0]; // Kiểm tra tính đúng đắn của số lượng sách nhập kho
       if (parseInt(count) <= 0 || null) {
         throw new Error("Số lượng sách phải lớn hơn 0");
       }
 
-      // Lưu ảnh sách lên clound
       cloudinary.uploader.upload(imageFile[0].filepath, async (err, result) => {
         fs.unlink(imageFile[0].filepath, (unlinkErr) => {
           if (unlinkErr) {
@@ -180,36 +173,42 @@ const updateBook = async (req, res) => {
   const updateId = req.params.id;
 
   if (!updateId) {
-    throw new Error("Không xác định được đối tượng sách cần cập nhật");
+    // Kiểm tra tính đúng đắn của dữ liệu ID
+    throw new Error("Không xác định được sách cần cập nhật");
   }
 
   const updateBookForm = new IncomingForm();
   updateBookForm.parse(req, async (err, fields, files) => {
     try {
-      const name = fields.name[0];
+      const name = fields.name[0]; // Kiểm tra tính hợp lệ của tên sách được cập nhật
       if (name.length > 255) {
         throw new Error("Tên sách không được vượt quá 255 ký tự");
       }
 
       const existBook = await bookModel.findOne({
+        // Kiểm tra sự tồn tại của sách
         where: {
           id: updateId,
         },
       });
 
       if (existBook.name !== name) {
+        // Nếu sách tồn tại và tên sách khác với tên nhập vào thì
+        //Done
         const otherBook = await bookModel.findOne({
+          // Tiếp tục kiểm tra xem có sách nào trùng tên không
           where: {
             name: name,
           },
         });
 
         if (otherBook && otherBook.name === name) {
+          // Nếu đã trùng tên thì không cho cập nhập vào hệ thống
           throw new Error("Tên sách đã tồn tại trong hệ thống");
         }
       }
 
-      const categoryId = fields.categoryId[0];
+      const categoryId = fields.categoryId[0]; // Kiểm tra tính đúng đắng của thể loại
       const existCategory = await categoryModel.findOne({
         where: {
           id: categoryId,
@@ -220,15 +219,15 @@ const updateBook = async (req, res) => {
         throw new Error("Thể loại sách không tồn tại trong hệ thống");
       }
 
-      const count = fields.count[0];
+      const count = fields.count[0]; // Kiểm tra tính đúng đắng của số lượng sách được thêm vào
       if (parseInt(count) <= 0 || null) {
         throw new Error("Số lượng sách phải lớn hơn 0");
       }
 
-      const imageFile = files.image;
+      const imageFile = files.image; // Lấy ra hình ảnh từ dữ liệu gửi lên để cập nhật
 
       if (imageFile) {
-        // Lưu ảnh sách lên Cloudinary
+        // Nếu có tồn tại ảnh mới cập nhật thì xử lý theo trường hợp cập nhật hình ảnh
         cloudinary.uploader.upload(
           imageFile[0].filepath,
           async (err, result) => {
@@ -236,7 +235,6 @@ const updateBook = async (req, res) => {
               throw new Error(err);
             }
 
-            // Xóa file tạm sau khi upload
             fs.unlink(imageFile[0].filepath, (unlinkErr) => {
               if (unlinkErr) {
                 console.error("Không thể xóa file tạm:", unlinkErr);
@@ -245,7 +243,6 @@ const updateBook = async (req, res) => {
 
             const imageURL = result.secure_url;
 
-            // Cập nhật thông tin sách bao gồm cả ảnh
             const newBook = await bookModel.update(
               {
                 name: name,
@@ -271,6 +268,7 @@ const updateBook = async (req, res) => {
           }
         );
       } else {
+        // Trường hợp không cập nhật lại hình ảnh của sách
         const newBook = await bookModel.update(
           {
             name: name,
@@ -306,25 +304,38 @@ const deleteBook = async (req, res) => {
     const bookId = req.params.id;
 
     if (!bookId) {
+      // Kiểm tra tính đúng dắn của dữ liệu ID
       throw new Error("ID sách không hợp lệ hoặc không được cung cấp");
     }
 
+    const borrowedBook = await borrowModel.findOne({
+      // Kiểm tra xem sách có đang mượn bởi độc giả không
+      where: {
+        bookId: bookId,
+      },
+    });
+
+    if (borrowedBook) {
+      // Nếu có được mượn thì không cho xóa
+      throw new Error("Không thể xóa sách đang được mượn");
+    }
+
     const deleteRows = await bookModel.destroy({
+      // Thực hiện xóa
       where: { id: bookId },
     });
 
     if (deleteRows === 0) {
-      throw new Error("Không tìm thấy sách với ID được cung cấp");
+      // Trường hợp không trả về dữ liệu được xóa
+      throw new Error("Xóa sách thất bại");
     }
 
-    req.flash("success", "Xóa sách thành công");
+    req.flash("success", "Xóa sách thành công"); // Trường hợp xóa thành công
     return res.status(200).json({ message: "Xóa sách thành công" });
   } catch (error) {
-    // Xử lý lỗi
+    // Nhận lỗi và xử lí
     req.flash("error", error.message || "Có lỗi xảy ra khi xóa sách");
-    return res
-      .status(400)
-      .json({ message: error.message || "Có lỗi xảy ra khi xóa sách" });
+    return res.status(400).redirect("/quan-li-sach");
   }
 };
 

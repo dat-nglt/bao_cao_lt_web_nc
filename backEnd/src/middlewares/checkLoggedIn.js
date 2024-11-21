@@ -1,9 +1,9 @@
 const checkLoggedIn = (req, res, next) => {
   if (!req.session.admin) {
-    req.flash('error', 'Bạn cần đăng nhập để truy cập chức năng này')
-    return res.redirect('/dang-nhap')
+    req.flash("error", "Vui lòng đăng nhập để truy cập hệ thống");
+    return res.redirect("/dang-nhap");
   }
-  next()
-}
+  next();
+};
 
-export default checkLoggedIn
+export default checkLoggedIn;

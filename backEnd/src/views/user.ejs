@@ -409,6 +409,23 @@
         $('#editModal').modal('show');
       });
     });
+
+    const errorToast = document.getElementById('errorToast');
+    if (errorToast) {
+      const toast = new bootstrap.Toast(errorToast, { autohide: false });
+      toast.show();
+      setTimeout(() => {
+        toast.hide();
+      }, 3000);
+    }
+    const successToast = document.getElementById('successToast');
+    if (successToast) {
+      const toast = new bootstrap.Toast(successToast, { autohide: false });
+      toast.show();
+      setTimeout(() => {
+        toast.hide();
+      }, 3000);
+    }
   });
 
   function formatDateToInput(dateString) {

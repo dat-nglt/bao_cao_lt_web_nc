@@ -20,12 +20,12 @@ const initWebRoute = (app) => {
   router.post("/dang-nhap", UserController.handleLogin);
   router.get("/dang-xuat", UserController.handleLogout);
   //Độc giả
-  router.get("/doc-gia",checkNotLoggedIn, UserController.getUserPage);
-  router.get("/doc-gia/:id",checkNotLoggedIn, UserController.getUserById);
-  router.post("/sua-doc-gia/:id",checkNotLoggedIn, UserController.updateUser);
-  router.post("/them-doc-gia",checkNotLoggedIn, UserController.addUser);
-  router.post("/khoa-doc-gia/:id",checkNotLoggedIn, UserController.lockEndUnLockUser);
-  router.post("/mo-khoa-doc-gia/:id",checkNotLoggedIn, UserController.lockEndUnLockUser);
+  router.get("/doc-gia",checkLoggedIn, UserController.getUserPage);
+  router.get("/doc-gia/:id",checkLoggedIn, UserController.getUserById);
+  router.post("/sua-doc-gia/:id",checkLoggedIn, UserController.updateUser);
+  router.post("/them-doc-gia",checkLoggedIn, UserController.addUser);
+  router.post("/khoa-doc-gia/:id",checkLoggedIn, UserController.lockEndUnLockUser);
+  router.post("/mo-khoa-doc-gia/:id",checkLoggedIn, UserController.lockEndUnLockUser);
   //thể loại
   router.get("/the-loai", checkLoggedIn, CategoryControllers.getCategoryPage);
   router.post("/the-loai", checkLoggedIn, CategoryControllers.addCategory);

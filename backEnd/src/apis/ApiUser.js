@@ -8,18 +8,18 @@ const handleLogin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    if (!username || !password) {
+    if (!username || !password) { // Kiểm tra tính đúng đắn của dữ liệu đăng nhập
       return res.status(200).json({
-        message: "Tài khoản và mật khẩu không được để trống",
+        message: "Tài khoản và mật khẩu không được để trống!",
         logined: false,
       });
     }
 
-    const existUser = await userModel.findOne({
+    const existUser = await userModel.findOne({ // Kiểm tra người dùng có tồn tại trong hệ thống không
       where: { studentCode: username },
     });
 
-    if (!existUser) {
+    if (!existUser) { // Trường hợp tài khoản không tồn tại trong hệ thống
       return res
         .status(200)
         .json({ message: "Tài khoản không tồn tại", logined: false });
@@ -27,17 +27,17 @@ const handleLogin = async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(password, existUser.passWord);
 
-    if (!isPasswordValid) {
+    if (!isPasswordValid) { // Kiểm tra tính đúng đắn của mật khẩu
       return res.status(200).json({
         message: "Mật khẩu không chính xác",
         logined: false,
       });
     }
 
-    existUser.passWord = undefined;
+    existUser.passWord = undefined; // loại bỏ trường mật khẩu trước khi tạo token
 
     const token = jwt.sign({ existUser }, SECRET_KEY, { expiresIn: "1h" });
-    if (!token) {
+    if (!token) {  // Kiểm tran tính hợp lệ của token khi đăng nhập
       return res.status(200).json({
         message:
           "Có lỗi trong quá trình đăng nhập, vui lòng thử lại (tokenError)",
@@ -45,7 +45,7 @@ const handleLogin = async (req, res) => {
       });
     }
 
-    res.cookie("token", token, {
+    res.cookie("token", token, { // Thiết lập cookie cho người dùng khi đăng nhập thành công
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 1000,

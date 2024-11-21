@@ -6,7 +6,6 @@ import apiTypeNews from "../apis/ApiTypeNews.js";
 import apiContact from "../apis/ApiContact.js";
 import apiUser from "../apis/ApiUser.js";
 import apiFine from "../apis/ApiFine.js";
-
 import authenticateToken from "../middlewares/apiMiddleware.js";
 
 const router = express.Router();
@@ -15,7 +14,11 @@ const initApiRoute = (app) => {
   router.post("/dang-nhap", apiUser.handleLogin);
   router.get("/thong-tin-nguoi-dung", apiUser.getInfoUser);
   router.get("/dang-xuat-user", apiUser.handleLogoutUser);
-  router.get("/danh-sach-muon/:id", apiUser.handleGetAllBorrow);
+  router.get(
+    "/danh-sach-muon/:id",
+    authenticateToken,
+    apiUser.handleGetAllBorrow
+  );
 
   // Trang danh mục sách
   router.post("/tim-kiem-sach", apiBooks.getAllBooksBySearch);

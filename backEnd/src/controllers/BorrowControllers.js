@@ -195,16 +195,7 @@ const updateBorrow = async (req, res) =>{
       return;
     }
     const checkBook = await bookModel.findByPk(checkBorrow.bookId);
-    if (checkBook) {
-      if (checkBook.count > 0) {
-          checkBook.count -= 1;
-          await checkBook.save();
-      } else {
-        req.flash("error", "Số lượng sách không đủ để duyệt phiếu mượn!");
-        res.status(400).redirect("/muon-tra");
-        return;
-      }
-    } else {
+    if (!checkBook) {
       req.flash("error", "Sách không tồn tại!");
       res.status(400).redirect("/muon-tra");
       return;
@@ -267,6 +258,20 @@ const cancelBorrow = async (req, res) =>{
     res.status(400).redirect("/muon-tra");
     return
   }
+  const checkBook = await bookModel.findByPk(checkBorrow.bookId);
+    if (checkBook) {
+      checkBook.count += 1;
+      const updateCountBook = await checkBook.save();
+      if (!updateCountBook) {
+        req.flash("error", "Cập nhật lại số lượng sách thất bại!");
+        res.status(400).redirect("/muon-tra");
+        return;
+      }
+    } else {
+      req.flash("error", "Sách không tồn tại!");
+      res.status(400).redirect("/muon-tra");
+      return;
+    }
   if(checkBorrow.status != 1){
     req.flash("error", "Thông tin phiếu mượn không hợp lệ!");
     res.status(400).redirect("/muon-tra");
@@ -288,3 +293,4 @@ const cancelBorrow = async (req, res) =>{
 }
 
 export default { getBorrowPage, createBorrow, updateBorrow, cancelBorrow };
+nào tắt share nha

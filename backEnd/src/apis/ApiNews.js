@@ -1,5 +1,5 @@
 import { typeNewsModel, newsModel, sequelize } from '../models/index.js'
-// const { Op } = require('sequelize');
+const { Op } = require('sequelize');
 
 const getAllNews = async (req, res) => {
     try {

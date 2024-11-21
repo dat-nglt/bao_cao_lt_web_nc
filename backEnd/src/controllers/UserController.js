@@ -71,40 +71,37 @@ const getUserById = async (req, res) => {
 
 const handleLogin = async (req, res) => {
   const { adminAccount, adminPassword } = req.body;
-  if (!adminAccount || !adminPassword) {
-    req.flash("error", "Tên tài khoản và mật khẩu không được để trống");
+  if (!adminAccount || !adminPassword) { // Kiểm tra tính đúng đắn của dữ liệu đăng nhập
+    req.flash("error", "Tài khoản và mật khẩu không được trống!");
     return res.status(400).redirect("/dang-nhap");
   }
 
-  const existUser = await userModel.findOne({
+  const existUser = await userModel.findOne({ // Kiếm tra sự tồn tại của tài khoản trong hệ thống
     where: { studentCode: adminAccount },
   });
 
   if (!existUser) {
-    req.flash("error", "Tên tài khoản không tồn tại, vui lòng kiểm tra lại");
+    req.flash("error", "Tên tài khoản không tồn tại, vui lòng kiểm tra lại!");
     return res.status(400).redirect("/dang-nhap");
   }
 
-  const isPasswordValid = await bcrypt.compare(
+  const isPasswordValid = await bcrypt.compare( // Kiểm tra tính đúng đắn của mật khẩu
     adminPassword,
     existUser.dataValues.passWord
   );
 
   if (!isPasswordValid) {
-    req.flash("error", "Mật khẩu không chính xác, vui lòng kiểm tra lại");
+    req.flash("error", "Mật khẩu không chính xác, vui lòng kiểm tra lại!");
     return res.status(400).redirect("/dang-nhap");
   }
 
-  if (existUser.dataValues.roleAccess !== 2) {
-    req.flash(
-      "error",
-      "Vui lòng sử dụng tài khoản quản trị viên để truy cập hệ thống!"
-    );
+  if (existUser.dataValues.roleAccess !== 2) { // Kiểm tra quyền truy cập vào hệ thống quản trị của người dùng
+    req.flash("error", "Vui lòng sử dụng tài khoản quản trị viên!");
     return res.status(200).redirect("/dang-nhap");
   }
 
-  req.session.admin = existUser.dataValues;
-  req.flash("success", "Đăng nhập thành công");
+  req.session.admin = existUser.dataValues; // Tạo session khi đăng nhập thành công
+  req.flash("success", "Đăng nhập thành công!");
   return res.status(200).redirect("/the-loai");
 };
 
@@ -113,7 +110,7 @@ const handleLogout = async (req, res) => {
     if (err) {
       return res.status(500).redirect("/dang-nhap");
     }
-    req.flash("success", "Đăng xuất thành công");
+    req.flash("success", "Đăng xuất thành công!");
     return res.status(200).redirect("/dang-nhap");
   });
 };
@@ -130,7 +127,6 @@ const addUser = async (req, res) => {
       email,
       identificationNumber,
     } = req.body;
-    console.log("--------------------------------------------------");
 
     if (!studentCode || !passWord || !fullName) {
       req.flash(
@@ -181,8 +177,16 @@ const updateUser = async (req, res) => {
     } = req.body;
 
     // Kiểm tra dữ liệu đầu vào
-    if (!studentCodeUpdate || !fullNameUpdate) {
-      req.flash("error", "Vui lòng nhập đầy đủ mã sinh viên, họ tên.");
+    if (
+      !studentCodeUpdate ||
+      !fullNameUpdate ||
+      !dateOfBirthUpdate ||
+      !identificationNumberUpdate ||
+      !phoneNumberUpdate ||
+      !emailUpdate ||
+      !addressUserUpdate
+    ) {
+      req.flash("error", "Vui lòng nhập đầy đủ thông tin.");
       return res.status(400).redirect("/doc-gia");
     }
 

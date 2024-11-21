@@ -2,7 +2,7 @@ import express from "express";
 import bookModel from "../models/BookModels.js";
 import userModel from "../models/UserModels.js";
 import borrowModel from "../models/BorrowModels.js";
-import { categoryModel } from '../models/index.js'
+import { categoryModel } from "../models/index.js";
 import { Op } from "sequelize";
 
 const getNewBooks = async (req, res) => {
@@ -45,23 +45,23 @@ const getAllBooksBySearch = async (req, res) => {
   const { danhMuc, tuKhoa } = req.body;
   let danhmuc;
   switch (danhMuc) {
-    case 'sach':
-      danhmuc = 'name';
+    case "sach":
+      danhmuc = "name";
       break;
-    case 'tacgia':
-      danhmuc = 'creatorBook';
+    case "tacgia":
+      danhmuc = "creatorBook";
       break;
-    case 'theloai':
-      danhmuc = '$category.name$';
+    case "theloai":
+      danhmuc = "$category.name$";
       break;
-    case 'namxuatban':
-      danhmuc = 'dateBook';
+    case "namxuatban":
+      danhmuc = "dateBook";
       break;
-    case 'nhaxuatban':
-        danhmuc = 'publisherBook';
-        break;
+    case "nhaxuatban":
+      danhmuc = "publisherBook";
+      break;
     default:
-      danhmuc = '';
+      danhmuc = "";
       break;
   }
   try {
@@ -73,7 +73,7 @@ const getAllBooksBySearch = async (req, res) => {
           { creatorBook: { [Op.like]: `%${tuKhoa}%` } },
           { publisherBook: { [Op.like]: `%${tuKhoa}%` } },
           { dateBook: { [Op.like]: `%${tuKhoa}%` } },
-          { "$category.name$": { [Op.like]: `%${tuKhoa}%` } }, 
+          { "$category.name$": { [Op.like]: `%${tuKhoa}%` } },
         ],
       };
     }
@@ -81,31 +81,28 @@ const getAllBooksBySearch = async (req, res) => {
       whereConditions[danhmuc] = { [Op.ne]: null };
     }
     if (!danhmuc && !tuKhoa) {
-      whereConditions = {}; 
+      whereConditions = {};
     }
     if (danhmuc && tuKhoa) {
-      whereConditions[danhmuc] = { [Op.like]: `%${tuKhoa}%` }; 
+      whereConditions[danhmuc] = { [Op.like]: `%${tuKhoa}%` };
     }
 
     const books = await bookModel.findAll({
-      where: whereConditions, 
+      where: whereConditions,
       include: [
         {
           model: categoryModel,
-          as: "category", 
-          attributes: ["name"], 
+          as: "category",
+          attributes: ["name"],
         },
       ],
     });
-    res.json({data:books,search:[danhmuc,tuKhoa]}); 
+    res.json({ data: books, search: [danhmuc, tuKhoa] });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Có lỗi xảy ra." });
   }
 };
-
-
-
 
 const getBookById = async (req, res) => {
   const { id } = req.params; // Lấy ID từ tham số URL
@@ -144,32 +141,73 @@ const requestBook = async (req, res) => {
     today.setDate(today.getDate() + 7);
     const dueDate = today.toISOString().split("T")[0];
 
+    // Check if the user exists
     const checkUser = await userModel.findByPk(user);
+    
     if (!checkUser) {
-      return res.status(400).json({message: "Tài khoản không tồn tại"})
+      return res.status(200).json({ message: "Tài khoản không tồn tại" });
     }
 
+    // Check if the book exists
     const checkBook = await bookModel.findByPk(book);
+    console.log(checkBook);
+    
+    
     if (!checkBook) {
-      return res.status(400).json({message: "Sách không tồn tại"})
+      return res.status(200).json({ message: "Sách không tồn tại" });
     }
 
+    // Check if the user has less than 5 borrowed books that are not returned
+    const activeBorrows = await borrowModel.count({
+      where: {
+        userId: user,
+        status: { [Op.ne]: 3 }, // Assuming status 2 means returned
+      },
+    });
+
+    if (activeBorrows >= 5) {
+      return res
+        .status(200)
+        .json({ message: "Bạn chỉ được mượn tối đa 5 sách chưa trả." });
+    }
+
+    const existingBorrow = await borrowModel.findOne({
+      where: {
+        userId: user,
+        bookId: book,
+        status: { [Op.ne]: 3 }, // Check for active borrow
+      },
+    });
+
+    if (existingBorrow) {
+      return res
+        .status(200)
+        .json({ message: "Bạn đã mượn sách này trước đó." });
+    }
+
+    // Check if there are available copies of the book
     if (checkBook.count > 0) {
+      // Tạo một bản ghi mượn mới
+      const createBorrow = await borrowModel.create({
+        dueDate,
+        status: 1, // Giả sử trạng thái 1 có nghĩa là đang mượn
+        bookId: book,
+        userId: user,
+      });
+
+      // Trừ số lượng sách trong bảng books
       checkBook.count -= 1;
       await checkBook.save();
-    } else {
-      return res.status(400).json({message: "Số lượng sách không đủ"})
-    }
 
-    const createBorrow = await borrowModel.create({
-      dueDate,
-      status: 1,
-      bookId: book,
-      userId: user,
-    });
-    return res.status(201).json({message: "Gửi yêu cầu mượn thành công"})
+      return res.status(201).json({ message: "Gửi yêu cầu mượn thành công" });
+    } else {
+      return res.status(200).json({ message: "Số lượng sách không đủ" });
+    }
   } catch (error) {
     console.error("Error in requestBook:", error);
+    return res
+      .status(500)
+      .json({ message: "Có lỗi xảy ra trong quá trình gửi yêu cầu." });
   }
 };
 
@@ -180,5 +218,4 @@ export default {
   getAllBooksBySearch,
   requestBook,
   getNewBooks,
-  
 };
