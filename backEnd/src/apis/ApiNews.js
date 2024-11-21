@@ -1,5 +1,5 @@
 import { typeNewsModel, newsModel, sequelize } from '../models/index.js'
-const { Op } = require('sequelize');
+// const { Op } = require('sequelize');
 
 const getAllNews = async (req, res) => {
     try {
@@ -26,7 +26,8 @@ const getAllNews = async (req, res) => {
                   as: 'type_news',
                   attributes: []
                 }
-            ]
+            ],
+            order: [['id', 'desc']],
         });
         res.json(news);
     } catch (error) {
@@ -36,33 +37,27 @@ const getAllNews = async (req, res) => {
 
 const getAllNewsHome = async (req, res) => {
   try {
-      const dayAgo = new Date();
-      dayAgo.setDate(dayAgo.getDate() - 30);
-      const news = await newsModel.findAll({
-        raw: true,
-        where:{
-          createAt: {
-            [Op.gt]: dayAgo
-        },
-        },
-          attributes: {
-            include: [
-              [sequelize.fn('DATE_FORMAT', sequelize.col('news.createdAt'), '%d-%m-%Y'), 'dayCreated'],
-            ]
-          },
-          include: [
-              {
-                model: typeNewsModel,
-                as: 'type_news',
-                attributes: []
-              }
-          ],
-          limit: 6,
-          offset: 0,
-      });
+    const news = await newsModel.findAll({
+      raw: true,
+      attributes: {
+        include: [
+          [sequelize.fn('DATE_FORMAT', sequelize.col('news.createdAt'), '%d-%m-%Y'), 'dayCreated'],
+        ]
+      },
+      include: [
+        {
+          model: typeNewsModel,
+          as: 'type_news',
+          attributes: []
+        }
+      ],
+      order: [['id', 'desc']],
+      limit: 6,
+      offset: 0,
+    });
       res.json(news);
   } catch (error) {
-      res.status(400).json({ message: 'Có lỗi xảy ra.' });
+      res.status(500).json({ message: 'Có lỗi xảy ra.' });
   }
 }
 

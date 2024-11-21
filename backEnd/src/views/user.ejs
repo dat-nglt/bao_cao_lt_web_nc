@@ -1,0 +1,422 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h3 style="padding: .5rem 0;"><b style="color: #e92de5;">QUẢN LÝ ĐỘC GIẢ</b></h3>
+    <div class="d-flex p-2 justify-content-end align-items-center gap-1">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+        Thêm đọc giả
+      </button>
+      <form class="form-inline my-2 my-lg-0 d-flex" method="get">
+        <div class="dropdown mr-2">
+          <select class="form-select" aria-label="select Default" name="sort" >
+            <option class="dropdown-item" value="desc" <% if(data.sort === 'desc'){%> selected <% } %>>Mới nhất</option>
+            <option class="dropdown-item" value="asc" <% if(data.sort === 'asc'){%> selected  <% } %>>Cũ nhất</option>
+          </select>
+        </div>
+        <input
+          class="form-control mr-sm-1"
+          type="search"
+          name="search"
+          value="<%= data.search %>"
+          placeholder="Tìm kiếm liên hệ"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <table class="table" style="height: fit-content;">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 5%;" class="p-1">STT</th>
+        <th scope="col" style="width: 15%;" class="p-1">MSSV</th>
+        <th scope="col" style="width: 15%;" class="p-1">Họ & tên</th>
+        <th scope="col" style="width: 15%;" class="p-1">Ngày sinh</th>
+        <th scope="col" style="width: 30%;" class="p-1">SĐT</th>
+        <th scope="col" style="width: 10%;" class="p-1">Email</th>
+        <th scope="col" style="width: 10%;" class="p-1">Tùy chọn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% let stt = (data.currentPage - 1) * data.limit + 1; %>
+      <% for (let user of data.row) { %>
+        <tr>
+          <td class="p-1"><%= stt++ %></td>
+          <td class="p-1"><%= user.studentCode %></td>
+          <td class="p-1"><%= user.fullName %></td>
+          <td class="p-1">
+            <% 
+              let date = new Date(user.dateOfBirth);
+              let formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+            %>
+            <%= formattedDate %>
+          </td>
+          <td class="p-1"><%= user.phoneNumber %></td>
+          <td class="p-1"><%= user.email %></td>
+          <td class="operation_group f-flex">
+            <i class="fa-solid fa-pen-to-square" data-toggle="modal" data-target="#editModal" data-id="<%= user.id %>" data-address="<%= user.addressUser %>" data-identification="<%= user.identificationNumber %>"></i>
+            <i class="fa-solid fa-eye" data-toggle="modal" data-target="#showModal" data-id="<%= user.id %>"></i>
+            <% if (user.roleAccess === 1) { %>
+                <i class="fa-solid fa-lock-open" style="color: #63E6BE;" data-toggle="modal" data-target="#lockModal" data-id="<%= user.id %>"></i>
+             <% }else{%>
+                <i class="fa-solid fa-lock" data-toggle="modal" data-target="#unlockModal" data-id="<%= user.id %>"></i>
+             <% } %>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <% if (data.messageError.length > 0) { %>
+    <div class="toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0" style="z-index: 1050;" id="errorToast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <%= data.messageError %>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  <% } %>
+  <% if (data.messageSuccess.length > 0) { %>
+    <div class="toast align-items-center text-white bg-primary border-0 position-fixed bottom-0 end-0" style="z-index: 1050;" id="successToast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <%= data.messageSuccess %>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  <% } %>
+  <!-- Pagination -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+        <% if (data.totalPage > 1) {
+            if (data.currentPage > 3) { %>
+               <li class="page-item"><a class="page-link" href="/doc-gia?sort=<%= data.sort%>&search=<%= data.search%>&page=1"><i class="fa-solid fa-angles-left"></i></a></li>
+            <% }
+            if (data.currentPage > 1) { %>
+              <li class="page-item"><a class="page-link" href="/doc-gia?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage-1%>"><i class="fa-solid fa-angle-left"></i></a></li>
+            <% }
+            for (let i = 1; i <= data.totalPage; i++) {
+              if (i == data.currentPage) { %>
+                  <li class="page-item active"><a class="page-link" href="#" aria-disabled="true"><%= i %></a></li>
+                  <% } else if (i > data.currentPage - 3 && i < data.currentPage + 3) { %>
+                  <li class="page-item"><a class="page-link" href="/doc-gia?sort=<%= data.sort %>&search=<%= data.search %>&page=<%= i %>"><%= i %></a></li>
+                  <%
+              }
+          }
+            if (data.currentPage < data.totalPage) { %>
+              <li class="page-item"><a class="page-link" href="/doc-gia?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.currentPage+1%>"><i class="fa-solid fa-angle-right"></i></a></li>
+            <% }
+            if (data.currentPage < data.totalPage - 2) { %>
+              <li class="page-item"><a class="page-link" href="/doc-gia?sort=<%= data.sort%>&search=<%= data.search%>&page=<%= data.totalPage%>"><i class="fa-solid fa-angles-right"></i></a></li>
+            <% }
+        } %>
+      </ul>
+  </nav>
+  
+  <div class="modal fade" id="lockModal" tabindex="-1" role="dialog" aria-labelledby="lockModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="lockModalLabel">
+            <i class="fa-solid fa-lock" style="color: #ff0000;"></i> Khóa đọc giả
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body text-center">
+          <p>Bạn có chắc chắn muốn khóa đọc giả này?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Hủy
+          </button>
+          <button type="button" class="btn btn-danger" id="confirmLockBtn">
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="unlockModal" tabindex="-1" role="dialog" aria-labelledby="unlockModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="unlockModalLabel">
+            <i class="fa-solid fa-lock-open" style="color: #63E6BE;"></i> Mở khóa đọc giả
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body text-center">
+          <p>Bạn có chắc chắn muốn mở khóa đọc giả này?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Hủy
+          </button>
+          <button type="button" class="btn" style="color: white;background-color: #63E6BE;" id="confirmUnlockBtn">
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Thêm Người Dùng Mới</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/them-doc-gia" method="post">
+            <div class="form-group">
+              <label for="studentCode">Mã Sinh Viên</label>
+              <input type="text" class="form-control" name="studentCode" required>
+            </div>
+            <div class="form-group">
+              <label for="passWord">Mật Khẩu</label>
+              <input type="password" class="form-control" name="passWord" required>
+            </div>
+            <div class="form-group">
+              <label for="fullName">Họ và Tên</label>
+              <input type="text" class="form-control" name="fullName" required>
+            </div>
+            <div class="form-group">
+              <label for="dateOfBirth">Ngày Sinh</label>
+              <input type="date" class="form-control" name="dateOfBirth" required>
+            </div>
+            <div class="form-group">
+              <label for="addressUser">Địa Chỉ</label>
+              <input type="text" class="form-control" name="addressUser" required>
+            </div>
+            <div class="form-group">
+              <label for="phoneNumber">Số Điện Thoại</label>
+              <input type="text" class="form-control" name="phoneNumber" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" name="email">
+            </div>
+            <div class="form-group">
+              <label for="nentificationNumber">Số CMND/CCCD</label>
+              <input type="text" class="form-control" name="identificationNumber" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Thêm Người Dùng</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Hiển Thị Thông Tin -->
+  <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content rounded-4 shadow-lg">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title d-flex align-items-center" id="showModalLabel">
+            <span>Chi tiết</span>
+          </h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+          <div id="userDetails" class="p-3">
+            <div class="mb-3">
+              <p><strong>MSSV:</strong> <span id="userCode"></span></p>
+            </div>
+            <div class="mb-3">
+              <p><strong>Họ & tên:</strong> <span id="userFullName"></span></p>
+            </div>
+            <div class="mb-3">
+              <p><strong>Ngày sinh:</strong> <span id="userBirthday"></span></p>
+            </div>
+            <div class="mb-3">
+                <p><strong>CCCD:</strong> <span id="userIdentification"></span></p>
+            </div>
+            <div class="mb-3">
+                <p><strong>SĐT:</strong> <span id="userPhoneNumber"></span></p>
+            </div>
+            <div class="mb-3">
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+            </div>
+            <div class="mb-3">
+              <p><strong>Địa chỉ:</strong> <span id="userAddress"></span></p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal Cập Nhật Thông Tin -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editModalLabel">Sửa Độc Giả</h5>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+              <form id="editUserForm" method="post" action="">
+                  <div id="userEditDetails">
+                      <div class="mb-3">
+                          <label for="editUserCode" class="form-label"><strong>MSSV:</strong></label>
+                          <input type="text" id="editUserCode" name="studentCodeUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserFullName" class="form-label"><strong>Họ & tên:</strong></label>
+                          <input type="text" id="editUserFullName" name="fullNameUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserBirthday" class="form-label"><strong>Ngày sinh:</strong></label>
+                          <input type="date" id="editUserBirthday" name="dateOfBirthUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserIdentification" class="form-label"><strong>CCCD:</strong></label>
+                          <input type="text" id="editUserIdentification" name="identificationNumberUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserPhoneNumber" class="form-label"><strong>SĐT:</strong></label>
+                          <input type="text" id="editUserPhoneNumber" name="phoneNumberUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserEmail" class="form-label"><strong>Email:</strong></label>
+                          <input type="email" id="editUserEmail" name="emailUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserAddress" class="form-label"><strong>Địa chỉ:</strong></label>
+                          <input type="text" id="editUserAddress" name="addressUserUpdate" class="form-control" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUserPassword" class="form-label"><strong>Mật khẩu mới:</strong></label>
+                          <input type="password" id="editUserPassword" name="passwordUpdate" class="form-control" placeholder="Nhập mật khẩu mới (nếu muốn)" aria-describedby="passwordHelp">
+                          <small id="passwordHelp" class="form-text text-muted">Để trống nếu không muốn thay đổi mật khẩu.</small>
+                      </div>
+                      <div class="mb-3">
+                          <input type="hidden" id="editId" name="idUpdate" class="form-control" required>
+                      </div>
+                  </div>
+              </form>
+          </div>
+
+          <div class="modal-footer border-top-0">
+              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Đóng</button>
+              <button type="submit" form="editUserForm" class="btn btn-primary">Lưu</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let lockBtn = document.getElementById('confirmLockBtn');
+    let unLockBtn = document.getElementById('confirmUnlockBtn');
+    let id;
+    
+    // Lock modal
+    $('#lockModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      id = button.data('id');
+    });
+
+    // Unlock modal
+    $('#unlockModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      id = button.data('id');
+    });
+
+    // Lock action
+    lockBtn.onclick = function () {
+      if (id) {
+        let formLock = document.createElement('form');
+        formLock.method = "POST";
+        formLock.action = '/khoa-doc-gia/' + id;
+        document.body.appendChild(formLock);
+        formLock.submit();
+      }
+    }
+
+    // Unlock action
+    unLockBtn.onclick = function () {
+      if (id) {
+        let formLock = document.createElement('form');
+        formLock.method = "POST";
+        formLock.action = '/mo-khoa-doc-gia/' + id;
+        document.body.appendChild(formLock);
+        formLock.submit();
+      }
+    }
+
+    // Show modal with user data
+    $('#showModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      let id = button.data('id'); 
+      
+      fetch(`/doc-gia/${id}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            document.getElementById('userCode').textContent = data.studentCode;
+            document.getElementById('userFullName').textContent = data.fullName;
+            let date = new Date(data.dateOfBirth);
+            let formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('userBirthday').textContent = formattedDate;
+            document.getElementById('userPhoneNumber').textContent = data.phoneNumber;
+            document.getElementById('userEmail').textContent = data.email;
+            document.getElementById('userIdentification').textContent = data.identificationNumber;
+            document.getElementById('userAddress').textContent = data.addressUser;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    });
+
+    //Edit user modal
+    document.querySelectorAll('.fa-pen-to-square').forEach(item => {
+      item.addEventListener('click', function () {
+        const row = this.closest('tr');
+        const updateId = this.getAttribute('data-id');
+        const dateOfBirth = row.cells[3].innerText; // Giả sử nó có định dạng khác
+        const formattedDate = formatDateToInput(dateOfBirth); // Hàm chuyển đổi
+      
+        document.getElementById('editUserForm').action = `http://localhost:3001/sua-doc-gia/${updateId}`;
+        document.getElementById('editUserCode').value = row.cells[1].innerText;
+        document.getElementById('editUserFullName').value = row.cells[2].innerText;
+        document.getElementById('editUserBirthday').value = formattedDate;
+        document.getElementById('editUserPhoneNumber').value = row.cells[4].innerText;
+        document.getElementById('editUserEmail').value = row.cells[5].innerText;
+        document.getElementById('editUserIdentification').value = this.getAttribute('data-identification');
+        document.getElementById('editUserAddress').value = this.getAttribute('data-address');
+        document.getElementById('editUserPassword').value = '';
+        document.getElementById('editId').value = updateId;
+
+        // Mở modal
+        $('#editModal').modal('show');
+      });
+    });
+  });
+
+  function formatDateToInput(dateString) {
+    // Giả sử dateString có định dạng 'DD/MM/YYYY'
+    const parts = dateString.split('/'); // Tách thành mảng [DD, MM, YYYY]
+    if (parts.length === 3) {
+        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Chuyển sang 'YYYY-MM-DD'
+    }
+    return dateString; // Trả về ngày gốc nếu không đúng định dạng
+}
+</script>

@@ -1,51 +1,31 @@
-// ContactList.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Contact from "./Contact";
 import { Box } from "@mui/material";
-import Pagination from "../../Pagination"; // Import component Pagination
+import Pagination from "../../Pagination"; 
+import contactService from "../../../services/contactService.js";
 
 function ContactList() {
-  const data = [
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-    { name: 'Apple', description: 'A sweet red fruit that is popular worldwide.', time: '2024-11-19 10:30' },
-    { name: 'Banana', description: 'A long, yellow fruit with a soft, creamy interior.', time: '2024-11-19 11:00' },
-    { name: 'Cherry', description: 'A small, round, red fruit often used in desserts.', time: '2024-11-19 11:30' },
-  ];
-
-  const countContact = data.length;
-  const itemsPerPage = 4;
-  const totalPages = Math.ceil(countContact / itemsPerPage);
+  const [contacts, setContacts] = useState([]); 
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const getContacts = async () => {
+      try {
+        const response = await contactService.getAllContact();
+        setContacts(response.data); 
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách liên hệ:", error);
+      }
+    };
+
+    getContacts(); 
+  }, []);
+
+  const countContacts = contacts.length;
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(countContacts / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const displayedData = data.slice(startIndex, startIndex + itemsPerPage);
+  const displayedData = contacts.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -53,10 +33,15 @@ function ContactList() {
 
   return (
     <Box>
-      {displayedData.map((item, index) => (
-        <Contact key={index} name={item.name} description={item.description} time={item.time} />
-      ))}
 
+      {displayedData.map((item, index) => (
+        <Contact
+          key={index}
+          name={item.name}
+          description={item.description}
+          time={new Date(item.timeContact).toLocaleString()}
+        />
+      ))}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

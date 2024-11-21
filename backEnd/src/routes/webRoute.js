@@ -19,8 +19,13 @@ const initWebRoute = (app) => {
   router.get("/dang-nhap", checkNotLoggedIn, UserController.getLoginPage);
   router.post("/dang-nhap", UserController.handleLogin);
   router.get("/dang-xuat", UserController.handleLogout);
-  router.get("doc-gia")
-
+  //Độc giả
+  router.get("/doc-gia",checkNotLoggedIn, UserController.getUserPage);
+  router.get("/doc-gia/:id",checkNotLoggedIn, UserController.getUserById);
+  router.post("/sua-doc-gia/:id",checkNotLoggedIn, UserController.updateUser);
+  router.post("/them-doc-gia",checkNotLoggedIn, UserController.addUser);
+  router.post("/khoa-doc-gia/:id",checkNotLoggedIn, UserController.lockEndUnLockUser);
+  router.post("/mo-khoa-doc-gia/:id",checkNotLoggedIn, UserController.lockEndUnLockUser);
   //thể loại
   router.get("/the-loai", checkLoggedIn, CategoryControllers.getCategoryPage);
   router.post("/the-loai", checkLoggedIn, CategoryControllers.addCategory);
@@ -36,10 +41,10 @@ const initWebRoute = (app) => {
   );
 
   //sách
-  router.get("/quan-li-sach", BookControllers.getBookPage);
-  router.post("/quan-li-sach", BookControllers.addBook);
-  router.post("/quan-li-sach/cap-nhap/:id", BookControllers.updateBook);
-  router.delete("/quan-li-sach/:id", BookControllers.deleteBook);
+  router.get("/quan-li-sach",checkLoggedIn, BookControllers.getBookPage);
+  router.post("/quan-li-sach",checkLoggedIn, BookControllers.addBook);
+  router.post("/quan-li-sach/cap-nhap/:id",checkLoggedIn, BookControllers.updateBook);
+  router.delete("/quan-li-sach/:id",checkLoggedIn, BookControllers.deleteBook);
 
   //mượn trả
   router.get("/muon-tra", checkLoggedIn, borrowControllers.getBorrowPage);
@@ -54,19 +59,34 @@ const initWebRoute = (app) => {
     checkLoggedIn,
     borrowControllers.cancelBorrow
   );
-
-  //phí phạt
   router.get(
     "/phi-phat",
+    checkLoggedIn,
     AutoGenerateFineMiddleware,
     FineControllers.getFinePage
   );
-  router.put("/tra-tien-phat/:borrowId", FineControllers.paidFine);
+  router.put(
+    "/tra-tien-phat/:borrowId",
+    checkLoggedIn,
+    FineControllers.paidFine
+  );
   //phản hồi
-  router.get("/api/get-all-contact", contactControllers.getAllContacts);
-  router.get("/api/get-contact/:id", contactControllers.getContactById);
-  router.get("/phan-hoi", contactControllers.getContactPage);
-  router.delete("/phan-hoi/:id/delete", contactControllers.deleteContact);
+  router.get(
+    "/api/get-all-contact",
+    checkLoggedIn,
+    contactControllers.getAllContacts
+  );
+  router.get(
+    "/api/get-contact/:id",
+    checkLoggedIn,
+    contactControllers.getContactById
+  );
+  router.get("/phan-hoi", checkLoggedIn, contactControllers.getContactPage);
+  router.delete(
+    "/phan-hoi/:id/delete",
+    checkLoggedIn,
+    contactControllers.deleteContact
+  );
   //loại tin tức
   router.get(
     "/the-loai-tin-tuc",
@@ -95,7 +115,7 @@ const initWebRoute = (app) => {
   router.post("/tin-tuc/update/:id", checkLoggedIn, newsControllers.updateNews);
   router.post("/tin-tuc/delete/:id", checkLoggedIn, newsControllers.deleteNews);
 
-  // router.get("*", (req, res) => res.send("Không có trang này")); xóa cái này làm gì v ae
+  // router.get("*", (req, res) => res.send("Không có trang này")); 
   return app.use("/", router);
 };
 

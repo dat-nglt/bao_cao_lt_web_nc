@@ -4,6 +4,7 @@ import { Box, Card, CardMedia, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import bookService from "../services/bookService";
+import { userContext } from './Context';
 
 function BookDetails(props) {
   const [book, setBook] = React.useState([]);
@@ -12,12 +13,13 @@ function BookDetails(props) {
 
   const navigate = useNavigate();
 
+  const { loggedInUser, loginContext, logoutContext } = React.useContext(userContext);
+
   React.useEffect(() => {
     const fetchBook = async () => {
       try {
         const bookByID = await bookService.getBookById(id);
         setBook(bookByID);
-        console.log(bookByID);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
@@ -27,6 +29,18 @@ function BookDetails(props) {
 
   const handleGoBack = () => {
     navigate(-1);
+  };
+  
+  const handleBorrowRequest = async () => {
+    try {
+
+      const response = await bookService.requestBook({ user: loggedInUser.userData.id, book: id }); 
+      console.log(response); 
+      alert('Yêu cầu mượn đã được gửi thành công!');
+    } catch (error) {
+      console.error("Error sending borrow request:", error);
+      alert('Có lỗi xảy ra khi gửi yêu cầu mượn.');
+    }
   };
 
   return (
@@ -116,6 +130,7 @@ function BookDetails(props) {
           <Button
             variant="contained"
             endIcon={<SendIcon />}
+            onClick={handleBorrowRequest}
             sx={{ alignSelf: "flex-end" }}
           >
             Yêu cầu mượn

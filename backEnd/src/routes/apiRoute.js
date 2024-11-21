@@ -5,13 +5,20 @@ import apiCategory from "../apis/ApiCategory.js";
 import apiTypeNews from "../apis/ApiTypeNews.js";
 import apiContact from "../apis/ApiContact.js";
 import apiUser from "../apis/ApiUser.js";
+import apiFine from "../apis/ApiFine.js";
+
+import authenticateToken from "../middlewares/apiMiddleware.js";
 
 const router = express.Router();
 const initApiRoute = (app) => {
   // Người dùng
   router.post("/dang-nhap", apiUser.handleLogin);
+  router.get("/thong-tin-nguoi-dung", apiUser.getInfoUser);
+  router.get("/dang-xuat-user", apiUser.handleLogoutUser);
+  router.get("/danh-sach-muon/:id", apiUser.handleGetAllBorrow);
 
   // Trang danh mục sách
+  router.post("/tim-kiem-sach", apiBooks.getAllBooksBySearch);
   router.get("/danh-muc/xem-tat-ca", apiBooks.getAllBooks);
   router.get("/danh-muc/:id", apiBooks.getBooksByCategory);
   router.get("/chi-tiet-sach/:id", apiBooks.getBookById);
@@ -40,6 +47,8 @@ const initApiRoute = (app) => {
   // liên hệ
   router.get("/phan-hoi", apiContact.getAllContact);
   router.post("/them-phan-hoi", apiContact.createContact);
+  //phi phat
+  router.get("/phi-phat/:userId", apiFine.getFineByUserId);
 
   return app.use("/api/v1/", router);
 };

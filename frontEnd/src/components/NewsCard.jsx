@@ -34,7 +34,7 @@ function NewsCard(props) {
               textOverflow: 'ellipsis',
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 1,
             }}
           >
             {props.data.title}

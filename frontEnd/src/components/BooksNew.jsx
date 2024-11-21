@@ -6,8 +6,8 @@ import { Stack } from "@mui/material";
 import SearchInput from "../components/SearchInput";
 import { useParams } from "react-router-dom";
 
-function CategoryAll(props) {
-  const [books, setBooks] = React.useState([]);
+function BooksNew(props) {
+  const [books, setBooksNew] = React.useState([]);
   const { id } = useParams();
 
   const countNews = books.length;
@@ -21,46 +21,23 @@ function CategoryAll(props) {
   };
 
   React.useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchBooksNew = async () => {
       try {
-        let bookList;
-        if (id) {
-          // Fetch books by category if id is present
-          bookList = await bookService.getBooksByCategory(id);
-        } else {
-          // Fetch all books if no category id
-          bookList = await bookService.getAllBooks();
-        }
-        setBooks(bookList);
+        const booksNew = await bookService.getBooksNew();
+        setBooksNew(booksNew);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
     };
-    fetchBooks();
-  }, [id]);
 
-  React.useEffect(() => {
-    setCurrentPage(1); 
-  }, [id]);
-
-
-  const titleMap = {
-    8: "Bài Giảng",
-    9: "Giáo trình",
-    10: "Đề tài NCKH",
-    11: "Luận án",
-    12: "Luận văn",
-    13: "Tiểu luận/ĐATN",
-    14: "Tiểu Thuyết"
-  };
-  
-  const title = id in titleMap ? `Danh mục: ${titleMap[id]}` : "Danh mục";
+    fetchBooksNew();
+  }, []);
 
   return (
     <>
       <SearchInput />
       <CategoryBook
-        title={title}
+        title={"Sách mới"}
         bookList={books}
         start={startIndex}
         end={endIndex}
@@ -75,12 +52,10 @@ function CategoryAll(props) {
       ) : null}
       {books.length === 0 ? (
         <Stack sx={{ margin: "0 auto", textAlign: "center", fontSize: "2rem" }}>
-          Hiện không có sách
+          Hiện không có sách mới
         </Stack>
       ) : null}
     </>
   );
 }
-export default CategoryAll;
-
-
+export default BooksNew;

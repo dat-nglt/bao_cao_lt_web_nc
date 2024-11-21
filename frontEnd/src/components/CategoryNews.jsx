@@ -23,30 +23,6 @@ function CategoryNews(props) {
         }}>
           {props.title}
         </Typography>
-        {/* {
-          props.isHomePage ?
-            props.title && (
-              <Typography sx={{
-                padding: '10px 20px',
-                color: theme.palette.white.main,
-                textTransform: 'unset',
-                fontWeight: 600,
-              }}>
-                {props.title}
-              </Typography>
-            )
-            :
-            props.title && <Typography sx={{
-              padding: '10px 20px',
-              color: theme.palette.white.main,
-              textTransform: 'unset',
-              fontWeight: 600,
-            }}>
-              {props.bookList.length} kết quả tìm kiếm dành cho: {props.searchData?.danhMuc} {props.searchData?.tuKhoa}
-            </Typography>
-
-        } */}
-
       </Stack>
 
       <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 1, md: 4 }} >

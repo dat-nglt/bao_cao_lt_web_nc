@@ -44,7 +44,7 @@ function News(props) {
     <>
    <SearchContext.Provider value={{ searchType, setSearchType, searchTitle, setSearchTitle }}>
       <SearchNews/>
-      <CategoryNews title={'Tin tức mới'} newsList={listNews} start={startIndex} end={endIndex} isHomePage={false} />
+      <CategoryNews title={'Tin tức'} newsList={listNews} start={startIndex} end={endIndex} isHomePage={false} />
       {(totalPages > 1) ? <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} /> : null}
       {listNews.length === 0 ? (
         <Stack sx={{ margin: '0 auto', textAlign: 'center', fontSize: '2rem' }}>

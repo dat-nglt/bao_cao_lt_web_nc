@@ -233,7 +233,7 @@ const updateBook = async (req, res) => {
           imageFile[0].filepath,
           async (err, result) => {
             if (err) {
-              throw new Error("Tải lên thông tin sách thất bại");
+              throw new Error(err);
             }
 
             // Xóa file tạm sau khi upload

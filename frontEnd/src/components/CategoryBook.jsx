@@ -19,7 +19,7 @@ function CategoryBook(props) {
       }}>
         {
           props.isHomePage ?
-            props.name && (
+            props.title && (
               <Typography sx={{
                 padding: '10px 20px',
                 color: theme.palette.white.main,
@@ -30,13 +30,13 @@ function CategoryBook(props) {
               </Typography>
             )
             :
-            props.name && <Typography sx={{
+            props.title && <Typography sx={{
               padding: '10px 20px',
               color: theme.palette.white.main,
               textTransform: 'unset',
               fontWeight: 600,
             }}>
-              {props.bookList.length} kết quả tìm kiếm dành cho: {props.searchData?.danhMuc} {props.searchData?.tuKhoa}
+              {props.title}
             </Typography>
 
         }
@@ -46,7 +46,7 @@ function CategoryBook(props) {
       <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }} >
         {
           props.isHomePage ?
-            props.bookList.slice(props.start, props.end).map((books, index) => (
+            props.bookList.slice(0,6).map((books, index) => (
               <Grid2 key={index} size={{ xs: 5, sm: 4, md: 4 }}>
                 <BookCard data={books} />
               </Grid2>

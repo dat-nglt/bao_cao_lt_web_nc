@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
-import axios from "axios";
+import contactService from "../../../services/contactService.js";
 
 function FormContact() {
   const [formData, setFormData] = useState({
@@ -24,10 +24,8 @@ function FormContact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      // const response = await axios.post("api", formData);
-      // console.log("API Response:", response.data);
+      await contactService.addContact(formData);
       setSuccess(true);
       setFormData({
         name: "",

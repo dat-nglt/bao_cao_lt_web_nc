@@ -1,142 +1,162 @@
-import { Stack, Typography, useTheme } from '@mui/material';
+import { Stack, Typography, useTheme, Box } from '@mui/material';
 import React from 'react';
 import { formatCurrencyVN } from '../utils/formatCurrencyVN';
 
-function PunishItem(props) {
-  const theme = useTheme()
+function PunishItem({ fine }) {
+  const theme = useTheme();
+
+  // Hàm tính số ngày quá hạn
+  const daynow = () => {
+    const today = new Date();
+    const dueDate = new Date(fine.borrow.dueDate);
+    const timeDiff = today - dueDate;
+    const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // Chuyển từ ms sang ngày
+    return dayDiff > 0 ? dayDiff : 0; // Nếu số ngày quá hạn là âm, trả về 0
+  };
+
   return (
     <Stack
       sx={{
-        padding: '10px 0',
-        gap: '10px',
+        padding: '12px 0',
+        gap: '12px',
         position: 'relative',
-
+        borderBottom: `1px solid ${theme.palette.divider}`,
       }}
     >
-
       <Stack
         sx={{
           border: `1px solid ${theme.palette.gray.main}`,
-          borderRadius: '5px',
-          padding: '10px',
+          borderRadius: '4px',
+          padding: '12px',
           flexDirection: 'row',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          '&:hover': {
-            boxShadow: theme.boxShadow.main,
-            transform: 'scale(1.01)',
-          }
         }}
       >
         <img
-          src={props.book.imageUrl}
+          src={fine.borrow.book.imgBook}
           alt="hinhanh"
           style={{
             width: '100px',
-            aspectRatio: '6 / 9',
-            borderRadius: '5px'
+            height: 'auto',
+            borderRadius: '4px',
+            objectFit: 'cover',
           }}
         />
         <Stack
           sx={{
             marginLeft: '15px',
-            gap: '5px',
+            gap: '8px',
             justifyContent: 'flex-start',
+            flex: 1,
           }}
         >
           <Stack
             sx={{
               flexDirection: 'row',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
-                color: theme.text.primary.main
+                color: theme.text.primary.main,
+                fontWeight: 500,
               }}
-            >Tên sách:</Typography>
+            >
+              Tên sách:
+            </Typography>
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
                 color: theme.text.primary.main,
               }}
-            >{props.book.title}</Typography>
+            >
+              {fine.borrow.book.name}
+            </Typography>
           </Stack>
 
           <Stack
             sx={{
               flexDirection: 'row',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
-                color: theme.text.primary.main
+                color: theme.text.primary.main,
+                fontWeight: 500,
               }}
-            >Ngày trả dự kiến:</Typography>
+            >
+              Ngày trả dự kiến:
+            </Typography>
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
                 color: theme.text.primary.main,
               }}
-            >{props.book.returnDate}</Typography>
+            >
+              {new Date(fine.borrow.dueDate).toLocaleDateString()}
+            </Typography>
           </Stack>
+
           <Stack
             sx={{
               flexDirection: 'row',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
-                color: theme.text.primary.main
+                color: theme.text.primary.main,
+                fontWeight: 500,
               }}
-            >Số ngày quá hạn:</Typography>
+            >
+              Số ngày quá hạn:
+            </Typography>
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
                 color: theme.text.primary.main,
               }}
-            >10 ngày</Typography>
+            >
+              {daynow()}
+            </Typography>
           </Stack>
+
           <Stack
             sx={{
               flexDirection: 'row',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
-                color: theme.text.primary.main
+                color: theme.text.primary.main,
+                fontWeight: 500,
               }}
-            >Tổng phí phạt :</Typography>
+            >
+              Tổng phí phạt:
+            </Typography>
             <Typography
-              variant='subtitle2'
+              variant="subtitle2"
               sx={{
                 marginLeft: '5px',
                 fontWeight: 600,
                 color: theme.palette.secondary.main,
               }}
-            >{formatCurrencyVN(10000 * 10)}</Typography>
+            >
+              {formatCurrencyVN(fine.amount)} {/* Hiển thị phí phạt theo định dạng tiền tệ */}
+            </Typography>
           </Stack>
         </Stack>
-        {/* <Button variant='contained' color="error" size="small"
-          sx={{
-            position: 'absolute',
-            right: '20px',
-            bottom: '30px',
-          }}
-        >Hủy mượn</Button> */}
       </Stack>
     </Stack>
   );

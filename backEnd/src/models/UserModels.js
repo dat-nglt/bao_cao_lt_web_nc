@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+
 import sequelize from "../configs/connectDB.js";
 
 const userModel = sequelize.define("user", {
@@ -8,7 +9,7 @@ const userModel = sequelize.define("user", {
   },
   passWord: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   fullName: {
     type: DataTypes.STRING,
@@ -28,9 +29,6 @@ const userModel = sequelize.define("user", {
   },
   email: {
     type: DataTypes.STRING,
-    validate: {
-      isEmail: true,
-    },
   },
   identificationNumber: {
     type: DataTypes.STRING,
@@ -44,7 +42,6 @@ const userModel = sequelize.define("user", {
 
 },
 {
-  timestamps: true,
+  timestamps: false,
 });
-
 export default userModel;

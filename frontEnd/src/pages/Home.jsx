@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import HeaderPage from "../components/HeaderPage";
 import SearchInput from "../components/SearchInput";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
@@ -11,12 +11,15 @@ import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import categoryService from "../services/categoryService";
+import { userContext } from "../components/Context";
 
 function Home(props) {
   const [categories, setCategories] = useState([]);
   const [visible, setVisible] = useState(false);
+  const { loggedInUser, loginContext, logoutContext } = useContext(userContext);
+  console.log(loggedInUser);
+  
   useEffect(() => {
-
     const fetchCategories = async () => {
       try {
         const response = await categoryService.getAllCategories();
@@ -52,7 +55,7 @@ function Home(props) {
     {
       text: "Danh mục",
       icon: <MenuBookIcon fontSize="medium" />,
-      subItems: categories, 
+      subItems: categories,
     },
     {
       link: "/ho-so-doc-gia/yeu-thich",

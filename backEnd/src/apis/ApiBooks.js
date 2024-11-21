@@ -24,7 +24,6 @@ const getNewBooks = async (req, res) => {
     res.status(500).json({ error: "Có lỗi xảy ra khi lấy sách mới." });
   }
 };
-
 const getAllBooks = async (req, res) => {
   try {
     const books = await bookModel.findAll({
@@ -41,6 +40,72 @@ const getAllBooks = async (req, res) => {
     res.status(500).json({ error: "Có lỗi xảy ra." });
   }
 };
+
+const getAllBooksBySearch = async (req, res) => {
+  const { danhMuc, tuKhoa } = req.body;
+  let danhmuc;
+  switch (danhMuc) {
+    case 'sach':
+      danhmuc = 'name';
+      break;
+    case 'tacgia':
+      danhmuc = 'creatorBook';
+      break;
+    case 'theloai':
+      danhmuc = '$category.name$';
+      break;
+    case 'namxuatban':
+      danhmuc = 'dateBook';
+      break;
+    case 'nhaxuatban':
+        danhmuc = 'publisherBook';
+        break;
+    default:
+      danhmuc = '';
+      break;
+  }
+  try {
+    let whereConditions = {};
+    if (!danhmuc && tuKhoa) {
+      whereConditions = {
+        [Op.or]: [
+          { name: { [Op.like]: `%${tuKhoa}%` } },
+          { creatorBook: { [Op.like]: `%${tuKhoa}%` } },
+          { publisherBook: { [Op.like]: `%${tuKhoa}%` } },
+          { dateBook: { [Op.like]: `%${tuKhoa}%` } },
+          { "$category.name$": { [Op.like]: `%${tuKhoa}%` } }, 
+        ],
+      };
+    }
+    if (danhmuc && !tuKhoa) {
+      whereConditions[danhmuc] = { [Op.ne]: null };
+    }
+    if (!danhmuc && !tuKhoa) {
+      whereConditions = {}; 
+    }
+    if (danhmuc && tuKhoa) {
+      whereConditions[danhmuc] = { [Op.like]: `%${tuKhoa}%` }; 
+    }
+
+    const books = await bookModel.findAll({
+      where: whereConditions, 
+      include: [
+        {
+          model: categoryModel,
+          as: "category", 
+          attributes: ["name"], 
+        },
+      ],
+    });
+    res.json({data:books,search:[danhmuc,tuKhoa]}); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Có lỗi xảy ra." });
+  }
+};
+
+
+
 
 const getBookById = async (req, res) => {
   const { id } = req.params; // Lấy ID từ tham số URL
@@ -81,22 +146,19 @@ const requestBook = async (req, res) => {
 
     const checkUser = await userModel.findByPk(user);
     if (!checkUser) {
-      req.flash("error", "Người dùng không tồn tại!");
-      return res.status(400).redirect(`/chi-tiet-sach/${book}`);
+      return res.status(400).json({message: "Tài khoản không tồn tại"})
     }
 
     const checkBook = await bookModel.findByPk(book);
     if (!checkBook) {
-      req.flash("error", "Sách không tồn tại!");
-      return res.status(400).redirect(`/chi-tiet-sach/${book}`);
+      return res.status(400).json({message: "Sách không tồn tại"})
     }
 
     if (checkBook.count > 0) {
       checkBook.count -= 1;
       await checkBook.save();
     } else {
-      req.flash("error", "Số lượng sách không đủ để thêm phiếu mượn!");
-      return res.status(400).redirect(`/chi-tiet-sach/${book}`);
+      return res.status(400).json({message: "Số lượng sách không đủ"})
     }
 
     const createBorrow = await borrowModel.create({
@@ -105,11 +167,9 @@ const requestBook = async (req, res) => {
       bookId: book,
       userId: user,
     });
-    req.flash("success", "Gửi yêu cầu mượn thành công");
-    return res.status(201).redirect(`/chi-tiet-sach/${book}`);
+    return res.status(201).json({message: "Gửi yêu cầu mượn thành công"})
   } catch (error) {
     console.error("Error in requestBook:", error);
-    res.status(500).json({ error: "Có lỗi xảy ra." });
   }
 };
 
@@ -117,6 +177,8 @@ export default {
   getAllBooks,
   getBookById,
   getBooksByCategory,
+  getAllBooksBySearch,
   requestBook,
   getNewBooks,
+  
 };

@@ -3,26 +3,27 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Box, Card, CardMedia, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import bookService from "../services/bookService";
+import newsServices from '../services/newsServices';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EventIcon from '@mui/icons-material/Event';
 
 function NewsDetail(props) {
-  const [book, setBook] = React.useState([]);
+  const [news, setNews] = React.useState([]);
 
   const { id } = useParams();
 
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const fetchBook = async () => {
+    const detailNews = async () => {
       try {
-        const bookByID = await bookService.getBookById(id);
-        setBook(bookByID);
-        console.log(bookByID);
+        const getNews = await newsServices.getNews(id);
+        setNews(getNews);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
     };
-    fetchBook();
+    detailNews();
   }, []);
 
   const handleGoBack = () => {
@@ -38,6 +39,7 @@ function NewsDetail(props) {
         flexDirection: "column",
         mt: 4,
         margin: "10px auto",
+        width: '1100px'
       }}
     >
       <Button
@@ -65,61 +67,47 @@ function NewsDetail(props) {
         }}
       >
         <Typography variant="h5" gutterBottom sx={{color: "#fff", padding: '10px 0', margin: "0", textTransform: 'uppercase'}}>
-          Thông tin sách
+          Chi tiết tin tức
         </Typography>
       </Box>
       <Card
-        variant="outlined"
         sx={{
-          display: "flex",
           width: "100%",
           minWidth: 900,
           boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.5)",
           borderRadius: '0 0 4px 4px',
         }}
       >
-        <CardMedia
-          variant="outlined"
-          component="img"
-          sx={{ width: 260, aspectRatio: "6 / 9" }}
-          image={book.imgBook}
-          alt={book.name}
-        />
         <Box
           sx={{
             display: "flex",
             flex: 1,
-            p: 4,
-            justifyContent: "space-between",
+            p: '10px 32px',
+            fontWeight: '700'
           }}
         >
-          <div>
             <Typography component="div" variant="h4">
-              {book.name}
+              {news.title}
             </Typography>
-            <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Tác giả: {book.creatorBook}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flex: 1,
+            p: '0 32px',
+            flexDirection: 'row',
+            gap: '100px'
+          }}
+        >
+            <Typography component="div" style={{ display: 'flex', gap: '5px' }}>
+              <VisibilityIcon/>{news.view}
             </Typography>
-            <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Thể loại: {book.categoryBook}
+            <Typography component="div" style={{ display: 'flex', gap: '5px' }}>
+              <EventIcon/>{news.dayCreated}
             </Typography>
-            <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Nhà xuát bản: {book.publisherBook}
-            </Typography>
-            <Typography variant="subtitle1" component="div" sx={{ mt: 2 }}>
-              Năm xuất bản: {book.dateBook}
-            </Typography>
-            <Typography variant="body1" sx={{ mt: 2 }}>
-              Mô tả: {book.desBook}
-            </Typography>
-          </div>
-          <Button
-            variant="contained"
-            endIcon={<SendIcon />}
-            sx={{ alignSelf: "flex-end" }}
-          >
-            Yêu cầu mượn
-          </Button>
+        </Box>
+        <Box sx={{ p: '15px 32px 20px', lineHeight: '1.5'}}>
+            <div dangerouslySetInnerHTML={{ __html: news.content }}/>
         </Box>
       </Card>
     </Box>

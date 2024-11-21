@@ -5,6 +5,7 @@ import initWebRoute from "./src/routes/webRoute";
 import initApiRoute from "./src/routes/apiRoute";
 import path from "path";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import flash from "connect-flash";
 import session from "express-session";
@@ -40,6 +41,7 @@ const corsOptions = () => {
 app.use(cors(corsOptions()));
 
 app.use(flash());
+app.use(cookieParser());
 
 app.use(
   bodyParser.urlencoded({

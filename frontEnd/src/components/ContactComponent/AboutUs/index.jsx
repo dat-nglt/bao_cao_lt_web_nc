@@ -1,136 +1,142 @@
 import React from 'react';
-import { Box, Typography, Stack, Card, CardContent, IconButton, Grid, Divider } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import YouTubeIcon from '@mui/icons-material/YouTube';
+import { Box, Typography, Grid, Paper, Divider, IconButton } from '@mui/material';
+import { LocationOn, Phone, Email, Web, Facebook, Instagram, Twitter, LinkedIn, YouTube } from '@mui/icons-material';
 
 function AboutUs() {
   return (
-    <Box sx={{ width: '95%', margin: '0 auto' }}>
-      {/* Title */}
-      <Typography variant="h3" align="center" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 4 }}>
-        Thông tin liên hệ của nhà trường
+    <Box sx={{ backgroundColor: '#F7F8FA', minHeight: '100vh', padding: '20px' }}>
+
+    <Typography 
+      variant="h3" 
+      component="h1" 
+      align="center" 
+      sx={{
+        fontWeight: 'bold', 
+        fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+        marginBottom: '30px'
+      }}
+    >
+      Thông tin liên hệ
+    </Typography>
+
+
+    <Grid container spacing={3} justifyContent="center">
+  <Grid item xs={12} sm={6} md={3}>
+    <Paper
+      sx={{
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between', // Đảm bảo nội dung được phân bố đều
+        height: '100%', // Chiều cao 100% để Paper chiếm toàn bộ không gian có sẵn
+       
+      }}
+    >
+      <LocationOn sx={{ fontSize: 50, color: 'blue' }} />
+      <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: '10px' }}>
+        Địa chỉ
       </Typography>
-
-      {/* Contact Info Section */}
-      <Grid container spacing={4} justifyContent="center">
-        {/* Address */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ display: 'flex', flexDirection: 'column', boxShadow: 3, padding: 3 }}>
-            <LocationOnIcon sx={{ fontSize: 40, color: 'primary.main', marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Địa chỉ</Typography>
-            <Typography variant="body1" color="text.secondary">123 Phố ABC, Quận XYZ, Thành phố Hà Nội</Typography>
-          </Card>
-        </Grid>
-
-        {/* Phone */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ display: 'flex', flexDirection: 'column', boxShadow: 3, padding: 3 }}>
-            <PhoneIcon sx={{ fontSize: 40, color: 'primary.main', marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Số điện thoại</Typography>
-            <Typography variant="body1" color="text.secondary">(024) 1234 5678</Typography>
-          </Card>
-        </Grid>
-
-        {/* Email */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ display: 'flex', flexDirection: 'column', boxShadow: 3, padding: 3 }}>
-            <EmailIcon sx={{ fontSize: 40, color: 'primary.main', marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Email</Typography>
-            <Typography variant="body1" color="text.secondary">info@school.edu.vn</Typography>
-          </Card>
-        </Grid>
-
-        {/* Website */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ display: 'flex', flexDirection: 'column', boxShadow: 3, padding: 3 }}>
-            <LocationOnIcon sx={{ fontSize: 40, color: 'primary.main', marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Website</Typography>
-            <Typography variant="body1" color="text.secondary">www.school.edu.vn</Typography>
-          </Card>
-        </Grid>
-      </Grid>
-
-      <Divider sx={{ marginY: 4 }} />
-
-      {/* Social Links */}
-      <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', marginBottom: 3 }}>
-        Liên kết mạng xã hội
+      <Typography variant="body1">
+      256 Nguyễn Văn Cừ, Quận Ninh Kiều, TP Cần Thơ
       </Typography>
-        <Stack direction="row" spacing={3} justifyContent="center">
-        <IconButton
-            color="primary"
-            href="https://facebook.com"
-            target="_blank"
-            sx={{
-            '&:hover': {
-                backgroundColor: 'transparent', // Giữ nguyên màu bao quanh khi hover
-            },
-            }}
-        >
-            <FacebookIcon sx={{ fontSize: 30, color: '#1877F2', '&:hover': { color: '#1558A3' } }} />
-        </IconButton>
+    </Paper>
+  </Grid>
 
-        <IconButton
-            color="primary"
-            href="https://instagram.com"
-            target="_blank"
-            sx={{
-            '&:hover': {
-                backgroundColor: 'transparent', // Giữ nguyên màu bao quanh khi hover
-            },
-            }}
-        >
-            <InstagramIcon sx={{ fontSize: 30, color: '#E4405F', '&:hover': { color: '#9B2C6F' } }} />
-        </IconButton>
+  <Grid item xs={12} sm={6} md={3}>
+    <Paper
+      sx={{
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '100%',
+       
+      }}
+    >
+      <Phone sx={{ fontSize: 50, color: 'blue' }} />
+      <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: '10px' }}>
+        Số điện thoại
+      </Typography>
+      <Typography variant="body1">
+        0868 660 545
+      </Typography>
+    </Paper>
+  </Grid>
 
-        <IconButton
-            color="primary"
-            href="https://twitter.com"
-            target="_blank"
-            sx={{
-            '&:hover': {
-                backgroundColor: 'transparent', // Giữ nguyên màu bao quanh khi hover
-            },
-            }}
-        >
-            <TwitterIcon sx={{ fontSize: 30, color: '#1DA1F2', '&:hover': { color: '#1991CC' } }} />
-        </IconButton>
+  <Grid item xs={12} sm={6} md={3}>
+    <Paper
+      sx={{
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '100%',
+       
+      }}
+    >
+      <Email sx={{ fontSize: 50, color: 'blue' }} />
+      <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: '10px' }}>
+        Email
+      </Typography>
+      <Typography variant="body1">
+        libraryCTUT@ctut.edu.vn
+      </Typography>
+    </Paper>
+  </Grid>
+</Grid>
 
-        <IconButton
-            color="primary"
-            href="https://linkedin.com"
-            target="_blank"
-            sx={{
-            '&:hover': {
-                backgroundColor: 'transparent', // Giữ nguyên màu bao quanh khi hover
-            },
-            }}
-        >
-            <LinkedInIcon sx={{ fontSize: 30, color: '#0077B5', '&:hover': { color: '#005A8C' } }} />
-        </IconButton>
+    <Divider sx={{ margin: '40px 0', borderColor: '#ddd' }} />
 
-        <IconButton
-            color="primary"
-            href="https://youtube.com"
-            target="_blank"
-            sx={{
-            '&:hover': {
-                backgroundColor: 'transparent', // Giữ nguyên màu bao quanh khi hover
-            },
-            }}
-        >
-            <YouTubeIcon sx={{ fontSize: 30, color: '#FF0000', '&:hover': { color: '#D10000' } }} />
-        </IconButton>
-        </Stack>
-
-
+    <Typography 
+      variant="h5" 
+      component="h2" 
+      align="center" 
+      sx={{ marginBottom: '20px', fontWeight: 'bold' }}
+    >
+      Kết nối với chúng tôi
+    </Typography>
+    <Box 
+      display="flex" 
+      justifyContent="center" 
+      gap="20px"
+    >
+      <IconButton 
+        href="https://www.facebook.com/CTUT.CT" 
+        target="_blank" 
+        sx={{ 
+          '&:hover': { 
+            color: '#1877F2', 
+            transform: 'scale(1.2)',
+            transition: 'transform 0.3s, color 0.3s' 
+          } 
+        }}
+      >
+        <Facebook fontSize="large" />
+      </IconButton>
+      <IconButton 
+        href="https://www.youtube.com/@ctut-kythuatvaoisong5936" 
+        target="_blank" 
+        sx={{ 
+          '&:hover': { 
+            color: '#FF0000', 
+            transform: 'scale(1.2)',
+            transition: 'transform 0.3s, color 0.3s' 
+          } 
+        }}
+      >
+        <YouTube fontSize="large" />
+      </IconButton>
     </Box>
+  </Box>
   );
 }
 

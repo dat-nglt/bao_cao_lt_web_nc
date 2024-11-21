@@ -16,8 +16,7 @@ import News from '../components/News'
 import FavoritBooks from '../components/FavoritBooks'
 import UpdatePassword from '../components/UpdatePassword'
 import Punish from '../components/Punish'
-import ReaderContact from '../components/ReaderContact'
-
+import BooksNew from '../components/BooksNew'
 import FormContact from "../components/ContactComponent/FormContact"
 import ContactList from "../components/ContactComponent/ContactList"
 import AboutUs from "../components/ContactComponent/AboutUs"
@@ -40,9 +39,13 @@ export const router = createBrowserRouter([
         path: '/tin-tuc',
         element: <News />
       },
+      // {
+      //   path: '/sach-yeu-thich',
+      //   element: <FavoritBooks />
+      // },
       {
-        path: '/sach-yeu-thich',
-        element: <FavoritBooks />
+        path: '/sach-moi',
+        element: <BooksNew />
       },
       {
         path: '/danh-muc',
@@ -77,10 +80,6 @@ export const router = createBrowserRouter([
       {
         path: '/ho-so-doc-gia/phi-phat',
         element: <Punish />
-      },
-      {
-        path: '/ho-so-doc-gia/phan-hoi-cua-toi',
-        element: <ReaderContact />
       },
       {
         path: '/ho-so-doc-gia/cap-nhat-mat-khau',
