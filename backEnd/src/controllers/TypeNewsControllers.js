@@ -52,9 +52,19 @@ const getTypeNewsPage = async (req, res) => {
 
 const createTypeNews = async (req, res) => {
     const { name } = req.body;
+    const nameTypeNews = name.trim()
+    if (nameTypeNews.length > 255) {
+      req.flash('error', 'Tiêu đề loại tin tức không vượt quá 255 kí tự!')
+      res.status(400).redirect('/tin-tuc')
+      return
+    }else if(nameTypeNews.length === 0){
+      req.flash('error', 'Tiêu đề loại tin tức không được bỏ trống!')
+      res.status(400).redirect('/tin-tuc')
+      return
+    }
     const typeNews = await typeNewsModel.findOne({
       where: {
-        name
+        name : nameTypeNews
       },
     });
     if(typeNews){
@@ -62,7 +72,7 @@ const createTypeNews = async (req, res) => {
       res.status(400).redirect("/the-loai-tin-tuc");
       return;
     }
-    const createTypeNews = await typeNewsModel.create({ name });
+    const createTypeNews = await typeNewsModel.create({ name : nameTypeNews });
     if (createTypeNews) {
       req.flash("success", "Thêm loại tin tức thành công");
       res.status(201).redirect("/the-loai-tin-tuc");
@@ -76,25 +86,35 @@ const createTypeNews = async (req, res) => {
 
 const updateTypeNews = async (req, res) => {
   const { name } = req.body;
+  const nameTypeNews = name.trim()
+  if (nameTypeNews.length > 255) {
+    req.flash('error', 'Tiêu đề loại tin tức không vượt quá 255 kí tự!')
+    res.status(400).redirect('/tin-tuc')
+    return
+  }else if(nameTypeNews.length === 0){
+    req.flash('error', 'Tiêu đề loại tin tức không được bỏ trống!')
+    res.status(400).redirect('/tin-tuc')
+    return
+  }
   const typeNews = await typeNewsModel.findOne({
     where: {
       id: req.params.id
     },
   });
-  if(typeNews.name !== name){
+  if(typeNews.name !== nameTypeNews){
     const otherTypeNews = await typeNewsModel.findOne({
       where: {
-        name
+        name: nameTypeNews
       },
     });
-    if(otherTypeNews && otherTypeNews.name === name){
+    if(otherTypeNews && otherTypeNews.name === nameTypeNews){
       req.flash("error", "Tên loại tin tức đã tồn tại!");
       res.status(400).redirect("/the-loai-tin-tuc");
       return;
     }
   }
   const updateTypeNews = await typeNewsModel.update(
-    { name },
+    { name: nameTypeNews },
     { where: { id: req.params.id } }
   );
   if (updateTypeNews) {

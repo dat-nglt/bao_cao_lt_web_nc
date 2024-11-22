@@ -87,9 +87,13 @@ const createNews = async (req, res) => {
       res.status(400).redirect('/tin-tuc')
       return
     }
-    const title = fields.title[0]
-    if(title.length > 255){
-      req.flash('error', 'Tiêu đề không vượt quá 255 kí tự!')
+    const title = fields.title[0].trim()
+    if (title.length > 255) {
+      req.flash('error', 'Tiêu đề tin tức không vượt quá 255 kí tự!')
+      res.status(400).redirect('/tin-tuc')
+      return
+    }else if(title.length === 0){
+      req.flash('error', 'Tiêu đề tin tức không được bỏ trống!')
       res.status(400).redirect('/tin-tuc')
       return
     }
@@ -159,9 +163,13 @@ const updateNews = async (req, res) => {
   const updateNewsForm = new IncomingForm()
   updateNewsForm.parse(req, async (err, fields, files) => {
     try {
-      const title = fields.title[0]
+      const title = fields.title[0].trim()
       if (title.length > 255) {
         req.flash('error', 'Tiêu đề tin tức không vượt quá 255 kí tự!')
+        res.status(400).redirect('/tin-tuc')
+        return
+      }else if(title.length === 0){
+        req.flash('error', 'Tiêu đề tin tức không được bỏ trống!')
         res.status(400).redirect('/tin-tuc')
         return
       }
